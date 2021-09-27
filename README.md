@@ -1,4 +1,4 @@
 ## vanilla js SPA todoList
 
-1. spa test
-2. spa study
+1. history api 사용해서 spa구현하기
+2. 서버 만들기
