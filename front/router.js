@@ -9,6 +9,10 @@ const linkTest = () => {
   homeLink.href = "#";
   detailLink.href = "#";
 
+  aboutLink.id = "about";
+  homeLink.id = "home";
+  detailLink.id = "detail";
+
   aboutLink.textContent = "about";
   homeLink.textContent = "home";
   detailLink.textContent = "detail";
@@ -16,6 +20,22 @@ const linkTest = () => {
   linkDiv.append(aboutLink, homeLink, detailLink);
 
   linkRoot.append(linkDiv);
+};
+
+const clickLink = (e) => {
+  e.preventDefault();
+  history.pushState({}, "", e.target.textContent);
+  console.log(e.target.textContent);
+};
+
+const linkEvent = () => {
+  const aboutEvent = document.getElementById("about");
+  const detailEvent = document.getElementById("detail");
+  const homeEvent = document.getElementById("home");
+
+  aboutEvent.addEventListener("click", clickLink);
+  detailEvent.addEventListener("click", clickLink);
+  homeEvent.addEventListener("click", clickLink);
 };
 
 const router = async () => {
@@ -40,24 +60,10 @@ const router = async () => {
   console.log(match.route.view());
 };
 
-const navigateTo = (url) => {
-  history.pushState({}, null, url);
-  router();
-};
-
-const controlLink = () => {
-  document.addEventListener("DOMContentLoadeed", () => {
-    document.body.addEventListener("click", (e) => {
-      if (e.target.matches("[data-link]")) {
-        e.preventDefault();
-        navigateTo(e.target.href);
-      }
-    });
-  });
-};
-
 const routerInit = () => {
   router();
   linkTest();
+  linkEvent();
+  window.addEventListener("popstate", router);
 };
 routerInit();
