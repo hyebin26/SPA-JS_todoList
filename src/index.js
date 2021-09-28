@@ -1,3 +1,5 @@
+import hello from "./test/test.js";
+
 const List = () => {
   const listRoot = document.getElementById("root");
   const listDiv = document.createElement("div");
@@ -40,6 +42,9 @@ const ListEvent = () => {
   addBtn.addEventListener("click", clickAddBtn);
   minusBtn.addEventListener("click", clickMinusBtn);
 };
+
+console.log(hello);
+hello();
 
 const init = () => {
   List();

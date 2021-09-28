@@ -1,0 +1,24 @@
+{
+  "name": "spa_todolist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyebin26/SPA-JS_todoList.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyebin26/SPA-JS_todoList/issues"
+  },
+  "homepage": "https://github.com/hyebin26/SPA-JS_todoList#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "supervisor": "^0.12.0"
+  }
+}
