@@ -24,8 +24,9 @@ const linkTest = () => {
 
 const clickLink = (e) => {
   e.preventDefault();
-  history.pushState({}, "", e.target.textContent);
-  console.log(e.target.textContent);
+  const content = e.target.textContent === "home" ? "/" : e.target.textContent;
+  history.pushState({}, "", content);
+  router();
 };
 
 const linkEvent = () => {
@@ -40,9 +41,9 @@ const linkEvent = () => {
 
 const router = async () => {
   const routes = [
-    { path: "/", view: () => console.log("route page") },
-    { path: "/detail", view: () => console.log("main page") },
-    { path: "/about", view: () => console.log("detail page") },
+    { path: "/", view: () => console.log("/ page") },
+    { path: "/detail", view: () => console.log("detail page") },
+    { path: "/about", view: () => console.log("about page") },
   ];
   const potentialMatches = routes.map((route) => {
     return {
@@ -57,7 +58,7 @@ const router = async () => {
     document.querySelector("#root").innerHTML = `<h1>404</h1>`;
     return;
   }
-  console.log(match.route.view());
+  match.route.view();
 };
 
 const routerInit = () => {

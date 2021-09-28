@@ -1,4 +1,3 @@
 ## vanilla js SPA todoList
 
-1. history api spa 구현하기
-2. popstate 확인하기
+1. spa 테스트 끝
