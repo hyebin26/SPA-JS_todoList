@@ -16,7 +16,7 @@
   color: #ffffff;
 }
 .dashBox p {
-  padding: 0 0.4rem;
+  padding: 0 0.6rem;
   font-size: 1.1rem;
 }
 .profileBtn {
@@ -25,11 +25,12 @@
   border: none;
   background-color: #512da8;
   color: white;
+  cursor: pointer;
 }
 .dashBox::after {
   content: "";
   position: absolute;
   width: 100%;
-  border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   bottom: -1.1rem;
 }
