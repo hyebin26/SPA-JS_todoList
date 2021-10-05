@@ -31,7 +31,9 @@
   height: 3.5rem;
   margin-right: 0.8rem;
   margin-bottom: 0.8rem;
+  cursor: pointer;
 }
+
 .popupColorBox p {
   padding-bottom: 0.7rem;
   font-size: 1.1rem;
@@ -47,7 +49,7 @@
 }
 .popupNameBox input {
   padding: 0.7rem 0.7rem;
-  outline-color: aqua;
+  outline: none;
   font-size: 1.1rem;
   border: 1px solid #3d3c50;
   background-color: #1d1d27;

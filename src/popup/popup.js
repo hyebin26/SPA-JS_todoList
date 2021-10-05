@@ -1,3 +1,8 @@
+const clickColor = (e) => {
+  const clickedColor = document.getElementsByClassName("clickedColor");
+  e.target.classList.add("clickedColor");
+  clickedColor[0].style.backgroundColor = e.target.style.borderColor;
+};
 const Popup = () => {
   const popupRoot = document.getElementById("root");
   const popupContainer = document.createElement("div");
@@ -7,7 +12,7 @@ const Popup = () => {
   const popupColorBox = document.createElement("div");
   const popupBtnBox = document.createElement("div");
   const popupColorUl = document.createElement("ul");
-  const popupColorP = document.createElement("p");
+  const popupColorP = document.createElement("p");  
   const popupNameP = document.createElement("p");
   const popupNameInput = document.createElement("input");
   const popupTitle = document.createElement("h3");
@@ -22,12 +27,15 @@ const Popup = () => {
     "#D25A61",
     "#AE68E6",
     "#70C4BF",
+    "#9E7F72",
   ];
-  for (let i = 0; i <= 5; i++) {
+  for (let i = 0; i <= colorList.length - 1; i++) {
     const popupColorList = document.createElement("li");
+    if (i === 0) popupColorList.className = "clickedColor";
     popupColorList.dataset.color = colorList[i];
-    popupColorList.className = "colorList";
-    popupColorList.style.border = `1px solid ${colorList[i]}`;
+    popupColorList.classList.add("colorList");
+    popupColorList.style.border = `3px solid ${colorList[i]}`;
+    popupColorList.addEventListener("click", clickColor);
     popupColorUl.append(popupColorList);
   }
   popupTitle.textContent = "Add Collection";
