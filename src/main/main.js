@@ -1,11 +1,13 @@
-const clickAddBtn = () => {};
+const clickAddBtn = () => {
+  const clickPopup = document.querySelector(".popupContainer");
+  clickPopup.classList.add("activeP");
+};
 
 const Main = () => {
   const mainRoot = document.getElementById("root");
   const mainSec = document.createElement("section");
   const mainH2 = document.createElement("h2");
   const mainAddBtn = document.createElement("button");
-  const popupContainer = document.createElement("div");
 
   mainSec.className = "main";
   mainAddBtn.className = "mainAddBtn";

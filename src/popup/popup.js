@@ -5,6 +5,12 @@ const clickColor = (e) => {
   e.target.classList.add("clickedColor");
   clickedColor[0].style.backgroundColor = e.target.style.borderColor;
 };
+
+const clickExitBtn = () => {
+  const exitPopup = document.querySelector(".popupContainer");
+  exitPopup.classList.remove("activeP");
+};
+
 const Popup = () => {
   const popupRoot = document.getElementById("root");
   const popupContainer = document.createElement("div");
@@ -33,7 +39,10 @@ const Popup = () => {
   ];
   for (let i = 0; i <= colorList.length - 1; i++) {
     const popupColorList = document.createElement("li");
-    if (i === 0) popupColorList.className = "clickedColor";
+    if (i === 0) {
+      popupColorList.className = "clickedColor";
+      popupColorList.style.backgroundColor = `${colorList[i]}`;
+    }
     popupColorList.dataset.color = colorList[i];
     popupColorList.classList.add("colorList");
     popupColorList.style.border = `3px solid ${colorList[i]}`;
@@ -64,6 +73,9 @@ const Popup = () => {
   popupBox.append(popupTitleBox, popupNameBox, popupColorBox, popupBtnBox);
   popupContainer.append(popupBox);
   popupRoot.append(popupContainer);
+
+  popupXBtn.addEventListener("click", clickExitBtn);
+  popupCancelBtn.addEventListener("click", clickExitBtn);
 
   const popupCss = document.createElement("link");
   popupCss.rel = "stylesheet";
