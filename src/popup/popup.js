@@ -1,5 +1,7 @@
 const clickColor = (e) => {
   const clickedColor = document.getElementsByClassName("clickedColor");
+  clickedColor[0].style.backgroundColor = "#1d1d27";
+  clickedColor[0].classList.remove("clickedColor");
   e.target.classList.add("clickedColor");
   clickedColor[0].style.backgroundColor = e.target.style.borderColor;
 };
@@ -12,7 +14,7 @@ const Popup = () => {
   const popupColorBox = document.createElement("div");
   const popupBtnBox = document.createElement("div");
   const popupColorUl = document.createElement("ul");
-  const popupColorP = document.createElement("p");  
+  const popupColorP = document.createElement("p");
   const popupNameP = document.createElement("p");
   const popupNameInput = document.createElement("input");
   const popupTitle = document.createElement("h3");
