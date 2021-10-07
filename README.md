@@ -1,4 +1,3 @@
 ## vanilla js SPA todoList
 
-1. popup color default 추가
-2. popup 닫기 이벤트 추가
+1.create 누를 시 => 배너가 만들어지고 들어갈 시 todo list 작성하는 것 나오게

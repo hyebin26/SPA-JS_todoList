@@ -26,10 +26,9 @@
   background-color: #1d1d27;
   cursor: pointer;
   color: #ffffff;
-  border: 1px solid #ffffff;
   padding: 0.2rem 0.4rem;
-  font-size: 1rem;
-  border-radius: 0.2rem;
+  border: none;
+  font-size: 1.2rem;
 }
 
 .popupColorBox ul {
