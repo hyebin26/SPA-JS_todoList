@@ -1,0 +1,63 @@
+.contentSection {
+  max-width: 55rem;
+  margin: 0 auto;
+}
+.contentTitleBox {
+  padding: 4rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.contentTitleBox a {
+  font-size: 1.8rem;
+  background: #272732;
+  padding: 0 0.5rem;
+  border-radius: 0.8rem;
+  margin-right: 1.5rem;
+  padding-bottom: 0.3rem;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.contentTitleBox a:hover {
+  opacity: 1;
+}
+.contentTitleBox h2 {
+  font-size: 1.8rem;
+}
+.contentSettingBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  opacity: 0.6;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0.2rem 0;
+}
+.contentSettingBtn:hover {
+  opacity: 1;
+}
+.settingBox {
+  position: absolute;
+  bottom: -0.8rem;
+  right: 4rem;
+  display: flex;
+  flex-direction: column;
+}
+.settingBox button {
+  padding: 0.8rem 1.7rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #272732;
+  border: none;
+  opacity: 0.5;
+  letter-spacing: 0.05rem;
+  cursor: pointer;
+}
+.settingBox button:hover {
+  opacity: 1;
+}
+.settingBox button:first-child {
+  border-bottom: 1px solid rgb(80, 80, 80);
+  text-align: left;
+}
