@@ -5,6 +5,7 @@ import Content from "./content/content.js";
 
 const init = () => {
   Header();
+  Popup();
   Content();
 };
 init();

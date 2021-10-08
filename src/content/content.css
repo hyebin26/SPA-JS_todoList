@@ -1,9 +1,9 @@
 .contentSection {
   max-width: 55rem;
   margin: 0 auto;
+  padding: 4rem;
 }
 .contentTitleBox {
-  padding: 4rem;
   position: relative;
   display: flex;
   align-items: center;
@@ -39,10 +39,10 @@
 }
 .settingBox {
   position: absolute;
-  bottom: -0.8rem;
-  right: 4rem;
-  display: flex;
+  bottom: -5rem;
+  right: 0;
   flex-direction: column;
+  display: none;
 }
 .settingBox button {
   padding: 0.8rem 1.7rem;
@@ -53,6 +53,7 @@
   opacity: 0.5;
   letter-spacing: 0.05rem;
   cursor: pointer;
+  transition: opacity 0.4s;
 }
 .settingBox button:hover {
   opacity: 1;
@@ -60,4 +61,69 @@
 .settingBox button:first-child {
   border-bottom: 1px solid rgb(80, 80, 80);
   text-align: left;
+}
+.activeS {
+  display: flex !important;
+}
+.contentTodoBox {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 0;
+}
+.contentTodoBox form,
+.contentTodoList {
+  border-radius: 0.7rem;
+  display: flex;
+  transition: border 0.3s;
+  padding: 0.7rem;
+}
+.contentTodoBox form{
+  background: none;
+  border: 2px solid #262632;
+  transition: border 0.3s;
+
+}
+.contentTodoBox form button {
+  border: none;
+  width: 1.5rem;
+  background: #ae68e6;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  color: black;
+  cursor: pointer;
+}
+
+.contentTodoBox form:hover {
+  border: 2px solid rgb(73, 73, 92);
+}
+.contentTodoBox input {
+  font-size: 1.1rem;
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding-left: 0.6rem;
+}
+.contentTodoBox h3{
+  padding-bottom:1rem ;
+}
+
+.contentTodoList {
+  background: #262632;
+  border: none;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  padding
+}
+.contentTodoList p {
+  padding-left: 0.5rem;
+}
+
+.contentTaskBtn {
+  border: 2px solid #ae68e6;
+  background: none;
+  width: 1.5rem;
+  border-radius: 0.5rem;
+  margin-left:2px;
+  cursor:pointer;
 }
