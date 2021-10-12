@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. task box 끝
+1. complete UI 추가
 
 ### content
 
@@ -10,3 +10,13 @@
 ### popup
 
 -data 전달
+
+다음은 complete 섹션
+
+### main
+
+- main에서 화면이 로드되었을 때 데이터를 가져오는 controll추가해야됨
+
+### 다음할것
+
+- completeBtn 이벤트 추가

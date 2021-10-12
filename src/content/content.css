@@ -65,23 +65,26 @@
 .activeS {
   display: flex !important;
 }
-.contentTodoBox {
+
+/* content box */
+.contentTodoBox,
+.contentComBox {
   display: flex;
   flex-direction: column;
   padding: 3rem 0;
 }
 .contentTodoBox form,
-.contentTodoList {
+.contentTodoList,
+.contentCompleteList {
   border-radius: 0.7rem;
   display: flex;
   transition: border 0.3s;
   padding: 0.7rem;
 }
-.contentTodoBox form{
+.contentTodoBox form {
   background: none;
   border: 2px solid #262632;
   transition: border 0.3s;
-
 }
 .contentTodoBox form button {
   border: none;
@@ -104,26 +107,37 @@
   width: 100%;
   padding-left: 0.6rem;
 }
-.contentTodoBox h3{
-  padding-bottom:1rem ;
+.contentTodoBox h3,
+.contentComBox h3 {
+  padding-bottom: 1rem;
 }
 
-.contentTodoList {
+.contentTodoList,
+.contentCompleteList {
   background: #262632;
   border: none;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
-  padding
 }
-.contentTodoList p {
+.contentCompleteList p {
+  text-decoration: line-through;
+}
+.contentTodoList p,
+.contentCompleteList p {
   padding-left: 0.5rem;
 }
 
-.contentTaskBtn {
+.contentTaskBtn,
+.completeBtn {
   border: 2px solid #ae68e6;
   background: none;
   width: 1.5rem;
   border-radius: 0.5rem;
-  margin-left:2px;
-  cursor:pointer;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.completeBtn {
+  background: #ae68e6;
+  color: black;
 }
