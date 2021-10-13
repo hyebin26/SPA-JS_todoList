@@ -4,6 +4,9 @@ const ContentModel = {
 };
 
 const ContentController = {
+  clickCompleteBtn: (e) => {
+    console.log(e);
+  },
   clickContentPopup: () => {
     const clickContentPopup = document.querySelector(".popupContainer");
     clickContentPopup.classList.add("activeP");
@@ -31,13 +34,12 @@ const ContentController = {
     const contentComBtn = document.createElement("button");
     const comText = e.target.nextSibling.innerText;
     const comId = e.target.parentNode.dataset.id;
-    const comLength =
-      document.querySelectorAll(".contentCompleteList").length + 1;
+    const comLength = document.querySelectorAll(".contentCompleteList").length;
 
     contentComP.textContent = comText;
-    contentComLi.dataset.id = comId;
+    contentComLi.dataset.id = comLength;
 
-    contentComTitle.textContent = `Completed - ${comLength}`;
+    contentComTitle.textContent = `Completed - ${comLength + 1}`;
     contentComBtn.textContent = "✓";
     contentComBtn.className = "completeBtn";
     contentComLi.className = "contentCompleteList";
@@ -46,16 +48,21 @@ const ContentController = {
     contentComLi.append(contentComBtn, contentComP);
     contentComUl.append(contentComLi);
 
-    ContentModel.complete[comId] = comText;
+    ContentModel.complete[comLength] = comText;
     delete ContentModel.task[comId];
+
+    contentComBtn.addEventListener("click", ContentController.sutmitTodoForm);
+    e.target.parentNode.remove();
   },
   sutmitTodoForm: (e) => {
     e.preventDefault();
+    const type = e.type;
+    console.log(type);
+    // click, submit일 경우 나눠서
     if (e.target[1].value !== "" && e.target[1].value[0] !== " ") {
-      let taskLength = Object.keys(ContentModel.task).length;
-      let taskLastKey = Number(Object.keys(ContentModel.task)[taskLength - 1]);
       const submitTodo = document.querySelector(".contentTodo");
       const submitTaskCnt = document.querySelectorAll(".contentTodoList");
+      const submitTaskCntLength = submitTaskCnt.length;
       const submitTaskTitle = document.querySelector(".contentTaskTitle");
       const todoList = document.createElement("li");
       const taskBtn = document.createElement("button");
@@ -63,16 +70,13 @@ const ContentController = {
 
       todoList.className = "contentTodoList";
       taskBtn.className = "contentTaskBtn";
-      if (isNaN(taskLastKey)) {
-        todoList.dataset.id = 0;
-        ContentModel.task[0] = e.target[1].value;
-      } else {
-        todoList.dataset.id = taskLastKey + 1;
-        ContentModel.task[taskLastKey + 1] = e.target[1].value;
-      }
       submitTaskTitle.textContent = `Tasks - ${submitTaskCnt.length + 1}`;
       taskText.textContent = e.target[1].value;
       taskBtn.textContent = " ";
+
+      todoList.dataset.id = submitTaskCntLength;
+      ContentModel.task[submitTaskCntLength] = e.target[1].value;
+
       taskBtn.addEventListener("click", ContentController.clickTaskBtn);
       todoList.append(taskBtn, taskText);
       submitTodo.append(todoList);
