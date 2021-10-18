@@ -1,6 +1,7 @@
 ## vanilla js SPA todoList
 
-1. complete UI 추가
+1. completeBtn 이벤트 추가
+2. submitTodo => addTodo로 변경
 
 ### content
 
@@ -18,5 +19,3 @@
 - main에서 화면이 로드되었을 때 데이터를 가져오는 controll추가해야됨
 
 ### 다음할것
-
-- completeBtn 이벤트 추가

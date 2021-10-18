@@ -35,6 +35,9 @@ const ContentController = {
     const comText = e.target.nextSibling.innerText;
     const comId = e.target.parentNode.dataset.id;
     const comLength = document.querySelectorAll(".contentCompleteList").length;
+    const contentTaskTitle = document.querySelector(".contentTaskTitle");
+    const contentTaskLength =
+      document.querySelectorAll(".contentTodoList").length;
 
     contentComP.textContent = comText;
     contentComLi.dataset.id = comLength;
@@ -43,6 +46,7 @@ const ContentController = {
     contentComBtn.textContent = "✓";
     contentComBtn.className = "completeBtn";
     contentComLi.className = "contentCompleteList";
+    contentTaskTitle.textContent = `Tasks - ${contentTaskLength - 1}`;
 
     contentComBox.append(contentComTitle, contentComUl);
     contentComLi.append(contentComBtn, contentComP);
@@ -51,36 +55,47 @@ const ContentController = {
     ContentModel.complete[comLength] = comText;
     delete ContentModel.task[comId];
 
-    contentComBtn.addEventListener("click", ContentController.sutmitTodoForm);
+    contentComBtn.addEventListener("click", ContentController.addTodo);
     e.target.parentNode.remove();
   },
-  sutmitTodoForm: (e) => {
+  addTodo: (e) => {
     e.preventDefault();
     const type = e.type;
-    console.log(type);
-    // click, submit일 경우 나눠서
-    if (e.target[1].value !== "" && e.target[1].value[0] !== " ") {
-      const submitTodo = document.querySelector(".contentTodo");
-      const submitTaskCnt = document.querySelectorAll(".contentTodoList");
-      const submitTaskCntLength = submitTaskCnt.length;
-      const submitTaskTitle = document.querySelector(".contentTaskTitle");
-      const todoList = document.createElement("li");
-      const taskBtn = document.createElement("button");
-      const taskText = document.createElement("p");
+    const addTodo = document.querySelector(".contentTodo");
+    const addTaskCnt = document.querySelectorAll(".contentTodoList");
+    const addTaskCntLength = addTaskCnt.length;
+    const addTaskTitle = document.querySelector(".contentTaskTitle");
+    const todoList = document.createElement("li");
+    const taskBtn = document.createElement("button");
+    const taskText = document.createElement("p");
 
-      todoList.className = "contentTodoList";
-      taskBtn.className = "contentTaskBtn";
-      submitTaskTitle.textContent = `Tasks - ${submitTaskCnt.length + 1}`;
-      taskText.textContent = e.target[1].value;
-      taskBtn.textContent = " ";
+    todoList.className = "contentTodoList";
+    taskBtn.className = "contentTaskBtn";
+    addTaskTitle.textContent = `Tasks - ${addTaskCnt.length + 1}`;
+    taskBtn.textContent = " ";
+    todoList.dataset.id = addTaskCntLength;
+    taskBtn.addEventListener("click", ContentController.clickTaskBtn);
+    todoList.append(taskBtn, taskText);
+    addTodo.append(todoList);
+    if (type === "submit") {
+      if (e.target[1].value !== "" && e.target[1].value[0] !== " ") {
+        taskText.textContent = e.target[1].value;
+        ContentModel.task[addTaskCntLength] = e.target[1].value;
+        e.target[1].value = "";
+      }
+    } //
+    else {
+      const addCompleteTitle = document.querySelector(".contentCompleteTitle");
+      const addCompleteLength = document.querySelectorAll(
+        ".contentCompleteList"
+      ).length;
 
-      todoList.dataset.id = submitTaskCntLength;
-      ContentModel.task[submitTaskCntLength] = e.target[1].value;
+      addCompleteTitle.textContent = `Completed -${addCompleteLength - 1}`;
+      taskText.textContent = e.target.nextSibling.textContent;
 
-      taskBtn.addEventListener("click", ContentController.clickTaskBtn);
-      todoList.append(taskBtn, taskText);
-      submitTodo.append(todoList);
-      e.target[1].value = "";
+      ContentModel.task[addTaskCntLength] = e.target.nextSibling.textContent;
+      e.target.parentNode.remove();
+      delete ContentModel.complete[e.target.parentNode.dataset.id];
     }
   },
 };
@@ -148,7 +163,7 @@ const Content = () => {
   );
   contentSettingBtn.addEventListener("blur", ContentController.blurSettignBox);
   contentEditBtn.addEventListener("click", ContentController.clickContentPopup);
-  contentTodoForm.addEventListener("submit", ContentController.sutmitTodoForm);
+  contentTodoForm.addEventListener("submit", ContentController.addTodo);
 
   const contentCss = document.createElement("link");
   contentCss.rel = "stylesheet";
