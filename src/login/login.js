@@ -4,14 +4,15 @@ const kakaoTest = async (e) => {
   location.href = kakaoAuth;
 };
 
-const getKakaoToken = (token) => {
-  console.log(token);
+const getKakaoToken = async (token) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token }),
   };
-  fetch("/kakao/token", requestOptions);
+  const getNickname = await fetch("/kakao/token", requestOptions);
+  const { nickname } = await getNickname.json();
+  console.log(nickname);
 };
 
 //const naverBtn = new naver_id_login(NAVER.KEY, "UPyQ2zxgkM");

@@ -33,17 +33,30 @@ app.get("/kakao/auth", async (req, res) => {
 app.post("/kakao/token", async (req, res) => {
   const { token } = req.body;
   try {
-    const requestOptions = {
+    const getTokenOptions = {
       method: "POST",
       headers: { "Content-type": "application/x-www-form-urlencoded" },
       redirect: "follow",
     };
-    const response = await fetch(
+    const fetchGetToken = await fetch(
       `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${token}`,
-      requestOptions
+      getTokenOptions
     );
-    const data = await response.json();
-    console.log(data);
+    const { access_token } = await fetchGetToken.json();
+    const fetchNickOptions = {
+      method: "POST",
+      headers: {
+        "Content-type": " application/x-www-form-urlencoded;charset=utf-8",
+        Authorization: `Bearer ${access_token}`,
+      },
+    };
+    const getNickname = await fetch(
+      "https://kapi.kakao.com/v2/user/me",
+      fetchNickOptions
+    );
+    const userData = await getNickname.json();
+    const { nickname } = await userData.properties;
+    res.send({ nickname });
   } catch (err) {
     console.log(err);
   }
