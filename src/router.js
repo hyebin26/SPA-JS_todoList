@@ -41,7 +41,7 @@ const linkEvent = () => {
 
 const router = async () => {
   const routes = [
-    { path: "/", view: () => console.log("/ page") },
+    { path: "/", view: () => console.log("/page") },
     { path: "/detail", view: () => console.log("detail page") },
     { path: "/about", view: () => console.log("about page") },
   ];

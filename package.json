@@ -18,7 +18,11 @@
   },
   "homepage": "https://github.com/hyebin26/SPA-JS_todoList#readme",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "node-fetch": "^3.0.0",
+    "path": "^0.12.7",
     "supervisor": "^0.12.0"
-  }
+  },
+  "type": "module"
 }
