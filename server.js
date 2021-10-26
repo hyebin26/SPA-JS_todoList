@@ -72,9 +72,33 @@ app.post("/kakao/token", async (req, res) => {
       "https://kapi.kakao.com/v2/user/me",
       fetchNickOptions
     );
-    console.log("wht!!");
     const userData = await getNickname.json();
     const { nickname } = await userData.properties;
+    res.send({ nickname });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/naver/token", async (req, res) => {
+  const { token } = req.body;
+  try {
+    const fetchNaverToken = await fetch(
+      `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${token}`
+    );
+    const { access_token } = await fetchNaverToken.json();
+    const getNaverNicknameOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    };
+    const getNaverNickname = await fetch(
+      "https://openapi.naver.com/v1/nid/me",
+      getNaverNicknameOptions
+    );
+    const userData = await getNaverNickname.json();
+    const { nickname } = userData.response;
     res.send({ nickname });
   } catch (err) {
     console.log(err);

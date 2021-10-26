@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. naver login 추가
-2. fetch 코드 정리
+1. naver login 마무리
 
 ### content
 
@@ -21,6 +20,7 @@
 ### Login
 
 - 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨
+- 네이버 로그아웃 => http://nid.naver.com/nidlogin.logout 팝업하기?
 
 ### 알게된 것
 
@@ -28,4 +28,4 @@
 
 ### 다음할 것
 
-1. 네이버 토큰 받기, 프로필 받기
+1. router구현하기

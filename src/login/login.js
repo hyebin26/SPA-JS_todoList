@@ -19,14 +19,14 @@ const clickNaverBtn = async (e) => {
   }
 };
 
-const getKakaoToken = async (token) => {
+const sendAuthToken = async (social, token) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token }),
   };
-  const getNickname = await fetch("/kakao/token", requestOptions);
-  const { nickname } = await getNickname.json();
+  const getNickname = await fetch(`/${social}/token`, requestOptions);
+  const { nickname } = await getNickname.json(); 
   console.log(nickname);
 };
 
@@ -54,7 +54,10 @@ const Login = () => {
   const url = new URL(window.location.href);
   const urlParams = url.searchParams;
   if (urlParams.has("code")) {
-    getKakaoToken(urlParams.get("code"));
+    if (urlParams.has("state")) {
+      sendAuthToken("naver", urlParams.get("code"));
+    } //
+    else sendAuthToken("kakao", urlParams.get("code"));
   }
   loginSocialBox.append(loginKakao, loginNaver);
 
