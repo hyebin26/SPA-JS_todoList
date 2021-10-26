@@ -24,10 +24,28 @@ app.get("/about", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
 
+app.get("/naver/auth", async (req, res) => {
+  try {
+    const fetchNaverAuth = await fetch(
+      `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.AUTH_REDIRECT}&state=${process.env.NAVER_CLIENT_SECRET}`
+    );
+    const naverAuthURL = fetchNaverAuth.url;
+    res.json({ naverAuthURL });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.get("/kakao/auth", async (req, res) => {
-  await fetch(
-    `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_API_KEY}&redirect_uri=${process.env.AUTH_REDIRECT}`
-  ).then((data) => res.json({ kakaoAuth: data.url }));
+  try {
+    const fetchKakaoAuth = await fetch(
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_API_KEY}&redirect_uri=${process.env.AUTH_REDIRECT}`
+    );
+    const kakaoAuthURL = await fetchKakaoAuth.url;
+    res.json({ kakaoAuthURL });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.post("/kakao/token", async (req, res) => {
@@ -54,6 +72,7 @@ app.post("/kakao/token", async (req, res) => {
       "https://kapi.kakao.com/v2/user/me",
       fetchNickOptions
     );
+    console.log("wht!!");
     const userData = await getNickname.json();
     const { nickname } = await userData.properties;
     res.send({ nickname });

@@ -1,7 +1,22 @@
-const kakaoTest = async (e) => {
-  const { kakaoAuth } = await fetch("http://localhost:3500/kakao/auth") //
-    .then((res) => res.json());
-  location.href = kakaoAuth;
+const localhost = "http://localhost:3500";
+const clickKakaoBtn = async (e) => {
+  try {
+    const fetchKakaoBtn = await fetch(`${localhost}/kakao/auth`); //
+    const { kakaoAuthURL } = await fetchKakaoBtn.json();
+    location.href = kakaoAuthURL;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const clickNaverBtn = async (e) => {
+  try {
+    const fetchNaverBtn = await fetch(`${localhost}/naver/auth`);
+    const { naverAuthURL } = await fetchNaverBtn.json();
+    location.href = naverAuthURL;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const getKakaoToken = async (token) => {
@@ -15,19 +30,6 @@ const getKakaoToken = async (token) => {
   console.log(nickname);
 };
 
-//const naverBtn = new naver_id_login(NAVER.KEY, "UPyQ2zxgkM");
-const NaverLogin = () => {
-  const naverDiv = document.createElement("div");
-  const naverRoot = document.getElementById("root");
-  naverDiv.id = "naver_id_login";
-  naverRoot.append(naverDiv);
-  const state = naverBtn.getUniqState();
-  naverBtn.setButton("white", 3, 40);
-  naverBtn.setDomain("http://localhost:3500");
-  naverBtn.setState(state);
-  naverBtn.setPopup();
-  naverBtn.init_naver_id_login();
-};
 const Login = () => {
   const loginRoot = document.getElementById("root");
   const loginSec = document.createElement("section");
@@ -44,15 +46,17 @@ const Login = () => {
   const loginSignUpLink = document.createElement("a");
 
   loginTitle.textContent = "Login";
+  loginNaver.textContent = "Naver";
 
   loginKakao.textContent = "Test";
-  loginKakao.addEventListener("click", kakaoTest);
+  loginKakao.addEventListener("click", clickKakaoBtn);
+  loginNaver.addEventListener("click", clickNaverBtn);
   const url = new URL(window.location.href);
   const urlParams = url.searchParams;
   if (urlParams.has("code")) {
     getKakaoToken(urlParams.get("code"));
   }
-  loginSocialBox.append(loginKakao);
+  loginSocialBox.append(loginKakao, loginNaver);
 
   loginPasswordInput.type = "password";
   loginEmailInput.type = "text";
