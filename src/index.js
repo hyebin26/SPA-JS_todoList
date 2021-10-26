@@ -6,5 +6,10 @@ import Login from "./login/login.js";
 
 const init = () => {
   Login();
+
+  const indexCss = document.createElement("link");
+  indexCss.rel = "stylesheet";
+  indexCss.href = "/index.css";
+  document.head.appendChild(indexCss);
 };
 init();

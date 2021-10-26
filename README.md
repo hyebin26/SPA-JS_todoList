@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. naver login 마무리
+1. login ui 추가
 
 ### content
 
@@ -28,4 +28,4 @@
 
 ### 다음할 것
 
-1. router구현하기
+1. 회원가입, DB연동

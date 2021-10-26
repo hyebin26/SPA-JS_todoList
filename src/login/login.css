@@ -1,0 +1,76 @@
+.loginSec {
+  max-width: 27rem;
+  margin: 2rem auto;
+  border-radius: 10px;
+  padding: 3rem;
+  color: #ffffff;
+}
+
+.loginTitleBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginTitleBox img {
+  width: 70px;
+  filter: brightness(0) invert(1);
+}
+.loginTitleBox h1 {
+  padding-top: 0.3rem;
+  font-size: 1.6rem;
+}
+
+.loginSocialBox {
+  text-align: center;
+}
+
+.loginSocialBox img {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0.8rem 0.5rem;
+}
+.loginSocialBox p {
+  font-size: 0.8rem;
+  color: #575f66;
+}
+
+.loginInputBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+}
+
+.loginInputBox a {
+  margin: 0.5rem 0;
+  color: #fafafa;
+  font-size: 0.8rem;
+}
+
+.loginInputBox input {
+  background: #1d1d26;
+  border: 2px solid #575f66;
+  padding: 0.7rem 0.5rem;
+  border-radius: 7px;
+  margin: 0.5rem 0;
+  width: 100%;
+  outline: none;
+  color: #ffffff;
+}
+.loginInputBox input:hover {
+  border: 2px solid #fd8197;
+}
+
+.loginInputBox button {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.7rem 0;
+  background: #fd8197;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
