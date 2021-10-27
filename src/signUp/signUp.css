@@ -1,0 +1,72 @@
+.signUpLogoBox {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+.signUpLogoBox img {
+  filter: brightness(0) invert(1);
+  width: 50px;
+}
+.signUpLogoBox a {
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column-reverse;
+  font-weight: bold;
+  align-items: center;
+  color: #ffffff;
+}
+
+.signUpInputBox {
+  max-width: 25rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  padding-top: 8rem;
+}
+.signUpInputBox h3 {
+  font-size: 0.9rem;
+}
+.signUpInputBox div {
+  padding: 0.5rem 0;
+}
+.signUpInputBox input {
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 3px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: #424248;
+}
+.signUpInputBox p {
+  font-size: 0.7rem;
+  color: #8b98a3;
+  margin: 0.4rem 0;
+}
+.signUpBtnBox button {
+  margin: 0.5rem 0;
+  width: 100%;
+  border-radius: 5px;
+  padding: 0.7rem 0;
+  background: #f74e6d;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s background;
+}
+.signUpBtnBox button:hover {
+  background: rgb(226, 41, 75);
+}
+.signUpBtnBox a {
+  text-decoration: underline;
+  margin-left: 0.3rem;
+  transition: 0.3s color;
+}
+.signUpBtnBox a:hover {
+  color: #f74e6d;
+}
+.signUpFalseText {
+  color: rgb(253, 57, 57) !important;
+}

@@ -1,6 +1,7 @@
 ## vanilla js SPA todoList
 
-1. login ui 추가
+1. 회원가입 UI추가
+2. password check 이벤트 추가
 
 ### content
 
@@ -29,3 +30,4 @@
 ### 다음할 것
 
 1. 회원가입, DB연동
+2. router연결
