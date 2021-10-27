@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. 회원가입 UI추가
-2. password check 이벤트 추가
+1. add mysql
+2. add duplicate check in signUp.js
 
 ### content
 

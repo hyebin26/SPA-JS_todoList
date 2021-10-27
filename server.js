@@ -3,16 +3,42 @@ import dotenv from "dotenv";
 import path from "path";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
+import mysql from "mysql";
 
 const __dirname = path.resolve();
 const app = express();
 const jsonParser = bodyParser.json();
 dotenv.config();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/src"));
+const conn = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "@@da8611zi",
+  database: "todolist",
+});
+//conn.connect();
+
+// conn.query("SELECT * from tuser", (error, rows, fields) => {
+//   if (error) throw error;
+//   console.log("User info is: ", rows);
+// });
+
+app.post("/signUp/uid", (req, res) => {
+  const { uid } = req.body;
+  console.log(uid);
+  conn.query(`select * from tuser where uid="${uid}"`, (err, row, fields) => {
+    if (err) console.log(err);
+    if (row.length) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+//conn.end();
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");

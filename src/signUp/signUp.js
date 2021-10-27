@@ -1,3 +1,5 @@
+const localhost = "http://localhost:3500";
+
 const SignUpController = {
   focusOutPassword: (e) => {
     const PASS_MIN = 8,
@@ -26,6 +28,22 @@ const SignUpController = {
       e.target.nextSibling.textContent = "";
     }
   },
+  focusOutId: async (e) => {
+    const uid = e.target.value;
+    const idRequestOpt = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid }),
+    };
+    const fetchId = await fetch(`/signUp/uid`, idRequestOpt);
+    const checkId = await fetchId.json();
+    console.log(checkId);
+    if (checkId) {
+      e.target.nextSibling.textContent = "";
+    } else {
+      e.target.nextSibling.textContent = "중복된 아이디가 존재합니다.";
+    }
+  },
 };
 
 const makeInputBox = ({ _type, _placeholder, _text, _title }) => {
@@ -37,6 +55,9 @@ const makeInputBox = ({ _type, _placeholder, _text, _title }) => {
 
   if (_type === "password") {
     makeInput.addEventListener("focusout", SignUpController.focusOutPassword);
+  }
+  if (_title === "Id") {
+    makeInput.addEventListener("focusout", SignUpController.focusOutId);
   }
   makeInputTitle.textContent = _placeholder;
   makeInput.type = _type;
