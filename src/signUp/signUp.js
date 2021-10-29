@@ -1,5 +1,3 @@
-const localhost = "http://localhost:3500";
-
 const SignUpController = {
   focusOutPassword: (e) => {
     const PASS_MIN = 8,
@@ -16,32 +14,93 @@ const SignUpController = {
       if (e.target.parentNode.className === "signUpPasswordBox") {
         e.target.nextSibling.textContent =
           "비밀 번호는 영문,숫자 포함 8글자 이상이어야 합니다.";
+        e.target.nextSibling.classList.add("falseSignup");
       } else {
         const checkPass = document.querySelector(".signUpPasswordInput");
         if (checkPass.value !== e.target.value) {
           e.target.nextSibling.textContent = "비밀번호가 일치하지 않습니다.";
+          e.target.nextSibling.classList.add("falseSignup");
         } else {
           e.target.nextSibling.textContent = "";
+          e.target.nextSibling.classList.remove("falseSignup");
         }
       }
     } else {
       e.target.nextSibling.textContent = "";
+      e.target.nextSibling.classList.remove("falseSignup");
     }
   },
-  focusOutId: async (e) => {
-    const uid = e.target.value;
+  duplicateCheck: async (e) => {
+    const [ID_MIN, ID_MAX] = [6, 20];
+    const [UNAME_MIN, UNAME_MAX] = [2, 15];
+    const check = e.target.value;
+    const { category } = e.target.dataset;
     const idRequestOpt = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid }),
+      body: JSON.stringify({ check, category }),
     };
-    const fetchId = await fetch(`/signUp/uid`, idRequestOpt);
-    const checkId = await fetchId.json();
-    console.log(checkId);
-    if (checkId) {
-      e.target.nextSibling.textContent = "";
+    if (category === "uid") {
+      if (check.length >= ID_MIN && check.length <= ID_MAX) {
+        e.target.nextSibling.textContent = "";
+        e.target.nextSibling.classList.remove("falseSignup");
+        const fetchId = await fetch(`/signUp/check`, idRequestOpt);
+        const checkId = await fetchId.json();
+        if (checkId) {
+          e.target.nextSibling.classList.remove("falseSignup");
+          e.target.nextSibling.textContent = "";
+        } else {
+          e.target.nextSibling.classList.add("falseSignup");
+          e.target.nextSibling.textContent = "중복된 아이디가 존재합니다.";
+        }
+      } else {
+        e.target.nextSibling.textContent = "아이디는 6~20자 이어야 합니다.";
+        e.target.nextSibling.classList.add("falseSignup");
+      }
+    }
+    if (category === "uname") {
+      if (check.length >= UNAME_MIN && check.length <= UNAME_MAX) {
+        e.target.nextSibling.textContent = "";
+        e.target.nextSibling.classList.remove("falseSignup");
+        const fetchId = await fetch(`/signUp/check`, idRequestOpt);
+        const checkId = await fetchId.json();
+        if (checkId) {
+          e.target.nextSibling.textContent = "";
+          e.target.nextSibling.classList.remove("falseSignup");
+        } else {
+          e.target.nextSibling.textContent = "중복된 아이디가 존재합니다.";
+          e.target.nextSibling.classList.add("falseSignup");
+        }
+      } else {
+        e.target.nextSibling.classList.add("falseSignup");
+        e.target.nextSibling.textContent = "닉네임은 2~15자 이어야 합니다.";
+      }
+    }
+  },
+  clickSignUpBtn: async (e) => {
+    // 데이터패치 => collection 페이지로 이동
+    const duplicate = document.querySelectorAll(".falseSignup");
+    if (duplicate.length) {
+      duplicate.forEach((item) => {
+        item.textContent = "필수 입력 항목입니다.";
+      });
     } else {
-      e.target.nextSibling.textContent = "중복된 아이디가 존재합니다.";
+      const uid = document.querySelector(".signUpUidInput").value;
+      const pwd = document.querySelector(".signUpPasswordInput").value;
+      const uname = document.querySelector(".signUpUnameInput").value;
+      const user = { uid, pwd, uname };
+      const successRequestOption = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user }),
+      };
+      const fetchSignUpSuccess = await fetch(
+        "/signUp/success",
+        successRequestOption
+      );
+      const signUpSuccess = await fetchSignUpSuccess.json();
+      if (signUpSuccess) location.href = "#";
+      else alert("다시 시도해주세요.");
     }
   },
 };
@@ -56,15 +115,17 @@ const makeInputBox = ({ _type, _placeholder, _text, _title }) => {
   if (_type === "password") {
     makeInput.addEventListener("focusout", SignUpController.focusOutPassword);
   }
-  if (_title === "Id") {
-    makeInput.addEventListener("focusout", SignUpController.focusOutId);
+  if (_title === "Uid" || _title === "Uname") {
+    makeInput.addEventListener("focusout", SignUpController.duplicateCheck);
   }
   makeInputTitle.textContent = _placeholder;
   makeInput.type = _type;
+  makeInput.dataset.category = _title.toLowerCase();
   makeInput.placeholder = _placeholder;
   makeP.textContent = _text;
 
   makeFalseText.className = `signUpFalseText`;
+  makeFalseText.classList.add("falseSignup");
   makeInputBox.className = `signUp${_title}Box`;
   makeInput.className = `signUp${_title}Input`;
   makeInputBox.append(makeInputTitle, makeP, makeInput, makeFalseText);
@@ -86,8 +147,8 @@ const SignUp = () => {
   const emailObj = {
     _type: "text",
     _placeholder: "아이디",
-    _text: "영문,숫자를 포함한 아이디를 입력해주세요.(6~20자)",
-    _title: "Id",
+    _text: "아이디를 입력해주세요.(6~20자)",
+    _title: "Uid",
   };
   const passwordObj = {
     _type: "password",
@@ -105,7 +166,7 @@ const SignUp = () => {
     _type: "text",
     _placeholder: "닉네임",
     _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
-    _title: "Nickname",
+    _title: "Uname",
   };
   const signUpIdBox = makeInputBox(emailObj);
   const signUpPasswordBox = makeInputBox(passwordObj);
@@ -137,6 +198,8 @@ const SignUp = () => {
   );
   signUpSec.append(signUpLogoBox, signUpInputBox);
   signUpRoot.append(signUpSec);
+
+  signUpBtn.addEventListener("click", SignUpController.clickSignUpBtn);
 
   const signUpCss = document.createElement("link");
   signUpCss.rel = "stylesheet";

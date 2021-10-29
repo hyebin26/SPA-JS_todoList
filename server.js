@@ -19,26 +19,26 @@ const conn = mysql.createConnection({
   password: "@@da8611zi",
   database: "todolist",
 });
-//conn.connect();
 
 // conn.query("SELECT * from tuser", (error, rows, fields) => {
 //   if (error) throw error;
 //   console.log("User info is: ", rows);
 // });
 
-app.post("/signUp/uid", (req, res) => {
-  const { uid } = req.body;
-  console.log(uid);
-  conn.query(`select * from tuser where uid="${uid}"`, (err, row, fields) => {
-    if (err) console.log(err);
-    if (row.length) {
-      res.send(false);
-    } else {
-      res.send(true);
+app.post("/signUp/check", (req, res) => {
+  const { check, category } = req.body;
+  conn.query(
+    `select * from tuser where ${category}="${check}"`,
+    (err, row, fields) => {
+      if (err) console.log(err);
+      if (row.length) {
+        res.send(false);
+      } else {
+        res.send(true);
+      }
     }
-  });
+  );
 });
-//conn.end();
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
@@ -60,6 +60,19 @@ app.get("/naver/auth", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+app.post("/signUp/success", (req, res) => {
+  const { uid, pwd, uname } = req.body.user;
+  conn.query(
+    `insert into tuser values("${uid}","${pwd}","${uname}")`,
+    (err, row, field) => {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
+    }
+  );
 });
 
 app.get("/kakao/auth", async (req, res) => {
