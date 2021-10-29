@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. 회원가입 event 추가
-2. 중복체크 리팩토링
+1. popup.js에 clickPopupCreate, fetchCollection 추가
 
 ### content
 
@@ -29,5 +28,9 @@
 
 ### 다음할 것
 
-1. 회원가입, DB연동
-2. router연결
+- 데이터 join하기
+- https://stackoverflow.com/questions/17371639/how-to-store-arrays-in-mysql
+
+1. router연결
+2. DB에 task , collection 추가
+3. 배포

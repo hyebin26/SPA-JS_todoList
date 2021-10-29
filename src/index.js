@@ -6,7 +6,8 @@ import Login from "./login/login.js";
 import SignUp from "./signUp/signUp.js";
 
 const init = () => {
-  SignUp();
+  Header();
+  Main();
 
   const indexCss = document.createElement("link");
   indexCss.rel = "stylesheet";

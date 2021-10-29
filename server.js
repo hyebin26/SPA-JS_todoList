@@ -39,7 +39,24 @@ app.post("/signUp/check", (req, res) => {
     }
   );
 });
-
+app.post("/signUp/success", (req, res) => {
+  const { uid, pwd, uname } = req.body.user;
+  conn.query(
+    `insert into tuser values("${uid}","${pwd}","${uname}")`,
+    (err, row, field) => {
+      if (err) {
+        console.log(err);
+        res.send(false);
+      }
+      res.send(true);
+    }
+  );
+});
+app.post("/collection/add", (req, res) => {
+  console.log(req.body);
+  // uname의 데이터 테이블 만들기 => collection 객체 넣기
+  // datatable이 없디면 추가하기
+});
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
 });
@@ -60,19 +77,6 @@ app.get("/naver/auth", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-});
-app.post("/signUp/success", (req, res) => {
-  const { uid, pwd, uname } = req.body.user;
-  conn.query(
-    `insert into tuser values("${uid}","${pwd}","${uname}")`,
-    (err, row, field) => {
-      if (err) {
-        console.log(err);
-        res.send(false);
-      }
-      res.send(true);
-    }
-  );
 });
 
 app.get("/kakao/auth", async (req, res) => {

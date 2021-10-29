@@ -30,7 +30,7 @@ body {
 .dashBox img {
   width: 19px;
   height: 19px;
-  color: #ffffff;
+  filter: brightness(0) invert(1);
 }
 .dashBox p {
   padding: 0 0.6rem;

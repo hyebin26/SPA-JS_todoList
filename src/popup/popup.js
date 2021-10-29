@@ -1,14 +1,38 @@
-const clickColor = (e) => {
-  const clickedColor = document.getElementsByClassName("clickedColor");
-  clickedColor[0].style.backgroundColor = "#1d1d27";
-  clickedColor[0].classList.remove("clickedColor");
-  e.target.classList.add("clickedColor");
-  clickedColor[0].style.backgroundColor = e.target.style.borderColor;
-};
+const collection = {};
 
-const clickExitBtn = () => {
-  const exitPopup = document.querySelector(".popupContainer");
-  exitPopup.classList.remove("activeP");
+const PopupController = {
+  clickColor: (e) => {
+    const clickedColor = document.getElementsByClassName("clickedColor");
+    clickedColor[0].style.backgroundColor = "#1d1d27";
+    clickedColor[0].classList.remove("clickedColor");
+    e.target.classList.add("clickedColor");
+    clickedColor[0].style.backgroundColor = e.target.style.borderColor;
+  },
+  clickExitBtn: () => {
+    const exitPopup = document.querySelector(".popupContainer");
+    exitPopup.classList.remove("activeP");
+  },
+  clickPopupCreate: () => {
+    const name = document.querySelector(".popupNameInput").value;
+    const color = document.querySelector(".clickedColor").dataset.color;
+    const createExit = document.querySelector(".popupContainer");
+    const collectionId = Object.keys(collection).length;
+    const userCollection = { name, color, tasks: {}, complete: {} };
+    collection[collectionId] = userCollection;
+    PopupController.fetchCollection(collectionId, userCollection);
+    console.log(collection);
+    // createExit.classList.remove("activeP");
+  },
+  fetchCollection: (id, collection) => {
+    const collectionRequest = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, collection }),
+    };
+    fetch("/collection/add", collectionRequest);
+    //collection fetch server => server sql 추가 => collection 기져오기
+    // collection이 변경되었을 때 => main에서 리렌더링이 되게
+  },
 };
 
 const Popup = () => {
@@ -46,7 +70,7 @@ const Popup = () => {
     popupColorList.dataset.color = colorList[i];
     popupColorList.classList.add("colorList");
     popupColorList.style.border = `3px solid ${colorList[i]}`;
-    popupColorList.addEventListener("click", clickColor);
+    popupColorList.addEventListener("click", PopupController.clickColor);
     popupColorUl.append(popupColorList);
   }
   popupTitle.textContent = "Add Collection";
@@ -54,9 +78,11 @@ const Popup = () => {
   popupNameP.textContent = "Name";
   popupColorP.textContent = "Color";
   popupNameInput.placeholder = "My Collection";
+  popupNameInput.type = "text";
   popupCreateBtn.textContent = "Create";
   popupCancelBtn.textContent = "Cancel";
 
+  popupNameInput.className = "popupNameInput";
   popupContainer.className = "popupContainer";
   popupBox.className = "popupBox";
   popupTitleBox.className = "popupTitleBox";
@@ -74,8 +100,9 @@ const Popup = () => {
   popupContainer.append(popupBox);
   popupRoot.append(popupContainer);
 
-  popupXBtn.addEventListener("click", clickExitBtn);
-  popupCancelBtn.addEventListener("click", clickExitBtn);
+  popupXBtn.addEventListener("click", PopupController.clickExitBtn);
+  popupCancelBtn.addEventListener("click", PopupController.clickExitBtn);
+  popupCreateBtn.addEventListener("click", PopupController.clickPopupCreate);
 
   const popupCss = document.createElement("link");
   popupCss.rel = "stylesheet";

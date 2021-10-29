@@ -1,3 +1,5 @@
+import Popup from "../popup/popup.js";
+
 const clickAddBtn = () => {
   const clickPopup = document.querySelector(".popupContainer");
   clickPopup.classList.add("activeP");
@@ -22,6 +24,7 @@ const Main = () => {
   mainCss.rel = "stylesheet";
   mainCss.href = "/main/main.css";
   document.head.appendChild(mainCss);
+  Popup();
   mainAddBtn.addEventListener("click", clickAddBtn);
 };
 

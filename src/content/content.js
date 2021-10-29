@@ -63,7 +63,7 @@ const ContentController = {
     const type = e.type;
     const addTodo = document.querySelector(".contentTodo");
     const addTaskCnt = document.querySelectorAll(".contentTodoList");
-    const addTaskCntLength = addTaskCnt.length;
+    const taskId = Object.keys(ContentMode.task).length;
     const addTaskTitle = document.querySelector(".contentTaskTitle");
     const todoList = document.createElement("li");
     const taskBtn = document.createElement("button");
@@ -73,14 +73,14 @@ const ContentController = {
     taskBtn.className = "contentTaskBtn";
     addTaskTitle.textContent = `Tasks - ${addTaskCnt.length + 1}`;
     taskBtn.textContent = " ";
-    todoList.dataset.id = addTaskCntLength;
+    todoList.dataset.id = taskId;
     taskBtn.addEventListener("click", ContentController.clickTaskBtn);
     todoList.append(taskBtn, taskText);
     addTodo.append(todoList);
     if (type === "submit") {
       if (e.target[1].value !== "" && e.target[1].value[0] !== " ") {
         taskText.textContent = e.target[1].value;
-        ContentModel.task[addTaskCntLength] = e.target[1].value;
+        ContentModel.task[taskId] = e.target[1].value;
         e.target[1].value = "";
       }
     } //
