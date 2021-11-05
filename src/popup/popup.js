@@ -1,4 +1,4 @@
-const collection = {};
+const todo = {};
 
 const PopupController = {
   clickColor: (e) => {
@@ -13,21 +13,21 @@ const PopupController = {
     exitPopup.classList.remove("activeP");
   },
   clickPopupCreate: () => {
-    const name = document.querySelector(".popupNameInput").value;
+    const collection = document.querySelector(".popupNameInput").value;
     const color = document.querySelector(".clickedColor").dataset.color;
     const createExit = document.querySelector(".popupContainer");
-    const collectionId = Object.keys(collection).length;
-    const userCollection = { name, color, tasks: {}, complete: {} };
-    collection[collectionId] = userCollection;
-    PopupController.fetchCollection(collectionId, userCollection);
-    console.log(collection);
+    const userCollection = { collection, color, tasks: [], done: [] };
+    PopupController.fetchCollection(
+      localStorage.getItem("uname"),
+      userCollection
+    );
     // createExit.classList.remove("activeP");
   },
-  fetchCollection: (id, collection) => {
+  fetchCollection: (uname, todo) => {
     const collectionRequest = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, collection }),
+      body: JSON.stringify({ uname, todo }),
     };
     fetch("/collection/add", collectionRequest);
     //collection fetch server => server sql 추가 => collection 기져오기

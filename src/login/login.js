@@ -29,6 +29,7 @@ const sendAuthToken = async (social, token) => {
   const getNickname = await fetch(`/${social}/token`, requestOptions);
   const { nickname } = await getNickname.json();
   console.log(nickname);
+  localStorage.setItem("uname", nickname);
 };
 
 const Login = () => {
