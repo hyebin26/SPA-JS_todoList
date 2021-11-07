@@ -1,8 +1,19 @@
 import Popup from "../popup/popup.js";
 
-const clickAddBtn = () => {
-  const clickPopup = document.querySelector(".popupContainer");
-  clickPopup.classList.add("activeP");
+const MainController = {
+  clickAddBtn: () => {
+    const clickPopup = document.querySelector(".popupContainer");
+    clickPopup.classList.add("activeP");
+  },
+  loadCollection: () => {
+    const uname = localStorage.getItem("uname");
+    const loadCollectionRequest = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uname }),
+    };
+    fetch("/collection/load", loadCollectionRequest);
+  },
 };
 
 const Main = () => {
@@ -25,7 +36,7 @@ const Main = () => {
   mainCss.href = "/main/main.css";
   document.head.appendChild(mainCss);
   Popup();
-  mainAddBtn.addEventListener("click", clickAddBtn);
+  mainAddBtn.addEventListener("click", MainController.clickAddBtn);
 };
 
 export default Main;

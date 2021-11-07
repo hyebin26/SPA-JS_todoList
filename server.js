@@ -53,9 +53,21 @@ app.post("/signUp/success", (req, res) => {
   );
 });
 app.post("/collection/add", (req, res) => {
-  console.log(req.body);
-  // uname의 데이터 테이블 만들기 => collection 객체 넣기
-  // datatable이 없디면 추가하기
+  const { uname, collection, color, tasks, done } = req.body.todo;
+  conn.query(
+    `insert into todo values("${uname}","${collection}","${color}","${tasks}","${done}")`,
+    (err, row, field) => {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
+});
+app.post("/collection/load", (req, res) => {
+  const { uname } = req.body;
+  conn.query(`select * from todo where uname="${uname}"`, (err, row, field) => {
+    console.log(row);
+  });
 });
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");

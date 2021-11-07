@@ -1,5 +1,10 @@
-const todo = {};
-
+const todo = {
+  uname: localStorage.getItem("uname"),
+  collection: "",
+  color: "",
+  tasks: [],
+  done: [],
+};
 const PopupController = {
   clickColor: (e) => {
     const clickedColor = document.getElementsByClassName("clickedColor");
@@ -16,20 +21,18 @@ const PopupController = {
     const collection = document.querySelector(".popupNameInput").value;
     const color = document.querySelector(".clickedColor").dataset.color;
     const createExit = document.querySelector(".popupContainer");
-    const userCollection = { collection, color, tasks: [], done: [] };
-    PopupController.fetchCollection(
-      localStorage.getItem("uname"),
-      userCollection
-    );
+    todo["color"] = color;
+    todo["collection"] = collection;
+    PopupController.fetchCollection(todo);
     // createExit.classList.remove("activeP");
   },
-  fetchCollection: (uname, todo) => {
+  fetchCollection: async (todo) => {
     const collectionRequest = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uname, todo }),
+      body: JSON.stringify({ todo }),
     };
-    fetch("/collection/add", collectionRequest);
+    await fetch("/collection/add", collectionRequest);
     //collection fetch server => server sql 추가 => collection 기져오기
     // collection이 변경되었을 때 => main에서 리렌더링이 되게
   },

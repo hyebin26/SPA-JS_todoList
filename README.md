@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. add popup logic 변경
+1. popup 추가 로직 변경
 
 ### content
 
@@ -28,10 +28,11 @@
 
 ### 다음할 것
 
-- server에 todo테이블에 데이터 추가\*\*
-- 데이터 join하기 mysql 켜서 확인
-- 배열은 있는 그대로 저장 x => 배열 형태의 데이터를 통째로 String으로 변환하기
+- main 으로 todo 데이터 받기
+- window.onload 이벤트 추가하기
 
 1. router연결
 2. DB에 task , collection 추가
 3. 배포
+
+https://ko.javascript.info/onload-ondomcontentloaded
