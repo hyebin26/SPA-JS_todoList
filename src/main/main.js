@@ -37,6 +37,7 @@ const Main = () => {
   document.head.appendChild(mainCss);
   Popup();
   mainAddBtn.addEventListener("click", MainController.clickAddBtn);
+  mainRoot.addEventListener("DOMContentLoaded", loadCollection);
 };
 
 export default Main;
