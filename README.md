@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. fetch collection데이터 추가
-2. react에 useState를 구현하는 방법 찾기
+1. useState 테스트해보기
 
 ### content
 
