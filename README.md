@@ -1,6 +1,7 @@
 ## vanilla js SPA todoList
 
-1. popup 추가 로직 변경
+1. fetch collection데이터 추가
+2. react에 useState를 구현하는 방법 찾기
 
 ### content
 
@@ -25,6 +26,13 @@
 ### 알게된 것
 
 1. 데이터를 보낼 때 header의 컨텐트 타입과 body의 데이터 타입이랑 똑같아야 함 => 아닐 시 가지 않음
+
+2. DOMcontentedLoad vs window onLoad
+
+- window onload는 이미지 그리고 css ,서브프레임 등이 완벽하게 로딩이 끝났을 때 이벤트가 시작된다.
+- DOMcontentedLoad는 초기 HTML문서를 완전히 불러오고 분석했을 때 발생하고, 스타일시트, 이미지, 하위 프레임의 로딩은 기다리지 않는다.
+
+3. useState는 클로저를 이용해 구현할 수 있다.
 
 ### 다음할 것
 

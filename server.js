@@ -65,8 +65,14 @@ app.post("/collection/add", (req, res) => {
 });
 app.post("/collection/load", (req, res) => {
   const { uname } = req.body;
+  const collectionData = [];
   conn.query(`select * from todo where uname="${uname}"`, (err, row, field) => {
-    console.log(row);
+    if (err) console.log(err);
+    row.map((item) => {
+      collectionData.push({ ...item });
+      return item;
+    });
+    res.send(collectionData);
   });
 });
 app.get("/", (req, res) => {

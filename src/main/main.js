@@ -5,18 +5,23 @@ const MainController = {
     const clickPopup = document.querySelector(".popupContainer");
     clickPopup.classList.add("activeP");
   },
-  loadCollection: () => {
+  loadCollection: async (e) => {
     const uname = localStorage.getItem("uname");
     const loadCollectionRequest = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ uname }),
     };
-    fetch("/collection/load", loadCollectionRequest);
+    const fetchLoadData = await fetch(
+      "/collection/load",
+      loadCollectionRequest
+    );
+    const collectionData = await fetchLoadData.json();
   },
 };
 
 const Main = () => {
+  document.addEventListener("DOMContentLoaded", MainController.loadCollection);
   const mainRoot = document.getElementById("root");
   const mainSec = document.createElement("section");
   const mainH2 = document.createElement("h2");
@@ -37,7 +42,6 @@ const Main = () => {
   document.head.appendChild(mainCss);
   Popup();
   mainAddBtn.addEventListener("click", MainController.clickAddBtn);
-  mainRoot.addEventListener("DOMContentLoaded", loadCollection);
 };
 
 export default Main;
