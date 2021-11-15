@@ -4,6 +4,7 @@ import path from "path";
 import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import mysql from "mysql";
+import jwt from "jsonwebtoken";
 
 const __dirname = path.resolve();
 const app = express();
@@ -13,11 +14,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/src"));
+
 const conn = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "@@da8611zi",
-  database: "todolist",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 // conn.query("SELECT * from tuser", (error, rows, fields) => {
@@ -25,6 +27,42 @@ const conn = mysql.createConnection({
 //   console.log("User info is: ", rows);
 // });
 
+function makeToken(type, uid) {
+  let token;
+  if (type === "refresh") {
+    token = jwt.sign({ id: uid }, process.env.JWT_SECRET, {
+      expiresIn: "14d",
+    });
+  } //
+  else {
+    token = jwt.sign({ id: uid }, process.env.JWT_SECRET, {
+      expiresIn: "1m",
+    });
+  }
+  return token;
+}
+function checkTokens() {
+  
+}
+
+app.post("/login", async (req, res) => {
+  const { uid, pwd } = req.body;
+  await conn.query(`select * from tuser where uid="${uid}"`, (err, row) => {
+    if (err) console.log(err);
+    if (pwd === row[0].pwd) {
+      let refreshToken = makeToken("refresh", uid);
+      let accessToken = makeToken("access", uid);
+      conn.query(
+        `insert into tokens values("${refreshToken}","${uid}")`,
+        (err) => {
+          if (err) console.log(err);
+        }
+      );
+      res.cookie("access_token", accessToken);
+      res.json(accessToken);
+    }
+  });
+});
 app.post("/signUp/check", (req, res) => {
   const { check, category } = req.body;
   conn.query(
@@ -47,8 +85,8 @@ app.post("/signUp/success", (req, res) => {
       if (err) {
         console.log(err);
         res.send(false);
-      }
-      res.send(true);
+      } //
+      else res.send(true);
     }
   );
 });

@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/hyebin26/SPA-JS_todoList#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "node-fetch": "^3.0.0",
     "path": "^0.12.7",

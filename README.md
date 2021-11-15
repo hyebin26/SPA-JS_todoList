@@ -1,6 +1,19 @@
 ## vanilla js SPA todoList
 
+1. jwt,cookie parser추가
+2. 로그인 jwt구현
+
+### 다음할 것
+
+- 토큰 유효성 검증하기 => https://cotak.tistory.com/102
+
+* main 으로 todo 데이터 받기
+* window.onload 이벤트 추가하기
+
 1. useState 테스트해보기
+2. router연결
+3. DB에 task , collection 추가
+4. 배포
 
 ### content
 
@@ -32,14 +45,5 @@
 - DOMcontentedLoad는 초기 HTML문서를 완전히 불러오고 분석했을 때 발생하고, 스타일시트, 이미지, 하위 프레임의 로딩은 기다리지 않는다.
 
 3. useState는 클로저를 이용해 구현할 수 있다.
-
-### 다음할 것
-
-- main 으로 todo 데이터 받기
-- window.onload 이벤트 추가하기
-
-1. router연결
-2. DB에 task , collection 추가
-3. 배포
 
 https://ko.javascript.info/onload-ondomcontentloaded

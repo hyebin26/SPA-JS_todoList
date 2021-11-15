@@ -28,8 +28,22 @@ const sendAuthToken = async (social, token) => {
   };
   const getNickname = await fetch(`/${social}/token`, requestOptions);
   const { nickname } = await getNickname.json();
-  console.log(nickname);
   localStorage.setItem("uname", nickname);
+};
+
+const submitLogin = async (e) => {
+  e.preventDefault();
+  const uid = e.target[0].value,
+    pwd = e.target[1].value;
+  const submitOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ uid, pwd }),
+  };
+  const loginData = await fetch("/login", submitOptions);
+  const accessToken = await loginData.json();
+
+  localStorage.setItem("access_token", accessToken);
 };
 
 const Login = () => {
@@ -39,7 +53,7 @@ const Login = () => {
   const loginLogo = document.createElement("img");
   const loginTitleBox = document.createElement("div");
   const loginSocialBox = document.createElement("div");
-  const loginInputBox = document.createElement("div");
+  const loginInputBox = document.createElement("form");
   const loginSocialP = document.createElement("p");
   const kakaoImage = document.createElement("img");
   const naverImage = document.createElement("img");
@@ -69,6 +83,7 @@ const Login = () => {
   loginInputBox.className = "loginInputBox";
   loginSec.className = "loginSec";
 
+  loginInputBox.addEventListener("submit", submitLogin);
   kakaoImage.addEventListener("click", clickKakaoBtn);
   naverImage.addEventListener("click", clickNaverBtn);
 
