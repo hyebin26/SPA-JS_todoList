@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. jwt,cookie parser추가
-2. 로그인 jwt구현
+1. check token function 추가
 
 ### 다음할 것
 
@@ -46,4 +45,8 @@
 
 3. useState는 클로저를 이용해 구현할 수 있다.
 
-https://ko.javascript.info/onload-ondomcontentloaded
+- https://ko.javascript.info/onload-ondomcontentloaded
+
+4. JWT token
+
+- Refresh 토큰과 Access 토큰 두 개를 받아서 accessToken이 만료될 시 Refresh를 이용해 재발급하는 방식

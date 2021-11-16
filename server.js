@@ -5,11 +5,13 @@ import fetch from "node-fetch";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 const __dirname = path.resolve();
 const app = express();
 const jsonParser = bodyParser.json();
 dotenv.config();
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
@@ -22,28 +24,67 @@ const conn = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// conn.query("SELECT * from tuser", (error, rows, fields) => {
-//   if (error) throw error;
-//   console.log("User info is: ", rows);
-// });
-
 function makeToken(type, uid) {
   let token;
   if (type === "refresh") {
     token = jwt.sign({ id: uid }, process.env.JWT_SECRET, {
-      expiresIn: "14d",
+      expiresIn: "1s",
     });
   } //
   else {
     token = jwt.sign({ id: uid }, process.env.JWT_SECRET, {
-      expiresIn: "1m",
+      expiresIn: "1s",
     });
   }
   return token;
 }
-function checkTokens() {
-  
+async function checkToken(access_token, uid) {
+  if (!access_token) throw Error("토큰이 존재하지 않습니다.!");
+  try {
+    const decoded = jwt.verify(access_token, process.env.JWT_SECRET);
+    return decoded.id;
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      await conn.query(
+        `select * from tokens where uid="${uid}"`,
+        (err, row) => {
+          if (err) console.log(err);
+          if (row[0]) {
+            let refreshToken = row[0].refresh_token;
+            try {
+              jwt.verify(refreshToken, process.env.JWT_SECRET);
+              const accessToken = makeToken("access", uid);
+              checkToken(accessToken, uid);
+            } catch (err) {
+              if (err.name === "TokenExpiredError") {
+                const makedRefresh = makeToken("refresh", uid);
+                const makedAccess = makeToken("access", uid);
+                conn.query(
+                  `update tokens set refresh_token="${makedRefresh}" where uid="${uid}"`,
+                  (err, row) => {
+                    if (err) console.log(err);
+                    console.log(":gasdfasdfsdf");
+                  }
+                );
+                checkToken(makedAccess, uid);
+              } //
+              else throw Error("API 권한이 없습니다.");
+            }
+          } //
+          else throw Error("API 권한이 없습니다.");
+        }
+      );
+    } else throw Error("API 권한이 없습니다.");
+    // refresh token check
+    // 존재하지 않을 경우 => API 호출 불가
+  }
 }
+
+app.get("/hello", async (req, res) => {
+  const { uid, access_token } = req.cookies;
+  const hi = await checkToken(access_token, uid);
+  console.log(hi, "hello");
+});
 
 app.post("/login", async (req, res) => {
   const { uid, pwd } = req.body;
@@ -59,6 +100,7 @@ app.post("/login", async (req, res) => {
         }
       );
       res.cookie("access_token", accessToken);
+      res.cookie("uid", uid);
       res.json(accessToken);
     }
   });
