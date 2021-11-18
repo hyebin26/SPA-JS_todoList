@@ -7,7 +7,7 @@
 }
 .signUpLogoBox img {
   filter: brightness(0) invert(1);
-  width: 50px;
+  width: 30px;
 }
 .signUpLogoBox a {
   font-size: 1.2rem;
