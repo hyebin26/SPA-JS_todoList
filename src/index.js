@@ -13,10 +13,10 @@ const init = () => {
   document.head.appendChild(indexCss);
 
   root.innerHTML = `
-  ${SignUp()}
+   ${Header()}
+   ${Main()}
   `;
 
-  //   ${Main()}
   // const mainAddBtn = document.querySelector(".mainAddBtn");
   // mainAddBtn.addEventListener("click", InitController.clickPopupBtn);
 };

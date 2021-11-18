@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. main,signUp로직 변경
+1. popup로직변경
 
 ### 다음할 것
 
@@ -20,6 +20,8 @@
 - taskBox에 완료 버튼 이벤트 추가하기
 
 ### popupz
+
+- **해결못함**: return하는 곳에 colorList를 맵핑해서 li를 만드는 함수에 넣었는데 UI에 colorList요소 하나당 두개씩 추가됨
 
 -data 전달
 

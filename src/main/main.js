@@ -28,7 +28,9 @@ const Main = () => {
 
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
-  return `<section class="main">
+  return `
+  ${Popup()}
+  <section class="main">
     <h2>You have no collections.</h2>
     <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>
   </section>`;
