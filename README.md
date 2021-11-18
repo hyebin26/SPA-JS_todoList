@@ -1,6 +1,8 @@
 ## vanilla js SPA todoList
 
-1. check token function 추가
+1. main, header 리팩토링
+2. 로직 변경
+3. 서버에 토큰 보내는 것 추가
 
 ### 다음할 것
 
@@ -50,3 +52,8 @@
 4. JWT token
 
 - Refresh 토큰과 Access 토큰 두 개를 받아서 accessToken이 만료될 시 Refresh를 이용해 재발급하는 방식
+
+5. onclick 문제점
+
+- <button onclick>로 이벤트를 등록하면 함수를 전역에서만 찾는다.
+- 전역변수로 선언되면 자바스크립트는 파일이 달라도 하나의 전역변수로 선언되기 때문에 문제가 일어나기 쉽다.

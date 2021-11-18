@@ -6,12 +6,15 @@ import Login from "./login/login.js";
 import SignUp from "./signUp/signUp.js";
 
 const init = () => {
-  Header();
-  Login();
-
+  const root = document.querySelector("#root");
   const indexCss = document.createElement("link");
   indexCss.rel = "stylesheet";
   indexCss.href = "/index.css";
   document.head.appendChild(indexCss);
+
+  root.innerHTML = `
+    ${Header()}
+    ${Main()}
+  `;
 };
 init();
