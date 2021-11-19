@@ -1,16 +1,25 @@
-const makeInputBox = ({ _type, _placeholder, _text, _title, _event }) => {
+const makeInputBox = ({
+  _type,
+  _placeholder,
+  _text,
+  _title,
+  _event,
+  _social,
+}) => {
   const category = _title.toLowerCase();
   return `
   <div class="signUp${_title}Box">
     <h3>${_placeholder}</h3>
     <p>${_text}</p>
-    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input">
+    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input" value="${
+    _social ? _social : ""
+  }">   
     <p class="signUpFalseText"></p>
   </div>
     `;
 };
 
-const SignUp = () => {
+const SignUp = (social) => {
   const emailObj = {
     _type: "text",
     _placeholder: "아이디",
@@ -38,32 +47,37 @@ const SignUp = () => {
     _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
     _title: "Uname",
     _event: "duplicateCheck",
+    _social: social,
   };
 
-  window.clickSignUpBtn = async () => {
-    // 데이터패치 => collection 페이지로 이동
+  window.clickSignUpBtn = async (target) => {
     const duplicate = document.querySelectorAll(".falseSignup");
     if (duplicate.length) {
       duplicate.forEach((item) => {
         item.textContent = "필수 입력 항목입니다.";
       });
     } else {
-      const uid = document.querySelector(".signUpUidInput").value;
-      const pwd = document.querySelector(".signUpPasswordInput").value;
-      const uname = document.querySelector(".signUpUnameInput").value;
-      const user = { uid, pwd, uname };
-      const successRequestOption = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user }),
-      };
-      const fetchSignUpSuccess = await fetch(
-        "/signUp/success",
-        successRequestOption
-      );
-      const signUpSuccess = await fetchSignUpSuccess.json();
-      if (signUpSuccess) location.href = "#";
-      else alert("다시 시도해주세요.");
+      const url = new URL(window.location.href);
+      let user = {};
+      if (url.pathname === "/social/signUp") {
+        const uname = document.querySelector(".signUpUnameInput").value;
+        const uid = document.querySelector(".signUpUidInput").value;
+        user["uname"] = uname;
+        user["uid"] = uid;
+      } //
+      else {
+        const uid = document.querySelector(".signUpUidInput").value;
+        const pwd = document.querySelector(".signUpPasswordInput").value;
+        const uname = document.querySelector(".signUpUnameInput").value;
+        user["uname"] = uname;
+        user["uid"] = uid;
+        user["pwd"] = pwd;
+      }
+      const fetchSignUpSuccess = await axios.post("/signUp/success", user);
+      const signUpSuccess = await fetchSignUpSuccess.data;
+      if (signUpSuccess) {
+        alert("성공, 페이지 이동해주세요~");
+      } else alert("다시 시도해주세요.");
     }
   };
   window.focusOutPassword = (taget) => {
@@ -99,22 +113,17 @@ const SignUp = () => {
     }
   };
   window.duplicateCheck = async (target) => {
-    console.log(target.dataset);
     const [ID_MIN, ID_MAX] = [6, 20];
     const [UNAME_MIN, UNAME_MAX] = [2, 15];
     const check = target.value;
     const { category } = target.dataset;
-    const idRequestOpt = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ check, category }),
-    };
+
     if (category === "uid") {
       if (check.length >= ID_MIN && check.length <= ID_MAX) {
         target.nextElementSibling.textContent = "";
         target.nextElementSibling.classList.remove("falseSignup");
-        const fetchId = await fetch(`/signUp/check`, idRequestOpt);
-        const checkId = await fetchId.json();
+        const fetchId = await axios.post(`/signUp/check`, { check, category });
+        const checkId = await fetchId.data;
         if (checkId) {
           target.nextElementSibling.classList.remove("falseSignup");
           target.nextElementSibling.textContent = "";
@@ -132,13 +141,13 @@ const SignUp = () => {
       if (check.length >= UNAME_MIN && check.length <= UNAME_MAX) {
         target.nextElementSibling.textContent = "";
         target.nextElementSibling.classList.remove("falseSignup");
-        const fetchId = await fetch(`/signUp/check`, idRequestOpt);
-        const checkId = await fetchId.json();
+        const fetchId = await axios.post(`/signUp/check`, { check, category });
+        const checkId = await fetchId.data;
         if (checkId) {
           target.nextElementSibling.textContent = "";
           target.nextElementSibling.classList.remove("falseSignup");
         } else {
-          target.nextElementSibling.textContent = "중복된 아이디가 존재합니다.";
+          target.nextElementSibling.textContent = "중복된 닉네임이 존재합니다.";
           target.nextElementSibling.classList.add("falseSignup");
         }
       } else {
@@ -154,7 +163,9 @@ const SignUp = () => {
   signUpCss.href = "/signUp/signUp.css";
   document.head.appendChild(signUpCss);
 
-  return `<section>
+  if (!social) {
+    return `
+  <section>
   <div class="signUpLogoBox">
     <a href="#">TASKS<img src="/image/task.png">
     </a>
@@ -169,7 +180,29 @@ const SignUp = () => {
       <span>이미 아이디가 있으신가요?</span><a href="#">로그인</a>
     </div>
   </div>
-</section>`;
+  </section>`;
+  }
+  if (social) {
+    return `
+    <section>
+    <div class="signUpLogoBox">
+      <a href="#">TASKS<img src="/image/task.png">
+      </a>
+    </div>
+    <div class="signUpInputBox">
+    ${makeInputBox(emailObj)}
+    ${makeInputBox(nicknameObj)}
+    <div class="signUpBtnBox">
+      <button class="signUpBtn" onclick="clickSignUpBtn(this)">회원가입하기</button>
+      <span>이미 아이디가 있으신가요?</span><a href="#">로그인</a>
+    </div>
+    </div>
+    </section>
+    `;
+  }
+  // 필요한 정보 => user_nickname
+  // social로 로그인하면 social/signup으로 redirect
+  // user_nickname 중복체크, 아이디 설정만하게
 };
 
 export default SignUp;

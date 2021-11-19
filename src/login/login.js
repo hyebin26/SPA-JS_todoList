@@ -1,92 +1,51 @@
-const localhost = "http://localhost:3500";
-
-const clickKakaoBtn = async (e) => {
-  try {
-    const fetchKakaoBtn = await fetch(`${localhost}/kakao/auth`); //
-    const { kakaoAuthURL } = await fetchKakaoBtn.json();
-    location.href = kakaoAuthURL;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const clickNaverBtn = async (e) => {
-  try {
-    const fetchNaverBtn = await fetch(`${localhost}/naver/auth`);
-    const { naverAuthURL } = await fetchNaverBtn.json();
-    location.href = naverAuthURL;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const sendAuthToken = async (social, token) => {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token }),
-  };
-  const getNickname = await fetch(`/${social}/token`, requestOptions);
-  const { nickname } = await getNickname.json();
-  localStorage.setItem("uname", nickname);
-};
-
-const submitLogin = async (e) => {
-  e.preventDefault();
-  const uid = e.target[0].value,
-    pwd = e.target[1].value;
-  const submitOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid, pwd }),
-  };
-  const loginData = await fetch("/login", submitOptions);
-  const accessToken = await loginData.json();
-
-  localStorage.setItem("access_token", accessToken);
-};
-
 const Login = () => {
-  const loginRoot = document.getElementById("root");
-  const loginSec = document.createElement("section");
-  const loginTitle = document.createElement("h1");
-  const loginLogo = document.createElement("img");
-  const loginTitleBox = document.createElement("div");
-  const loginSocialBox = document.createElement("div");
-  const loginInputBox = document.createElement("form");
-  const loginSocialP = document.createElement("p");
-  const kakaoImage = document.createElement("img");
-  const naverImage = document.createElement("img");
-  const loginEmail = document.createElement("input");
-  const loginPassword = document.createElement("input");
-  const loginBtn = document.createElement("button");
-  const loginSignup = document.createElement("a");
+  // loginInputBox.addEventListener("submit", submitLogin);
+  // kakaoImage.addEventListener("click", clickKakaoBtn);
+  // naverImage.addEventListener("click", clickNaverBtn);
+  window.submitLogin = async (e) => {
+    e.preventDefault();
+    const falseLogin = document.querySelector(".falseLogin");
+    const uid = e.target[0].value,
+      pwd = e.target[1].value;
+    try {
+      const loginData = await axios.post("/login", { uid, pwd });
+      const { accessToken, uname } = await loginData.data;
+      if (accessToken) {
+        axios.defaults.headers.common.Cookie = accessToken;
+        falseLogin.textContent = "";
+        localStorage.setItem("uname", uname);
+        // 페이지 collection이동 하기
+      } else {
+        falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  window.clickNaverBtn = async (e) => {
+    try {
+      const fetchNaverBtn = await axios(`/naver/auth`);
+      const { naverAuthURL } = await fetchNaverBtn.data;
+      location.href = naverAuthURL;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  window.clickKakaoBtn = async (e) => {
+    try {
+      const fetchKakaoBtn = await axios(`/kakao/auth`); //
+      const { kakaoAuthURL } = await fetchKakaoBtn.data;
+      location.href = kakaoAuthURL;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  loginTitle.textContent = "TASKS";
-  loginSocialP.textContent = "SNS계정으로 간편 로그인";
-  loginBtn.textContent = "Login";
-  loginSignup.textContent = "회원가입";
-
-  loginSignup.href = "#";
-
-  loginEmail.placeholder = "Email";
-  loginEmail.type = "text";
-  loginPassword.placeholder = "Password";
-  loginPassword.type = "password";
-
-  loginLogo.src = "/image/task.png";
-  naverImage.src = "/image/naver_login.png";
-  kakaoImage.src = "/image/kakao_login.svg";
-
-  loginTitleBox.className = "loginTitleBox";
-  loginSocialBox.className = "loginSocialBox";
-  loginInputBox.className = "loginInputBox";
-  loginSec.className = "loginSec";
-
-  loginInputBox.addEventListener("submit", submitLogin);
-  kakaoImage.addEventListener("click", clickKakaoBtn);
-  naverImage.addEventListener("click", clickNaverBtn);
-
+  const sendAuthToken = async (social, token) => {
+    const getNickname = await axios.post(`/social/token`, { token, social });
+    const { nickname } = await getNickname.data;
+    localStorage.setItem("uname", nickname);
+  };
   const url = new URL(window.location.href);
   const urlParams = url.searchParams;
   if (urlParams.has("code")) {
@@ -95,15 +54,31 @@ const Login = () => {
     } //
     else sendAuthToken("kakao", urlParams.get("code"));
   }
-  loginTitleBox.append(loginLogo, loginTitle);
-  loginSocialBox.append(loginSocialP, naverImage, kakaoImage);
-  loginInputBox.append(loginEmail, loginPassword, loginBtn, loginSignup);
-  loginSec.append(loginTitleBox, loginInputBox, loginSocialBox);
-  loginRoot.append(loginSec);
 
   const loginCss = document.createElement("link");
   loginCss.rel = "stylesheet";
   loginCss.href = "/login/login.css";
   document.head.appendChild(loginCss);
+
+  return `
+  <section class="loginSec">
+    <div class="loginTitleBox">
+      <img src="/image/task.png">
+      <h1>TASKS</h1>
+    </div>
+    <form class="loginInputBox" onsubmit="submitLogin(event)">
+      <input placeholder="Email" type="text">
+      <input placeholder="Password" type="password">
+      <p class="falseLogin"></p>
+      <button>Login</button>
+      <a href="#">회원가입</a>
+    </form>
+    <div class="loginSocialBox">
+      <p>SNS계정으로 간편 로그인</p>
+      <img src="/image/naver_login.png" onclick="clickNaverBtn(event)">
+      <img src="/image/kakao_login.svg" onclick="clickKakaoBtn(event)">
+    </div>
+  </section>  
+  `;
 };
 export default Login;

@@ -80,3 +80,8 @@
 .loginInputBox button:hover {
   background: rgb(226, 41, 75);
 }
+
+.falseLogin {
+  color: rgb(253, 57, 57);
+  font-size: 0.7rem;
+}

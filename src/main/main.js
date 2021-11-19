@@ -31,8 +31,8 @@ const Main = () => {
   return `
   ${Popup()}
   <section class="main">
-    <h2>You have no collections.</h2>
-    <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>
+  <h2>You have no collections.</h2>
+  <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>
   </section>`;
 };
 

@@ -5,7 +5,6 @@ const todo = {
   tasks: [],
   done: [],
 };
-const PopupController = {};
 
 const Popup = () => {
   window.clickPopupColor = (target) => {
@@ -48,10 +47,6 @@ const Popup = () => {
     "#70C4BF",
     "#9E7F72",
   ];
-
-  // popupXBtn.addEventListener("click", PopupController.clickExitBtn);
-  // popupCancelBtn.addEventListener("click", PopupController.clickExitBtn);
-  // popupCreateBtn.addEventListener("click", PopupController.clickPopupCreate);
 
   const popupCss = document.createElement("link");
   popupCss.rel = "stylesheet";

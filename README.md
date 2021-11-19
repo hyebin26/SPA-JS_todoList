@@ -1,13 +1,16 @@
 ## vanilla js SPA todoList
 
-1. popup로직변경
+1. axios추가
+2. signUp, login 리팩토링
 
 ### 다음할 것
 
-- 토큰 유효성 검증하기 => https://cotak.tistory.com/102
+- fetch => axios로 변경, collection데이터 다시 확인
 
-* main 으로 todo 데이터 받기
-* window.onload 이벤트 추가하기
+https://cotak.tistory.com/102
+
+- main 으로 todo 데이터 받기
+- window.onload 이벤트 추가하기
 
 1. useState 테스트해보기
 2. router연결
@@ -36,6 +39,10 @@
 - 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨
 - 네이버 로그아웃 => http://nid.naver.com/nidlogin.logout 팝업하기?
 
+### signUp
+
+- social로 로그인 => social/login으로 redirect => 매개변수로 nickname주기
+
 ### 알게된 것
 
 1. 데이터를 보낼 때 header의 컨텐트 타입과 body의 데이터 타입이랑 똑같아야 함 => 아닐 시 가지 않음
@@ -62,4 +69,9 @@
 
 - index.js에서 DOM을 찾아서 이벤트를 등록하면 가독성이 떨어짐
 - 전역변수로 선언하는 것에 있어서 거부감이 있었으나 가독성과 속도의 저하도 크지 않을 것 같아서 attribute로 직접 이벤트를 등록함
-- 또한 처음엔 e.target이 되지가 않아서 다시 바꿧으나 event(this)이렇게하면 e.target을 가져올 수 있음
+- 또한 처음엔 e.target이 되지가 않아서 다시 바꿧으나 event(this)이렇게하면 e.target을 가져올 수 있음\
+
+7. axios를 추가한 이유
+
+- 로그인을 하고 API통신을 하기 위해서는 쿠키를 헤더에 넣고 통신을 해야된다.
+- localStrage에 쿠키를 저장하는 것보다 axios.defaults 사용하는 것이 더 안전할 거라고 생각하기도 했고 fetch를 더 간편하게 할 수 있기 때문에 추가했음

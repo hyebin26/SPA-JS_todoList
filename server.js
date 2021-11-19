@@ -83,8 +83,10 @@ app.get("/hello", (req, res) => {
 app.post("/login", async (req, res) => {
   const { uid, pwd } = req.body;
   await conn.query(`select * from tuser where uid="${uid}"`, (err, row) => {
-    if (err) console.log(err);
-    if (pwd === row[0].pwd) {
+    if (err) {
+      res.json(false);
+    }
+    if (row[0] && pwd === row[0].pwd) {
       let refreshToken = makeToken("refresh", uid);
       let accessToken = makeToken("access", uid);
       conn.query(
@@ -95,10 +97,14 @@ app.post("/login", async (req, res) => {
       );
       res.cookie("access_token", accessToken, { httpOnly: true, secure: true });
       res.cookie("uid", uid, { httpOnly: true });
-      res.json(accessToken);
+      res.json({ accessToken, uname: row[0].uname });
+    } //
+    else {
+      res.json(false);
     }
   });
 });
+
 app.post("/signUp/check", (req, res) => {
   const { check, category } = req.body;
   conn.query(
@@ -114,9 +120,9 @@ app.post("/signUp/check", (req, res) => {
   );
 });
 app.post("/signUp/success", (req, res) => {
-  const { uid, pwd, uname } = req.body.user;
+  const { uid, pwd, uname } = req.body;
   conn.query(
-    `insert into tuser values("${uid}","${pwd}","${uname}")`,
+    `insert into tuser values("${uid}","${!pwd ? null : pwd}","${uname}")`,
     (err, row, field) => {
       if (err) {
         console.log(err);
@@ -154,6 +160,7 @@ app.post("/collection/load", (req, res) => {
 app.get("/", (req, res) => {
   res.status(200).sendFile(__dirname + "/index.html");
 });
+
 app.get("/detail", (req, res) => {
   res.redirect("http://localhost:3500");
 });
@@ -185,63 +192,67 @@ app.get("/kakao/auth", async (req, res) => {
   }
 });
 
-app.post("/kakao/token", async (req, res) => {
-  const { token } = req.body;
-  try {
-    const getTokenOptions = {
-      method: "POST",
-      headers: { "Content-type": "application/x-www-form-urlencoded" },
-      redirect: "follow",
-    };
-    const fetchGetToken = await fetch(
-      `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${token}`,
-      getTokenOptions
-    );
-    const { access_token } = await fetchGetToken.json();
-    const fetchNickOptions = {
-      method: "POST",
-      headers: {
-        "Content-type": " application/x-www-form-urlencoded;charset=utf-8",
-        Authorization: `Bearer ${access_token}`,
-      },
-    };
-    const getNickname = await fetch(
-      "https://kapi.kakao.com/v2/user/me",
-      fetchNickOptions
-    );
-    const userData = await getNickname.json();
-    const { nickname } = await userData.properties;
-    res.send({ nickname });
-  } catch (err) {
-    console.log(err);
+app.post("/social/token", async (req, res) => {
+  const { token, social } = req.body;
+  if (social === "kakao") {
+    try {
+      const getTokenOptions = {
+        method: "POST",
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+        redirect: "follow",
+      };
+      const fetchGetToken = await fetch(
+        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${token}`,
+        getTokenOptions
+      );
+      const { access_token } = await fetchGetToken.json();
+      const fetchNickOptions = {
+        method: "POST",
+        headers: {
+          "Content-type": " application/x-www-form-urlencoded;charset=utf-8",
+          Authorization: `Bearer ${access_token}`,
+        },
+      };
+      const getNickname = await fetch(
+        "https://kapi.kakao.com/v2/user/r",
+        fetchNickOptions
+      );
+      //const userData = await getNickname.json();
+    } catch (err) {
+      console.log(err);
+    }
   }
-});
-
-app.post("/naver/token", async (req, res) => {
-  const { token } = req.body;
-  try {
-    const fetchNaverToken = await fetch(
-      `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${token}`
-    );
-    const { access_token } = await fetchNaverToken.json();
-    const getNaverNicknameOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    };
-    const getNaverNickname = await fetch(
-      "https://openapi.naver.com/v1/nid/me",
-      getNaverNicknameOptions
-    );
-    const userData = await getNaverNickname.json();
-    const { nickname } = userData.response;
-    res.send({ nickname });
-  } catch (err) {
-    console.log(err);
+  if (social === "naver") {
+    try {
+      const fetchNaverToken = await fetch(
+        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${token}`
+      );
+      const { access_token } = await fetchNaverToken.json();
+      const getNaverNicknameOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      };
+      const getNaverNickname = await fetch(
+        "https://openapi.naver.com/v1/nid/me",
+        getNaverNicknameOptions
+      );
+      const userData = await getNaverNickname.json();
+      const { nickname } = userData.response;
+      res.send({ nickname });
+    } catch (err) {
+      console.log(err);
+    }
   }
 });
 
 app.listen(3500, () => {
   console.log("Running");
 });
+
+// social/signup test
+// app.get("/social/signUp", (req, res) => {
+//   console.log(__dirname);
+//   res.status(200).sendFile(__dirname + "/public/index.html");
+// });
