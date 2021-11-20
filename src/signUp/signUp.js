@@ -200,9 +200,6 @@ const SignUp = (social) => {
     </section>
     `;
   }
-  // 필요한 정보 => user_nickname
-  // social로 로그인하면 social/signup으로 redirect
-  // user_nickname 중복체크, 아이디 설정만하게
 };
 
 export default SignUp;

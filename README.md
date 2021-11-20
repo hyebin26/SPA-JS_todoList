@@ -1,21 +1,23 @@
 ## vanilla js SPA todoList
 
-1. axios추가
-2. signUp, login 리팩토링
+1. social로그인 재설정
+2. signup로직변경
 
 ### 다음할 것
 
-- fetch => axios로 변경, collection데이터 다시 확인
-
 https://cotak.tistory.com/102
 
-- main 으로 todo 데이터 받기
-- window.onload 이벤트 추가하기
+1. 무조건 router하고 signUp,login 체크
 
-1. useState 테스트해보기
-2. router연결
-3. DB에 task , collection 추가
-4. 배포
+- signUp은 social로 회원가입하면 바로 main, 아닐경우 로그인
+- login은 social로 DB에 id존재하면 토큰 받고 메인으로
+
+- main collection 데이터 받아오기
+- useState, router 구현해야됨
+
+- useState 테스트해보기
+- router연결
+- 배포
 
 ### content
 
@@ -36,6 +38,7 @@ https://cotak.tistory.com/102
 
 ### Login
 
+- 소셜 로그인 - DB에 id있을경우, 없을 경우
 - 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨
 - 네이버 로그아웃 => http://nid.naver.com/nidlogin.logout 팝업하기?
 

@@ -13,7 +13,7 @@ const init = () => {
   document.head.appendChild(indexCss);
 
   root.innerHTML = `
-  ${SignUp()}
+  ${Login()}
   `;
   // ${Header()}
   //  ${Main()}

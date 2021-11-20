@@ -209,15 +209,31 @@ app.post("/social/token", async (req, res) => {
       const fetchNickOptions = {
         method: "POST",
         headers: {
-          "Content-type": " application/x-www-form-urlencoded;charset=utf-8",
           Authorization: `Bearer ${access_token}`,
         },
       };
-      const getNickname = await fetch(
-        "https://kapi.kakao.com/v2/user/r",
+      const getKakaoUser = await fetch(
+        "https://kapi.kakao.com/v2/user/me",
         fetchNickOptions
       );
-      //const userData = await getNickname.json();
+      const kakaoUser = await getKakaoUser.json();
+      const { id } = kakaoUser;
+      const { nickname } = kakaoUser.properties;
+
+      conn.query(`select * from tuser where uid="${id}"`, (err, row) => {
+        try {
+          if (row.length) {
+            res.json({ nickname });
+            // 바로 메인으로 이동
+          }
+          if (!row.length) {
+            res.json({ id, nickname });
+            // socalSignup으로 이동 => id, nickname을 가지고 가야됨
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
     } catch (err) {
       console.log(err);
     }
@@ -234,13 +250,26 @@ app.post("/social/token", async (req, res) => {
           Authorization: `Bearer ${access_token}`,
         },
       };
-      const getNaverNickname = await fetch(
+      const getNaverUser = await fetch(
         "https://openapi.naver.com/v1/nid/me",
         getNaverNicknameOptions
       );
-      const userData = await getNaverNickname.json();
-      const { nickname } = userData.response;
-      res.send({ nickname });
+      const userData = await getNaverUser.json();
+      const { id, nickname } = userData.response;
+      conn.query(`select * from tuser where uid="${id}"`, (err, row) => {
+        try {
+          if (row.length) {
+            res.json({ nickname });
+            // 바로 메인으로 이동
+          }
+          if (!row.length) {
+            res.json({ id, nickname });
+            // socalSignup으로 이동 => id, nickname을 가지고 가야됨
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
     } catch (err) {
       console.log(err);
     }

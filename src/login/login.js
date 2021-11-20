@@ -42,9 +42,15 @@ const Login = () => {
   };
 
   const sendAuthToken = async (social, token) => {
-    const getNickname = await axios.post(`/social/token`, { token, social });
-    const { nickname } = await getNickname.data;
-    localStorage.setItem("uname", nickname);
+    const getUserData = await axios.post(`/social/token`, { token, social });
+    const user = await getUserData.data;
+    if (id) {
+      // id와 닉네임을 가지고 social/signup으로
+    }
+    if (!id) {
+      localStorage.setItem("nickname", user.nickname);
+      // 닉네임 저장하고 main으로
+    }
   };
   const url = new URL(window.location.href);
   const urlParams = url.searchParams;
