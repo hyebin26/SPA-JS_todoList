@@ -41,7 +41,7 @@ const Login = () => {
     }
   };
 
-  const sendAuthToken = async (social, token) => {
+  const sendSocialToken = async (social, token) => {
     const getUserData = await axios.post(`/social/token`, { token, social });
     const user = await getUserData.data;
     if (id) {
@@ -56,14 +56,14 @@ const Login = () => {
   const urlParams = url.searchParams;
   if (urlParams.has("code")) {
     if (urlParams.has("state")) {
-      sendAuthToken("naver", urlParams.get("code"));
+      sendSocialToken("naver", urlParams.get("code"));
     } //
-    else sendAuthToken("kakao", urlParams.get("code"));
+    else sendSocialToken("kakao", urlParams.get("code"));
   }
 
   const loginCss = document.createElement("link");
   loginCss.rel = "stylesheet";
-  loginCss.href = "/login/login.css";
+  loginCss.href = "/src/login/login.css";
   document.head.appendChild(loginCss);
 
   return `

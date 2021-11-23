@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import path from "path";
 import fetch from "node-fetch";
+import path from "path";
 import bodyParser from "body-parser";
 import mysql from "mysql";
 import jwt from "jsonwebtoken";
@@ -12,10 +12,11 @@ const app = express();
 const jsonParser = bodyParser.json();
 dotenv.config();
 app.use(cookieParser());
+app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(__dirname + "/public"));
-app.use(express.static(__dirname + "/src"));
 
 const conn = mysql.createConnection({
   host: "localhost",
@@ -75,9 +76,14 @@ function checkToken(access_token, uid) {
   }
 }
 
-app.get("/hello", (req, res) => {
-  const { uid, access_token } = req.cookies;
-  console.log(checkToken(access_token, uid));
+app.get("/", (req, res) => {
+  res.status(200).sendFile("/index.html");
+});
+app.get("/signUp", (req, res) => {
+  res.status(200).sendFile(__dirname + "/public/index.html");
+});
+app.get("/social/signUp", (req, res) => {
+  res.status(200).sendFile(__dirname + "/public/index.html");
 });
 
 app.post("/login", async (req, res) => {
@@ -155,10 +161,6 @@ app.post("/collection/load", (req, res) => {
     });
     res.send(collectionData);
   });
-});
-
-app.get("/", (req, res) => {
-  res.status(200).sendFile(__dirname + "/index.html");
 });
 
 app.get("/detail", (req, res) => {

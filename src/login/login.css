@@ -49,6 +49,10 @@
   color: #fafafa;
   font-size: 0.8rem;
 }
+.loginInputBox a:hover {
+  transition: 0.3s color;
+  color: #fa6782;
+}
 
 .loginInputBox input {
   background: #1d1d26;
@@ -74,10 +78,10 @@
   color: #ffffff;
   border: none;
   cursor: pointer;
-  transition: 0.3s background;
 }
 
 .loginInputBox button:hover {
+  transition: 0.3s background;
   background: rgb(226, 41, 75);
 }
 

@@ -9,7 +9,7 @@ const init = () => {
   const root = document.querySelector("#root");
   const indexCss = document.createElement("link");
   indexCss.rel = "stylesheet";
-  indexCss.href = "/index.css";
+  indexCss.href = "/src/index.css";
   document.head.appendChild(indexCss);
 
   root.innerHTML = `
