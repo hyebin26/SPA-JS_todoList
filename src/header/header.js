@@ -1,7 +1,7 @@
 const Header = () => {
   const headerCss = document.createElement("link");
   headerCss.rel = "stylesheet";
-  headerCss.href = "/header/header.css";
+  headerCss.href = "/src/header/header.css";
   document.head.appendChild(headerCss);
 
   return `<section class="header">
@@ -10,7 +10,7 @@ const Header = () => {
     <p>Dashboard</p>
   </div>
   <div class="profileBox">
-    <button class="profileBtn">별명</button>
+    <button class="profileBtn">로그아웃</button>
   </div>
   </section>`;
 };

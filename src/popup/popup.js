@@ -50,7 +50,7 @@ const Popup = () => {
 
   const popupCss = document.createElement("link");
   popupCss.rel = "stylesheet";
-  popupCss.href = "/popup/popup.css";
+  popupCss.href = "/src/popup/popup.css";
   document.head.appendChild(popupCss);
 
   return `

@@ -82,7 +82,8 @@ app.get("/", (req, res) => {
 app.get("/signUp", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
-app.get("/social/signUp", (req, res) => {
+
+app.get("/main", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
 
@@ -207,11 +208,12 @@ app.post("/social/token", async (req, res) => {
         `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${token}`,
         getTokenOptions
       );
-      const { access_token } = await fetchGetToken.json();
+      const kakaoToken = await fetchGetToken.json();
+      const access_social = await kakaoToken.access_token;
       const fetchNickOptions = {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${access_social}`,
         },
       };
       const getKakaoUser = await fetch(
@@ -220,22 +222,15 @@ app.post("/social/token", async (req, res) => {
       );
       const kakaoUser = await getKakaoUser.json();
       const { id } = kakaoUser;
-      const { nickname } = kakaoUser.properties;
-
-      conn.query(`select * from tuser where uid="${id}"`, (err, row) => {
-        try {
-          if (row.length) {
-            res.json({ nickname });
-            // 바로 메인으로 이동
-          }
-          if (!row.length) {
-            res.json({ id, nickname });
-            // socalSignup으로 이동 => id, nickname을 가지고 가야됨
-          }
-        } catch (err) {
-          console.log(err);
+      const access_token = makeToken("access", id);
+      const refresh_token = makeToken("refresh", id);
+      conn.query(
+        `insert into tokens values("${refresh_token}","${id}")`,
+        (err, row) => {
+          if (err) console.log(err);
         }
-      });
+      );
+      res.json({ id, access_token });
     } catch (err) {
       console.log(err);
     }

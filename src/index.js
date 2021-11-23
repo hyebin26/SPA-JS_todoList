@@ -19,8 +19,9 @@ const init = () => {
       path: "/",
       view: Login,
     },
-    { path: "/signUp/", view: SignUp },
+    { path: "/signUp", view: SignUp },
     { path: "/social/signUp", view: SignUp },
+    { path: "/main", view: Main, Header },
   ];
 
   routes.map((item) => {

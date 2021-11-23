@@ -1,12 +1,14 @@
 ## vanilla js SPA todoList
 
-1. social/signup로직 변경
+1. social 로그인 로직변경 => REST API로 구현했으나 로그인 팝업이 불가하고, 페이지를 메인으로 보내고 그 정보를 바탕으로 DB에서 관련 데이터를 받아오는 것이므로 속도가 느리다. => Javascript SDK로 구현하려고 했으나 프론트에서 환경변수 관리가 어렵다.
+   => REST API로 구현하고 로딩속도를 최저로 만들수 있도록 노력하고 로딩 애니메이션 추가하기
 
 ### 다음할 것
 
-https://cotak.tistory.com/102
+1. location href x history.pushState O
+2. a태크 바꾸기
 
-1. 무조건 router하고 signUp,login 체크
+https://cotak.tistory.com/102
 
 - signUp은 social로 회원가입하면 바로 main, 아닐경우 로그인
 - login은 social로 DB에 id존재하면 토큰 받고 메인으로
@@ -36,6 +38,10 @@ https://cotak.tistory.com/102
 - main에서 화면이 로드되었을 때 데이터를 가져오는 controll추가해야됨
 
 ### Login
+
+- REST API로 구현했으나 로그인 팝업이 불가하고, 페이지를 메인으로 보내고 그 정보를 바탕으로 DB에서 관련 데이터를 받아오는 것이므로 속도가 느리다. => Javascript SDK로 구현하려고 했으나 프론트에서 환경변수 관리가 어렵다. => REST API로 구현하고 로딩속도를 최저로 만들수 있도록 노력하고 로딩 애니메이션 추가하기
+
+- REST API로 구현했을 때 social/signUp으로가면 회원가입 한 사람이 로그인할 경우 화면이 매끄럽지 않음
 
 - 소셜 로그인 - DB에 id있을경우, 없을 경우
 - 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨

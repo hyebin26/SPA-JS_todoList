@@ -1,23 +1,21 @@
+import Header from "../header/header.js";
 import Popup from "../popup/popup.js";
 
 const Main = () => {
   const mainCss = document.createElement("link");
   mainCss.rel = "stylesheet";
-  mainCss.href = "/main/main.css";
+  mainCss.href = "/src/main/main.css";
   document.head.appendChild(mainCss);
 
   window.loadCollectionData = async () => {
-    const uname = localStorage.getItem("uname");
+    const nickname = localStorage.getItem("nickname");
     const loadCollectionRequest = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uname }),
+      body: JSON.stringify({ nickname }),
     };
-    const fetchLoadData = await fetch(
-      "/collection/load",
-      loadCollectionRequest
-    );
-    const collectionData = await fetchLoadData.json();
+    const fetchLoadData = await axios.post("/collection/load");
+    // const collectionData = await fetchLoadData.json();
     console.log("check");
   };
   window.clickPopupBtn = () => {
@@ -25,11 +23,28 @@ const Main = () => {
     // clickPopup.classList.add("activeP");
     console.log("hi");
   };
-
+  const sendSocialToken = async (social, token) => {
+    const getUserData = await axios.post(`/social/token`, { token, social });
+    const { id } = getUserData.data;
+    const { access_token } = getUserData.data;
+    axios.defaults.headers.common["Authorization"] = access_token;
+    localStorage.setItem("nickname", id);
+  };
+  const url = new URL(window.location.href);
+  const urlParams = url.searchParams;
+  if (urlParams.has("code")) {
+    if (urlParams.has("state")) {
+      sendSocialToken("naver", urlParams.get("code"));
+    } //
+    else sendSocialToken("kakao", urlParams.get("code"));
+  }
+  // => 결국 문제는 collection로딩이 오래걸리는것이 문제
+  // 로딩 애니메이션을 만들기
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
+  // ${Popup()}
   return `
-  ${Popup()}
+  ${Header()}
   <section class="main">
   <h2>You have no collections.</h2>
   <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>

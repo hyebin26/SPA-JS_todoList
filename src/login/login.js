@@ -37,8 +37,6 @@ const Login = () => {
       console.log(err);
     }
   };
-
-
   const loginCss = document.createElement("link");
   loginCss.rel = "stylesheet";
   loginCss.href = "/src/login/login.css";

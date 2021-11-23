@@ -1,41 +1,16 @@
-const makeInputBox = ({
-  _type,
-  _placeholder,
-  _text,
-  _title,
-  _event,
-  _nickname,
-}) => {
+const makeInputBox = ({ _type, _placeholder, _text, _title, _event }) => {
   const category = _title.toLowerCase();
-  console.log("first", _nickname);
   return `
   <div class="signUp${_title}Box">
     <h3>${_placeholder}</h3>
     <p>${_text}</p>
-    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input" value="${
-    _nickname ? _nickname : ""
-  }"}">   
+    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input"}">   
     <p class="signUpFalseText"></p>
   </div>
     `;
 };
 
 const SignUp = () => {
-  const sendSocialToken = async (social, token) => {
-    const getUserData = await axios.post(`/social/token`, { token, social });
-    const { nickname } = await getUserData.data;
-    localStorage.setItem("nickname", nickname);
-    console.log("success");
-  };
-  const url = new URL(window.location.href);
-  const urlParams = url.searchParams;
-  if (urlParams.has("code")) {
-    if (urlParams.has("state")) {
-      sendSocialToken("naver", urlParams.get("code"));
-    } //
-    else sendSocialToken("kakao", urlParams.get("code"));
-  }
-
   window.clickSignUpBtn = async (target) => {
     const duplicate = document.querySelectorAll(".falseSignup");
     if (duplicate.length) {
@@ -43,26 +18,17 @@ const SignUp = () => {
         item.textContent = "필수 입력 항목입니다.";
       });
     } else {
-      const url = new URL(window.location.href);
-      let user = {};
-      if (url.pathname === "/social/signUp") {
-        const uname = document.querySelector(".signUpUnameInput").value;
-        const uid = document.querySelector(".signUpUidInput").value;
-        user["uname"] = uname;
-        user["uid"] = uid;
-      } //
-      else {
-        const uid = document.querySelector(".signUpUidInput").value;
-        const pwd = document.querySelector(".signUpPasswordInput").value;
-        const uname = document.querySelector(".signUpUnameInput").value;
-        user["uname"] = uname;
-        user["uid"] = uid;
-        user["pwd"] = pwd;
-      }
-      const fetchSignUpSuccess = await axios.post("/signUp/success", user);
+      const uid = document.querySelector(".signUpUidInput").value;
+      const pwd = document.querySelector(".signUpPasswordInput").value;
+      const uname = document.querySelector(".signUpUnameInput").value;
+      const fetchSignUpSuccess = await axios.post("/signUp/success", {
+        uid,
+        pwd,
+        uname,
+      });
       const signUpSuccess = await fetchSignUpSuccess.data;
       if (signUpSuccess) {
-        alert("성공, 페이지 이동해주세요~");
+        location.href = "/";
       } else alert("다시 시도해주세요.");
     }
   };
@@ -178,9 +144,7 @@ const SignUp = () => {
     _event: "duplicateCheck",
     _nickname: localStorage.getItem("nickname"),
   };
-  console.log("last");
-  if (url.pathname === "/signUp/") {
-    return `
+  return `
   <section>
   <div class="signUpLogoBox">
     <a href="#">TASKS<img src="/image/task.png">
@@ -197,25 +161,6 @@ const SignUp = () => {
     </div>
   </div>
   </section>`;
-  }
-  if (url.pathname === "/social/signUp") {
-    return `
-    <section>
-    <div class="signUpLogoBox">
-      <a href="#">TASKS<img src="/image/task.png">
-      </a>
-    </div>
-    <div class="signUpInputBox">
-    ${makeInputBox(emailObj)}
-    ${makeInputBox(nicknameObj)}
-    <div class="signUpBtnBox">
-      <button class="signUpBtn" onclick="clickSignUpBtn(this)">회원가입하기</button>
-      <span>이미 아이디가 있으신가요?</span><a href="#">로그인</a>
-    </div>
-    </div>
-    </section>
-    `;
-  }
 };
 
 export default SignUp;
