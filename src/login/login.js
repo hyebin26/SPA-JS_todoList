@@ -1,7 +1,4 @@
 const Login = () => {
-  // loginInputBox.addEventListener("submit", submitLogin);
-  // kakaoImage.addEventListener("click", clickKakaoBtn);
-  // naverImage.addEventListener("click", clickNaverBtn);
   window.submitLogin = async (e) => {
     e.preventDefault();
     const falseLogin = document.querySelector(".falseLogin");
@@ -41,25 +38,6 @@ const Login = () => {
     }
   };
 
-  const sendSocialToken = async (social, token) => {
-    const getUserData = await axios.post(`/social/token`, { token, social });
-    const user = await getUserData.data;
-    if (id) {
-      // id와 닉네임을 가지고 social/signup으로
-    }
-    if (!id) {
-      localStorage.setItem("nickname", user.nickname);
-      // 닉네임 저장하고 main으로
-    }
-  };
-  const url = new URL(window.location.href);
-  const urlParams = url.searchParams;
-  if (urlParams.has("code")) {
-    if (urlParams.has("state")) {
-      sendSocialToken("naver", urlParams.get("code"));
-    } //
-    else sendSocialToken("kakao", urlParams.get("code"));
-  }
 
   const loginCss = document.createElement("link");
   loginCss.rel = "stylesheet";

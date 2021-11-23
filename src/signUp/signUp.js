@@ -4,51 +4,37 @@ const makeInputBox = ({
   _text,
   _title,
   _event,
-  _social,
+  _nickname,
 }) => {
   const category = _title.toLowerCase();
+  console.log("first", _nickname);
   return `
   <div class="signUp${_title}Box">
     <h3>${_placeholder}</h3>
     <p>${_text}</p>
     <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input" value="${
-    _social ? _social : ""
-  }">   
+    _nickname ? _nickname : ""
+  }"}">   
     <p class="signUpFalseText"></p>
   </div>
     `;
 };
 
-const SignUp = (social) => {
-  const emailObj = {
-    _type: "text",
-    _placeholder: "아이디",
-    _text: "아이디를 입력해주세요.(6~20자)",
-    _title: "Uid",
-    _event: "duplicateCheck",
+const SignUp = () => {
+  const sendSocialToken = async (social, token) => {
+    const getUserData = await axios.post(`/social/token`, { token, social });
+    const { nickname } = await getUserData.data;
+    localStorage.setItem("nickname", nickname);
+    console.log("success");
   };
-  const passwordObj = {
-    _type: "password",
-    _placeholder: "비밀번호",
-    _text: "영문,숫자를 포함한 비밀번호를 입력해주세요.(8~20자)",
-    _title: "Password",
-    _event: "focusOutPassword",
-  };
-  const passwordCheckObj = {
-    _type: "password",
-    _placeholder: "비밀번호 확인",
-    _text: "위의 비밀번호를 입력해주세요.",
-    _title: "PasswordCheck",
-    _event: "focusOutPassword",
-  };
-  const nicknameObj = {
-    _type: "text",
-    _placeholder: "닉네임",
-    _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
-    _title: "Uname",
-    _event: "duplicateCheck",
-    _social: social,
-  };
+  const url = new URL(window.location.href);
+  const urlParams = url.searchParams;
+  if (urlParams.has("code")) {
+    if (urlParams.has("state")) {
+      sendSocialToken("naver", urlParams.get("code"));
+    } //
+    else sendSocialToken("kakao", urlParams.get("code"));
+  }
 
   window.clickSignUpBtn = async (target) => {
     const duplicate = document.querySelectorAll(".falseSignup");
@@ -160,10 +146,40 @@ const SignUp = (social) => {
 
   const signUpCss = document.createElement("link");
   signUpCss.rel = "stylesheet";
-  signUpCss.href = "/signUp/signUp.css";
+  signUpCss.href = "/src/signUp/signUp.css";
   document.head.appendChild(signUpCss);
 
-  if (!social) {
+  const emailObj = {
+    _type: "text",
+    _placeholder: "아이디",
+    _text: "아이디를 입력해주세요.(6~20자)",
+    _title: "Uid",
+    _event: "duplicateCheck",
+  };
+  const passwordObj = {
+    _type: "password",
+    _placeholder: "비밀번호",
+    _text: "영문,숫자를 포함한 비밀번호를 입력해주세요.(8~20자)",
+    _title: "Password",
+    _event: "focusOutPassword",
+  };
+  const passwordCheckObj = {
+    _type: "password",
+    _placeholder: "비밀번호 확인",
+    _text: "위의 비밀번호를 입력해주세요.",
+    _title: "PasswordCheck",
+    _event: "focusOutPassword",
+  };
+  const nicknameObj = {
+    _type: "text",
+    _placeholder: "닉네임",
+    _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
+    _title: "Uname",
+    _event: "duplicateCheck",
+    _nickname: localStorage.getItem("nickname"),
+  };
+  console.log("last");
+  if (url.pathname === "/signUp/") {
     return `
   <section>
   <div class="signUpLogoBox">
@@ -182,7 +198,7 @@ const SignUp = (social) => {
   </div>
   </section>`;
   }
-  if (social) {
+  if (url.pathname === "/social/signUp") {
     return `
     <section>
     <div class="signUpLogoBox">

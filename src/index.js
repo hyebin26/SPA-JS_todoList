@@ -12,9 +12,26 @@ const init = () => {
   indexCss.href = "/src/index.css";
   document.head.appendChild(indexCss);
 
-  root.innerHTML = `
-  ${Login()}
-  `;
+  const url = new URL(window.location.href);
+
+  const routes = [
+    {
+      path: "/",
+      view: Login,
+    },
+    { path: "/signUp/", view: SignUp },
+    { path: "/social/signUp", view: SignUp },
+  ];
+
+  routes.map((item) => {
+    if (item.path === url.pathname) {
+      return (root.innerHTML = `${item.view()}`);
+    }
+  });
+
+  // root.innerHTML = `
+  // ${Login()}
+  // `;
   // ${Header()}
   //  ${Main()}
 

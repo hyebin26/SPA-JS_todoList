@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. nodejs 경로 재설정
+1. social/signup로직 변경
 
 ### 다음할 것
 
