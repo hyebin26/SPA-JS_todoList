@@ -4,12 +4,7 @@ import Popup from "./popup/popup.js";
 import Content from "./content/content.js";
 import Login from "./login/login.js";
 import SignUp from "./signUp/signUp.js";
-import Router from "/src/realRouter.js";
-
-const handleLinkChange = () => {
-  const root = document.querySelector("#root");
-  root.innerHTML = `${Router.HandleSubmitRoute()}`;
-};
+import Router from "/src/router.js";
 
 const RenderHTML = () => {
   const indexCss = document.createElement("link");
@@ -17,8 +12,9 @@ const RenderHTML = () => {
   indexCss.href = "/src/index.css";
   document.head.appendChild(indexCss);
 
-  window.addEventListener("popstate", handleLinkChange);
-  root.innerHTML = `${Router.HandleSubmitRoute()}`;
+  window.addEventListener("popstate", RenderHTML);
+
+  root.innerHTML = `${Router.HandleRoute()}`;
 
   const allLink = document.querySelectorAll("a");
   allLink.forEach((v) => {

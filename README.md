@@ -1,12 +1,9 @@
 ## vanilla js SPA todoList
 
-1. router 만들기
-2. signup.js, login.js 에 적용
+1. realRouter.js router.js로 변경
+2. login.js router추가
 
 ### 다음할 것
-
-1. location href x history.pushState O
-2. a태크 바꾸기
 
 https://cotak.tistory.com/102
 

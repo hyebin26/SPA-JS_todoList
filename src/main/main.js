@@ -42,9 +42,9 @@ const Main = () => {
   // 로딩 애니메이션을 만들기
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
-  // ${Popup()}
   return `
   ${Header()}
+   ${Popup()}
   <section class="main">
   <h2>You have no collections.</h2>
   <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>

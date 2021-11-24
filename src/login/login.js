@@ -1,3 +1,5 @@
+import RenderHTML from "/src/index.js";
+
 const Login = () => {
   window.submitLogin = async (e) => {
     e.preventDefault();
@@ -8,10 +10,11 @@ const Login = () => {
       const loginData = await axios.post("/login", { uid, pwd });
       const { accessToken, uname } = await loginData.data;
       if (accessToken) {
-        axios.defaults.headers.common.Cookie = accessToken;
+        axios.defaults.headers.common[`Authorization`] = accessToken;
         falseLogin.textContent = "";
         localStorage.setItem("uname", uname);
-        // 페이지 collection이동 하기
+        history.pushState({}, "", "/main");
+        RenderHTML();
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
       }
