@@ -8,11 +8,11 @@ const Login = () => {
       pwd = e.target[1].value;
     try {
       const loginData = await axios.post("/login", { uid, pwd });
-      const { accessToken, uname } = await loginData.data;
+      const { accessToken } = await loginData.data;
       if (accessToken) {
-        axios.defaults.headers.common[`Authorization`] = accessToken;
         falseLogin.textContent = "";
-        localStorage.setItem("uname", uname);
+        localStorage.setItem("uid", uid);
+        localStorage.setItem("access_token", accessToken);
         history.pushState({}, "", "/main");
         RenderHTML();
       } else {

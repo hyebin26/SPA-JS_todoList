@@ -19,10 +19,10 @@ const Main = () => {
     console.log("check");
   };
   window.clickPopupBtn = () => {
-    // const clickPopup = document.querySelector(".popupContainer");
-    // clickPopup.classList.add("activeP");
-    console.log("hi");
+    const clickPopup = document.querySelector(".popupContainer");
+    clickPopup.classList.add("activeP");
   };
+
   const sendSocialToken = async (social, token) => {
     const getUserData = await axios.post(`/social/token`, { token, social });
     const { id } = getUserData.data;
@@ -47,7 +47,7 @@ const Main = () => {
    ${Popup()}
   <section class="main">
   <h2>You have no collections.</h2>
-  <button class="mainAddBtn" onclick="clickPopupBtn">Add Your First Collection</button>
+  <button class="mainAddBtn" onclick="clickPopupBtn()">Add Your First Collection</button>
   </section>`;
 };
 

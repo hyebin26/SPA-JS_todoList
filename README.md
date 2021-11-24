@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. realRouter.js router.js로 변경
-2. login.js router추가
+1. 로그아웃 이벤트 구현
 
 ### 다음할 것
 
@@ -38,6 +37,8 @@ https://cotak.tistory.com/102
 
 - REST API로 구현했으나 로그인 팝업이 불가하고, 페이지를 메인으로 보내고 그 정보를 바탕으로 DB에서 관련 데이터를 받아오는 것이므로 속도가 느리다. => Javascript SDK로 구현하려고 했으나 프론트에서 환경변수 관리가 어렵다. => REST API로 구현하고 로딩속도를 최저로 만들수 있도록 노력하고 로딩 애니메이션 추가하기
 
+- login할 경우 쿠키,uid를 localStorage에 저장 => axios.defaults로 저장할 경우 새로고침하면 사라짐
+
 - REST API로 구현했을 때 social/signUp으로가면 회원가입 한 사람이 로그인할 경우 화면이 매끄럽지 않음
 
 - 소셜 로그인 - DB에 id있을경우, 없을 경우
@@ -47,6 +48,10 @@ https://cotak.tistory.com/102
 ### signUp
 
 - social로 로그인 => social/login으로 redirect => 매개변수로 nickname주기
+
+### Router
+
+- 현재 로직이 맞는지 모르겠음.
 
 ### 알게된 것
 

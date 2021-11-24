@@ -102,9 +102,7 @@ app.post("/login", async (req, res) => {
           if (err) console.log(err);
         }
       );
-      res.cookie("access_token", accessToken, { httpOnly: true, secure: true });
-      res.cookie("uid", uid, { httpOnly: true });
-      res.json({ accessToken, uname: row[0].uname });
+      res.json({ accessToken });
     } //
     else {
       res.json(false);
@@ -270,6 +268,20 @@ app.post("/social/token", async (req, res) => {
     } catch (err) {
       console.log(err);
     }
+  }
+});
+
+app.post("/logout", async (req, res) => {
+  const { authorization } = req.headers;
+  const { uid } = req.body;
+  if (checkToken(authorization, uid)) {
+    const { uid } = req.body;
+    conn.query(`delete from tokens where uid="${uid}"`, (err, row) => {
+      res.send(true);
+      if (err) console.log(err);
+    });
+  } else {
+    res.json(false);
   }
 });
 
