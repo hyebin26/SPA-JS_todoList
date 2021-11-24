@@ -4,39 +4,33 @@ import Popup from "./popup/popup.js";
 import Content from "./content/content.js";
 import Login from "./login/login.js";
 import SignUp from "./signUp/signUp.js";
+import Router from "/src/realRouter.js";
 
-const init = () => {
+const handleLinkChange = () => {
   const root = document.querySelector("#root");
+  root.innerHTML = `${Router.HandleSubmitRoute()}`;
+};
+
+const RenderHTML = () => {
   const indexCss = document.createElement("link");
   indexCss.rel = "stylesheet";
   indexCss.href = "/src/index.css";
   document.head.appendChild(indexCss);
 
-  const url = new URL(window.location.href);
+  window.addEventListener("popstate", handleLinkChange);
+  root.innerHTML = `${Router.HandleSubmitRoute()}`;
 
-  const routes = [
-    {
-      path: "/",
-      view: Login,
-    },
-    { path: "/signUp", view: SignUp },
-    { path: "/social/signUp", view: SignUp },
-    { path: "/main", view: Main, Header },
-  ];
-
-  routes.map((item) => {
-    if (item.path === url.pathname) {
-      return (root.innerHTML = `${item.view()}`);
-    }
+  const allLink = document.querySelectorAll("a");
+  allLink.forEach((v) => {
+    v.addEventListener("click", Router.HandleLink);
   });
 
-  // root.innerHTML = `
-  // ${Login()}
-  // `;
   // ${Header()}
   //  ${Main()}
 
   // const mainAddBtn = document.querySelector(".mainAddBtn");
   // mainAddBtn.addEventListener("click", InitController.clickPopupBtn);
 };
-init();
+RenderHTML();
+
+export default RenderHTML;

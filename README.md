@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. social 로그인 로직변경 => REST API로 구현했으나 로그인 팝업이 불가하고, 페이지를 메인으로 보내고 그 정보를 바탕으로 DB에서 관련 데이터를 받아오는 것이므로 속도가 느리다. => Javascript SDK로 구현하려고 했으나 프론트에서 환경변수 관리가 어렵다.
-   => REST API로 구현하고 로딩속도를 최저로 만들수 있도록 노력하고 로딩 애니메이션 추가하기
+1. router 만들기
+2. signup.js, login.js 에 적용
 
 ### 다음할 것
 

@@ -53,7 +53,7 @@ const Login = () => {
       <input placeholder="Password" type="password">
       <p class="falseLogin"></p>
       <button>Login</button>
-      <a href="#">회원가입</a>
+      <a data-link="/signUp">회원가입</a>
     </form>
     <div class="loginSocialBox">
       <p>SNS계정으로 간편 로그인</p>
