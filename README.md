@@ -1,8 +1,13 @@
 ## vanilla js SPA todoList
 
-1. 로그아웃 이벤트 구현
+1. signUp, login 로직 변경 => main으로 AUTH_REDIRECT를 설정할 경우 새로고침이나 리렌더링될 떄도 계속 서버가 호출되므로 login으로 AUTH_REDIRECT변경
 
 ### 다음할 것
+
+1. 로딩 애니매이션
+2. local Event
+3. useState
+4. 뒤로가기가 적용안됨
 
 https://cotak.tistory.com/102
 
@@ -44,10 +49,6 @@ https://cotak.tistory.com/102
 - 소셜 로그인 - DB에 id있을경우, 없을 경우
 - 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨
 - 네이버 로그아웃 => http://nid.naver.com/nidlogin.logout 팝업하기?
-
-### signUp
-
-- social로 로그인 => social/login으로 redirect => 매개변수로 nickname주기
 
 ### Router
 

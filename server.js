@@ -137,6 +137,18 @@ app.post("/signUp/success", (req, res) => {
     }
   );
 });
+app.post("/signUp/social", async (req, res) => {
+  const { uid } = req.body;
+  const access_token = makeToken("access", uid);
+  const refresh_token = makeToken("refresh", uid);
+  try {
+    await conn.query(`insert into tokens values("${refresh_token}","${uid}")`);
+    res.json({ access_token });
+  } catch (err) {
+    console.log(err);
+  }
+  //토큰이랑 uid 저장해야됨
+});
 
 app.post("/collection/add", (req, res) => {
   const { uname, collection, color, tasks, done } = req.body.todo;
@@ -220,15 +232,24 @@ app.post("/social/token", async (req, res) => {
       );
       const kakaoUser = await getKakaoUser.json();
       const { id } = kakaoUser;
+      const { nickname } = kakaoUser.properties;
       const access_token = makeToken("access", id);
       const refresh_token = makeToken("refresh", id);
-      conn.query(
-        `insert into tokens values("${refresh_token}","${id}")`,
-        (err, row) => {
-          if (err) console.log(err);
+      conn.query(`select * from tuser where uid="${id}"`, (err, row) => {
+        if (err) console.log(err);
+        if (row.length) {
+          res.json({ id, access_token, needSignup: false });
+          conn.query(
+            `insert into tokens values("${refresh_token}","${id}")`,
+            (err, row) => {
+              if (err) console.log(err);
+            }
+          );
         }
-      );
-      res.json({ id, access_token });
+        if (!row.length) {
+          res.json({ id, nickname, needSignup: true });
+        }
+      });
     } catch (err) {
       console.log(err);
     }
@@ -238,11 +259,12 @@ app.post("/social/token", async (req, res) => {
       const fetchNaverToken = await fetch(
         `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${token}`
       );
-      const { access_token } = await fetchNaverToken.json();
+      const getNaverToken = await fetchNaverToken.json();
+      const naverToken = getNaverToken.access_token;
       const getNaverNicknameOptions = {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${naverToken}`,
         },
       };
       const getNaverUser = await fetch(
@@ -251,18 +273,21 @@ app.post("/social/token", async (req, res) => {
       );
       const userData = await getNaverUser.json();
       const { id, nickname } = userData.response;
+      const access_token = makeToken("access", id);
+      const refresh_token = makeToken("refresh", id);
       conn.query(`select * from tuser where uid="${id}"`, (err, row) => {
-        try {
-          if (row.length) {
-            res.json({ nickname });
-            // 바로 메인으로 이동
-          }
-          if (!row.length) {
-            res.json({ id, nickname });
-            // socalSignup으로 이동 => id, nickname을 가지고 가야됨
-          }
-        } catch (err) {
-          console.log(err);
+        if (err) console.log(err);
+        if (row.length) {
+          res.json({ id, access_token, needSignup: false });
+          conn.query(
+            `insert into tokens values("${refresh_token}","${id}")`,
+            (err, row) => {
+              if (err) console.log(err);
+            }
+          );
+        }
+        if (!row.length) {
+          res.json({ id, nickname, needSignup: true });
         }
       });
     } catch (err) {

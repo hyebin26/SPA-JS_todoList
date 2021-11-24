@@ -13,7 +13,6 @@ const RenderHTML = () => {
   document.head.appendChild(indexCss);
 
   window.addEventListener("popstate", RenderHTML);
-
   root.innerHTML = `${Router.HandleRoute()}`;
 
   const allLink = document.querySelectorAll("a");

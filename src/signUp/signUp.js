@@ -1,23 +1,37 @@
 import RenderHTML from "/src/index.js";
 
-const makeInputBox = ({ _type, _placeholder, _text, _title, _event }) => {
+const makeInputBox = ({
+  _type,
+  _placeholder,
+  _text,
+  _title,
+  _event,
+  _nickname,
+}) => {
   const category = _title.toLowerCase();
   return `
   <div class="signUp${_title}Box">
     <h3>${_placeholder}</h3>
     <p>${_text}</p>
-    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input"}">   
+    <input onfocusout="${_event}(this)" type="${_type}" data-category="${category}" placeholder="${_placeholder}" class="signUp${_title}Input" value="${
+    _nickname ? _nickname : ""
+  }">   
     <p class="signUpFalseText"></p>
   </div>
     `;
 };
 
 const SignUp = () => {
-  window.clickSignUpBtn = async (target) => {
+  window.clickSignUpBtn = async () => {
     const duplicate = document.querySelectorAll(".falseSignup");
-    const uid = document.querySelector(".signUpUidInput").value;
-    const pwd = document.querySelector(".signUpPasswordInput").value;
+    const uid = document.querySelector(".signUpUidInput")
+      ? document.querySelector(".signUpUidInput").value
+      : history.state.id;
+    const pwd = document.querySelector(".signUpPasswordInput")
+      ? document.querySelector(".signUpPasswordInput").value
+      : null;
     const uname = document.querySelector(".signUpUnameInput").value;
+    window.duplicateCheck(document.querySelector(".signUpUnameInput"));
     if (duplicate.length) {
       duplicate.forEach((item) => {
         item.textContent = "필수 입력 항목입니다.";
@@ -34,8 +48,20 @@ const SignUp = () => {
       });
       const signUpSuccess = await fetchSignUpSuccess.data;
       if (signUpSuccess) {
-        history.pushState({}, "Login Page", "/");
-        RenderHTML();
+        if (history.state.id) {
+          const getAccessToken = await axios.post("/signUp/social", {
+            uid: history.state.id,
+          });
+          const { access_token } = getAccessToken.data;
+          localStorage.setItem("uid", history.state.id);
+          localStorage.setItem("access_token", access_token);
+          history.pushState({}, "main Page", "/main");
+          RenderHTML();
+        } //
+        else {
+          history.pushState({}, "Login Page", "/");
+          RenderHTML();
+        }
       } //
       else alert("다시 시도해주세요.");
     }
@@ -117,7 +143,6 @@ const SignUp = () => {
       }
     }
   };
-
   const signUpCss = document.createElement("link");
   signUpCss.rel = "stylesheet";
   signUpCss.href = "/src/signUp/signUp.css";
@@ -150,9 +175,26 @@ const SignUp = () => {
     _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
     _title: "Uname",
     _event: "duplicateCheck",
-    _nickname: localStorage.getItem("nickname"),
+    _nickname: history.state.nickname,
   };
-  return `
+  if (history.state.id) {
+    return `
+    <section>
+    <div class="signUpLogoBox">
+      <a data-link="/">TASKS<img src="/image/task.png">
+      </a>
+    </div>
+    <div class="signUpInputBox">
+      ${makeInputBox(nicknameObj)}
+      <div class="signUpBtnBox">
+        <button class="signUpBtn" onclick="clickSignUpBtn()">회원가입하기</button>
+        <span>이미 아이디가 있으신가요?</span><a data-link="/">로그인</a>
+      </div>
+    </div>
+    </section>`;
+  }
+  if (!history.state.id) {
+    return `
   <section>
   <div class="signUpLogoBox">
     <a data-link="/">TASKS<img src="/image/task.png">
@@ -164,11 +206,12 @@ const SignUp = () => {
     ${makeInputBox(passwordCheckObj)}
     ${makeInputBox(nicknameObj)}
     <div class="signUpBtnBox">
-      <button class="signUpBtn" >회원가입하기</button>
+      <button class="signUpBtn" onclick="clickSignUpBtn()">회원가입하기</button>
       <span>이미 아이디가 있으신가요?</span><a data-link="/">로그인</a>
     </div>
   </div>
   </section>`;
+  }
 };
 
 export default SignUp;

@@ -23,21 +23,6 @@ const Main = () => {
     clickPopup.classList.add("activeP");
   };
 
-  const sendSocialToken = async (social, token) => {
-    const getUserData = await axios.post(`/social/token`, { token, social });
-    const { id } = getUserData.data;
-    const { access_token } = getUserData.data;
-    axios.defaults.headers.common["Authorization"] = access_token;
-    localStorage.setItem("nickname", id);
-  };
-  const url = new URL(window.location.href);
-  const urlParams = url.searchParams;
-  if (urlParams.has("code")) {
-    if (urlParams.has("state")) {
-      sendSocialToken("naver", urlParams.get("code"));
-    } //
-    else sendSocialToken("kakao", urlParams.get("code"));
-  }
   // => 결국 문제는 collection로딩이 오래걸리는것이 문제
   // 로딩 애니메이션을 만들기
   document.addEventListener("DOMContentLoaded", loadCollectionData());

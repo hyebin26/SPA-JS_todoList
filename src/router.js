@@ -12,8 +12,7 @@ const Router = {
     { path: "/signUp", view: SignUp },
     { path: "/main", view: Main },
   ],
-  HandleRoute: (content) => {
-    history.pushState({}, "", content);
+  HandleRoute: () => {
     const url = new URL(window.location.href);
     const filterRouter = Router.routes.filter((v) => v.path === url.pathname);
     return filterRouter.length

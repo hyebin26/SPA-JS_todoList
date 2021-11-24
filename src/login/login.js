@@ -40,6 +40,26 @@ const Login = () => {
       console.log(err);
     }
   };
+  const sendSocialToken = async (social, token) => {
+    const getUserData = await axios.post(`/social/token`, { token, social });
+    const { needSignup, id, nickname } = getUserData.data;
+    if (needSignup) {
+      history.pushState({ id, nickname }, "", "/signUp");
+      RenderHTML();
+    }
+    if (!needSignup) {
+      history.pushState({}, "", "/main");
+      RenderHTML();
+    }
+  };
+  const url = new URL(window.location.href);
+  const urlParams = url.searchParams;
+  if (urlParams.has("code")) {
+    if (urlParams.has("state")) {
+      sendSocialToken("naver", urlParams.get("code"));
+    } //
+    else sendSocialToken("kakao", urlParams.get("code"));
+  }
   const loginCss = document.createElement("link");
   loginCss.rel = "stylesheet";
   loginCss.href = "/src/login/login.css";

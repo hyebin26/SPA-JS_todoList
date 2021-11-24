@@ -19,13 +19,16 @@ body {
   background-color: rgb(29, 29, 39);
   display: flex;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 0.7rem 1.5rem;
   color: #ffffff;
+  align-items: center;
 }
 .dashBox {
+  position: relative;
+}
+.dashBox a {
   display: flex;
   align-items: center;
-  position: relative;
 }
 .dashBox img {
   width: 19px;

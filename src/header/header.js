@@ -27,8 +27,10 @@ const Header = () => {
 
   return `<section class="header">
   <div class="dashBox">
+   <a data-link="/">
     <img src="/image/dashboard.png" alt="dashboard">
     <p>Dashboard</p>
+    </a>
   </div>
   <div class="profileBox">
     <button class="profileBtn" onclick="clickLogoutBtn()">로그아웃</button>
