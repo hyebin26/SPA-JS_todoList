@@ -12,9 +12,12 @@ const Header = () => {
       {
         uid: localStorage.getItem("uid"),
       },
-      { headers: { authorization: localStorage.getItem("access_token") } }
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
     );
-
     if (logout.data) {
       localStorage.removeItem("uid");
       localStorage.removeItem("access_token");

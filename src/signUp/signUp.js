@@ -175,9 +175,9 @@ const SignUp = () => {
     _text: "다른 유저와 겹치지 않는 별명을 입력해주세요.(2~15자)",
     _title: "Uname",
     _event: "duplicateCheck",
-    _nickname: history.state.nickname,
+    _nickname: history.state ? history.state.nickname : "",
   };
-  if (history.state.id) {
+  if (history.state) {
     return `
     <section>
     <div class="signUpLogoBox">
@@ -193,7 +193,7 @@ const SignUp = () => {
     </div>
     </section>`;
   }
-  if (!history.state.id) {
+  if (!history.state) {
     return `
   <section>
   <div class="signUpLogoBox">

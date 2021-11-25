@@ -22,7 +22,7 @@ const Router = {
   HandleLink: (e) => {
     e.preventDefault();
     const { link } = e.target.dataset;
-    history.pushState({}, "", link);
+    history.pushState(null, "", link);
     RenderHTML();
   },
 };

@@ -39,10 +39,10 @@ function makeToken(type, uid) {
   }
   return token;
 }
-function checkToken(access_token, uid) {
+async function checkToken(access_token, uid) {
   if (!access_token) return false;
   try {
-    const decoded = jwt.verify(access_token, process.env.JWT_SECRET);
+    const decoded = await jwt.verify(access_token, process.env.JWT_SECRET);
     return true;
   } catch (err) {
     if (err.name === "TokenExpiredError") {
@@ -297,13 +297,12 @@ app.post("/social/token", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  const { authorization } = req.headers;
-  const { uid } = req.body;
-  if (checkToken(authorization, uid)) {
-    const { uid } = req.body;
+  const access_token = req.headers.authorization.split(" ")[1];
+  const uid = req.body;
+  if (await checkToken(access_token, uid)) {
     conn.query(`delete from tokens where uid="${uid}"`, (err, row) => {
-      res.send(true);
       if (err) console.log(err);
+      res.send(true);
     });
   } else {
     res.json(false);

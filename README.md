@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. signUp, login 로직 변경 => main으로 AUTH_REDIRECT를 설정할 경우 새로고침이나 리렌더링될 떄도 계속 서버가 호출되므로 login으로 AUTH_REDIRECT변경
+1. social login 최종 수정
 
 ### 다음할 것
 
@@ -86,3 +86,12 @@ https://cotak.tistory.com/102
 
 - 로그인을 하고 API통신을 하기 위해서는 쿠키를 헤더에 넣고 통신을 해야된다.
 - localStrage에 쿠키를 저장하는 것보다 axios.defaults 사용하는 것이 더 안전할 거라고 생각하기도 했고 fetch를 더 간편하게 할 수 있기 때문에 추가했음
+
+8. 코드 로직을 짜야 할 때
+
+- 이번에 social로그인 로직을 짤 때 기준이 없어서 너무 오래걸렸다. => auth_redirect를 처음에 로그인, 다음에 signUp그 다음에 main으로 했는데 main으로 할 경우 리렌더링이 일어날 때 마다 API가 호출됨 => 비효율 => 다시 login으로 로직변경
+- 최대한 직관적으로 짜기 위헤 API를 호출해서 이미 회원가입한 아이디면 needSignup:false 회원가입을 하지 않은 아이디면 needSignUp:true를 주는 것으로 해결했다.
+
+9. router구현
+
+- history.pushState로 url을 변경 => 현재의 url에 맞는 view 렌더하기.

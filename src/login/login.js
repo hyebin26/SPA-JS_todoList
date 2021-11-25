@@ -13,8 +13,8 @@ const Login = () => {
         falseLogin.textContent = "";
         localStorage.setItem("uid", uid);
         localStorage.setItem("access_token", accessToken);
-        history.pushState({}, "", "/main");
-        RenderHTML();
+        // history.pushState(null, "", "/main");
+        // RenderHTML();
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
       }
@@ -42,13 +42,16 @@ const Login = () => {
   };
   const sendSocialToken = async (social, token) => {
     const getUserData = await axios.post(`/social/token`, { token, social });
-    const { needSignup, id, nickname } = getUserData.data;
+    const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
       history.pushState({ id, nickname }, "", "/signUp");
       RenderHTML();
     }
     if (!needSignup) {
-      history.pushState({}, "", "/main");
+      // id랑 access_token발급
+      localStorage.setItem("uid", id);
+      localStorage.setItem("access_token", access_token);
+      history.pushState("", "", "/main");
       RenderHTML();
     }
   };
