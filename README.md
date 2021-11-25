@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. collection/add api추가
+1. collection ui 완성
 
 ### 다음할 것
 

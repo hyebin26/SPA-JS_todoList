@@ -5,11 +5,9 @@ body {
 }
 .main {
   color: #ffffff;
-  padding-top: 5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
 }
 .main h2 {
   padding: 2rem 0;
@@ -28,3 +26,9 @@ body {
   background-color: #272732;
   transition: 0.6s;
 }
+.main ul {
+  display: flex;
+  justify-content: space-between;
+}
+
+

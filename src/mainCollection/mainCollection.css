@@ -1,0 +1,36 @@
+.mainTodoList {
+  flex: 0 0 48%;
+  background: #21212b;
+  border-radius: 1rem;
+}
+.mainTodoList a {
+  display: flex;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+.mainTodoList a:hover {
+  background: #272732;
+}
+.mainTodoColor {
+  width: 55px;
+  background: #ae68e6;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainTodoList img {
+  filter: brightness(0) invert(1);
+  width: 30px;
+}
+.mainTodoText {
+  padding: 0rem 0.8rem;
+}
+.mainTodoTItle {
+  padding: 0.2rem 0;
+}
+.mainTodoTask {
+  padding: 0.2rem 0;
+  font-size: 0.8rem;
+  color: #8e8e94;
+}

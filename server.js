@@ -163,17 +163,21 @@ app.post("/collection/add", async (req, res) => {
     );
   }
 });
-app.post("/collection/load", (req, res) => {
-  const { uname } = req.body;
+app.post("/collection/load", async (req, res) => {
+  const { uid } = req.body;
+  const access_token = req.headers.authorization.split(" ")[1];
   const collectionData = [];
-  conn.query(`select * from todo where uname="${uname}"`, (err, row, field) => {
-    if (err) console.log(err);
-    row.map((item) => {
-      collectionData.push({ ...item });
-      return item;
+  if (await checkToken(access_token, uid)) {
+    conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
+      if (err) console.log(err);
+      row.forEach((item) => {
+        collectionData.push({ ...item });
+      });
+      res.send(collectionData);
     });
-    res.send(collectionData);
-  });
+  } else {
+    res.json(false);
+  }
 });
 
 app.get("/detail", (req, res) => {
