@@ -25,11 +25,11 @@ const Main = () => {
 
   // => 결국 문제는 collection로딩이 오래걸리는것이 문제
   // 로딩 애니메이션을 만들기
-  document.addEventListener("DOMContentLoaded", loadCollectionData());
+  // document.addEventListener("DOMContentLoaded", loadCollectionData());
 
   return `
   ${Header()}
-   ${Popup()}
+  ${Popup()}
   <section class="main">
   <h2>You have no collections.</h2>
   <button class="mainAddBtn" onclick="clickPopupBtn()">Add Your First Collection</button>

@@ -1,5 +1,5 @@
 const todo = {
-  uname: localStorage.getItem("uname"),
+  uid: localStorage.getItem("uid"),
   collection: "",
   color: "",
   tasks: [],
@@ -18,24 +18,25 @@ const Popup = () => {
     const exitPopup = document.querySelector(".popupContainer");
     exitPopup.classList.remove("activeP");
   };
-  window.clickPopupCreate = () => {
+  window.handlePopupSubmit = async (e) => {
+    e.preventDefault();
     const collection = document.querySelector(".popupNameInput").value;
     const color = document.querySelector(".clickedColor").dataset.color;
-    const createExit = document.querySelector(".popupContainer");
+    console.log(color);
     todo["color"] = color;
     todo["collection"] = collection;
-    sendCollectionData(todo);
-    // createExit.classList.remove("activeP");
-  };
-  window.sendCollectionData = async (todo) => {
-    const collectionRequest = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ todo }),
-    };
-    await fetch("/collection/add", collectionRequest);
+    const test = await axios.post(
+      "/collection/add",
+      { todo },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
     //collection fetch server => server sql 추가 => collection 기져오기
     // collection이 변경되었을 때 => main에서 리렌더링이 되게
+    // 서버로 데이터 보내기 => BD에 데이터 저장 => 그 데이터를 리렌더링
   };
 
   const colorList = [
@@ -55,10 +56,10 @@ const Popup = () => {
 
   return `
   <div class="popupContainer">
-    <div class="popupBox">
+    <form class="popupBox" onsubmit=handlePopupSubmit(event)>
       <div class="popupTitleBox">
         <h3>Add Collection</h3>
-        <button onclick="clickExitBtn()">X</button>
+        <button onclick="clickExitBtn()">x</button>
       </div>
       <div class="popupNameBox">
         <p>Name</p>
@@ -68,18 +69,18 @@ const Popup = () => {
         <p>Color</p>
         <ul>
           <li class="clickedColor colorList" style="background-color:${colorList[0]}; border:3px solid ${colorList[0]}" data-color:${colorList[0]} onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[1]}" data-color:${colorList[1]} onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[2]}" data-color:${colorList[2]} onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[3]}" data-color:${colorList[3]} onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[4]}" data-color:${colorList[4]} onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[5]}" data-color:${colorList[5]} onclick="clickPopupColor(this)"></li>
+          <li class="colorList" style="border:3px solid ${colorList[1]}" data-color="${colorList[1]}" onclick="clickPopupColor(this)"></li>
+          <li class="colorList" style="border:3px solid ${colorList[2]}" data-color="${colorList[2]}" onclick="clickPopupColor(this)"></li>
+          <li class="colorList" style="border:3px solid ${colorList[3]}" data-color="${colorList[3]}" onclick="clickPopupColor(this)"></li>
+          <li class="colorList" style="border:3px solid ${colorList[4]}" data-color="${colorList[4]}" onclick="clickPopupColor(this)"></li>
+          <li class="colorList" style="border:3px solid ${colorList[5]}" data-color="${colorList[5]}" onclick="clickPopupColor(this)"></li>
         </ul>
       </div>
       <div class="popupBtnBox">
         <button class="popupCreateBtn">Create</button>
         <button class="popupCancelBtn" onclick="clickExitBtn()">Cancel</button>
       </div>
-    </div>
+    </form>
   </div>
   `;
 };

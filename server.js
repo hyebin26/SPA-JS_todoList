@@ -150,16 +150,18 @@ app.post("/signUp/social", async (req, res) => {
   //토큰이랑 uid 저장해야됨
 });
 
-app.post("/collection/add", (req, res) => {
-  const { uname, collection, color, tasks, done } = req.body.todo;
-  conn.query(
-    `insert into todo values("${uname}","${collection}","${color}","${tasks}","${done}")`,
-    (err, row, field) => {
-      if (err) {
-        console.log(err);
+app.post("/collection/add", async (req, res) => {
+  const { uid, collection, color, tasks, done } = req.body.todo;
+  const access_token = req.headers.authorization.split(" ")[1];
+  if (await checkToken(access_token)) {
+    conn.query(
+      `insert into todo values("${uid}","${collection}","${color}","${tasks}","${done}",0)`,
+      (err, row, field) => {
+        if (err) console.log(err);
+        console.log(row);
       }
-    }
-  );
+    );
+  }
 });
 app.post("/collection/load", (req, res) => {
   const { uname } = req.body;

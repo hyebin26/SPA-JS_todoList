@@ -14,7 +14,7 @@
   padding: 1.5rem 1rem;
   background-color: #1d1d27;
   border-radius: 0.7rem;
-  width: 30rem;
+  width: 25rem;
   margin: 0 auto;
   margin-top: 7rem;
 }
@@ -22,14 +22,17 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 1rem;
+  align-items: center;
 }
 .popupTitleBox button {
   background-color: #1d1d27;
   cursor: pointer;
   color: #ffffff;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.6rem;
   border: none;
   font-size: 1.2rem;
+  border: 1px solid #ffffff;
+  border-radius: 0.3rem;
 }
 
 .popupColorBox ul {

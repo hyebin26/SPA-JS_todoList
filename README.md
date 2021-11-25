@@ -1,8 +1,11 @@
 ## vanilla js SPA todoList
 
-1. social login 최종 수정
+1. collection/add api추가
 
 ### 다음할 것
+
+- 렌더방식에 대해서 고민해보기
+- 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
 
 1. 로딩 애니매이션
 2. local Event
