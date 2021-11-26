@@ -8,10 +8,11 @@ const MainCollection = (color, title, tasks) => {
     <li class="mainTodoList">
       <a>
         <div class="mainTodoColor">
-        
+           <img src="/image/arrow.jpg" alt="arrow" style="background:"${color}"">
         </div>
         <div class="mainTodoText">
-         
+            <h3 class="mainTodoTItle">${title}</h3>
+            <p class="mainTodoTask">${tasks.length} task</p>
         </div>
       </a>
     </li>

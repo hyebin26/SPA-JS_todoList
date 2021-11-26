@@ -21,7 +21,6 @@ const Main = () => {
       }
     );
     collectionData = await sendLoadData.data;
-    console.log(collectionData);
   };
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
