@@ -46,14 +46,14 @@ async function checkToken(access_token, uid) {
     return true;
   } catch (err) {
     if (err.name === "TokenExpiredError") {
+      let check = true;
       conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
         if (err) console.log(err);
         if (row[0]) {
           let refreshToken = row[0].refresh_token;
           try {
             jwt.verify(refreshToken, process.env.JWT_SECRET);
-            const accessToken = makeToken("access", uid);
-            checkToken(accessToken, uid);
+            check = true;
           } catch (err) {
             if (err.name === "TokenExpiredError") {
               const makedRefresh = makeToken("refresh", uid);
@@ -65,12 +65,16 @@ async function checkToken(access_token, uid) {
                 }
               );
               checkToken(makedAccess, uid);
+              check = true;
             } //
+            if (err.name !== "TokenExpiredError") {
+              check = false;
+            }
           }
         } //
       });
+      return check;
     }
-    return false;
     // refresh token check
     // 존재하지 않을 경우 => API 호출 불가
   }
@@ -168,6 +172,7 @@ app.post("/collection/load", async (req, res) => {
   const { uid } = req.body;
   const access_token = req.headers.authorization.split(" ")[1];
   const collectionData = [];
+  console.log("check Token", await checkToken(access_token, uid));
   if (await checkToken(access_token, uid)) {
     conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
       if (err) console.log(err);

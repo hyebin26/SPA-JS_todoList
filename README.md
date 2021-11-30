@@ -1,13 +1,10 @@
 ## vanilla js SPA todoList
 
-1. useState 연습끝
-2. 코드가 복잡하고 로직도 틀리고 에러도 나오고 react와 비슷하지도 않아서 useState를 추가하면서 리팩토링
+1. token 리팩토링
 
 ### 다음할 것
 
-- useState
-
-- 렌더방식에 대해서 고민해보기
+- https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
 
 1. 로딩 애니매이션

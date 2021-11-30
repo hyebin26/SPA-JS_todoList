@@ -1,5 +1,3 @@
-import RenderHTML from "../index.js";
-
 export const MyReact = {
   options: {
     currentStateKey: 0,
@@ -9,24 +7,27 @@ export const MyReact = {
     rootComponent: null,
   },
   useState: (initState) => {
-    const key = currentStateKey;
-    if (states.length === currentStateKey) {
-      states.push(initState);
+    const key = MyReact.options.currentStateKey;
+    if (MyReact.options.states.length === MyReact.options.currentStateKey) {
+      MyReact.options.states.push(initState);
     }
-    const state = states[key];
+    const state = MyReact.options.states[key];
     const setState = (newState) => {
       if (newState === state) return;
       if (JSON.stringify(newState) === JSON.stringify(state)) return;
-      states[key] = newState;
-      render();
+      MyReact.options.states[key] = newState;
+      MyReact.render(MyReact.options.rootComponent, MyReact.options.root);
     };
-    currentStateKey += 1;
+    MyReact.options.currentStateKey += 1;
     return [state, setState];
   },
   render: (component, root) => {
-    MyReact.options.root = root;
-    MyReact.options.rootComponent = component;
-    MyReact.options.root.innerHTML = MyReact.options.rootComponent();
+    console.log("render!!!!!!");
+    MyReact.options.root = root ? root : MyReact.options.root;
+    MyReact.options.rootComponent = component
+      ? component
+      : MyReact.options.rootComponent;
+    root.innerHTML = MyReact.options.rootComponent();
     MyReact.options.currentStateKey = 0;
   },
 };

@@ -1,5 +1,3 @@
-import RenderHTML from "/src/index.js";
-
 const Header = () => {
   window.clickLogoutBtn = async () => {
     const logout = await axios.post(

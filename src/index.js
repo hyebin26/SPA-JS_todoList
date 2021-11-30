@@ -1,4 +1,4 @@
-// import Main from "./main/main.js";
+import Main from "./main/main.js";
 // import Header from "./header/header.js";
 // import Popup from "./popup/popup.js";
 // import Content from "./content/content.js";
@@ -16,11 +16,11 @@ import { MyReact } from "./core/react.js";
 
 //   // const mainAddBtn = document.querySelector(".mainAddBtn");
 //   // mainAddBtn.addEventListener("click", InitController.clickPopupBtn);
-// };
+// };s
 const App = () => {
-  return "<h1>반갑습니다~</h1>";
+  return `${Main()}`;
 };
 
 MyReact.render(App, document.querySelector("#root"));
 
-export default RenderHTML;
+// export default RenderHTML;
