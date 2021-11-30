@@ -1,10 +1,11 @@
 ## vanilla js SPA todoList
 
-1. collection ui 완성
+1. useState 연습끝
+2. 코드가 복잡하고 로직도 틀리고 에러도 나오고 react와 비슷하지도 않아서 useState를 추가하면서 리팩토링
 
 ### 다음할 것
 
-- useState 
+- useState
 
 - 렌더방식에 대해서 고민해보기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
@@ -20,10 +21,8 @@ https://cotak.tistory.com/102
 - login은 social로 DB에 id존재하면 토큰 받고 메인으로
 
 - main collection 데이터 받아오기
-- useState, router 구현해야됨
 
-- useState 테스트해보기
-- router연결
+- 리팩토링 해보기 => 추상화 https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Make-useSate-hook/#_3-render-%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE-%E1%84%8E%E1%85%AE%E1%84%89%E1%85%A1%E1%86%BC%E1%84%92%E1%85%AA참고
 - 배포
 
 ### content
@@ -58,6 +57,7 @@ https://cotak.tistory.com/102
 ### Router
 
 - 현재 로직이 맞는지 모르겠음.
+- Link class undefined 체크하기
 
 ### 알게된 것
 

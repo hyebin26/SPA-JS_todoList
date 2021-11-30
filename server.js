@@ -100,6 +100,7 @@ app.post("/login", async (req, res) => {
         `insert into tokens values("${refreshToken}","${uid}")`,
         (err) => {
           if (err) console.log(err);
+          console.log(row, "success");
         }
       );
       res.json({ accessToken });

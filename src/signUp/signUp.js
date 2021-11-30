@@ -1,4 +1,5 @@
 import RenderHTML from "/src/index.js";
+import { Link } from "/src/link.js";
 
 const makeInputBox = ({
   _type,
@@ -181,14 +182,17 @@ const SignUp = () => {
     return `
     <section>
     <div class="signUpLogoBox">
-      <a data-link="/">TASKS<img src="/image/task.png">
-      </a>
+      ${Link({
+        to: "/",
+        content: "GO TASKS",
+      })}
     </div>
     <div class="signUpInputBox">
       ${makeInputBox(nicknameObj)}
       <div class="signUpBtnBox">
         <button class="signUpBtn" onclick="clickSignUpBtn()">회원가입하기</button>
-        <span>이미 아이디가 있으신가요?</span><a data-link="/">로그인</a>
+        <span>이미 아이디가 있으신가요?</span>
+        ${Link({ to: "/", content: "로그인" })}
       </div>
     </div>
     </section>`;
@@ -197,8 +201,10 @@ const SignUp = () => {
     return `
   <section>
   <div class="signUpLogoBox">
-    <a data-link="/">TASKS<img src="/image/task.png">
-    </a>
+    ${Link({
+      to: "/",
+      content: "GO TASKS",
+    })}
   </div>
   <div class="signUpInputBox">
     ${makeInputBox(emailObj)}
@@ -207,7 +213,8 @@ const SignUp = () => {
     ${makeInputBox(nicknameObj)}
     <div class="signUpBtnBox">
       <button class="signUpBtn" onclick="clickSignUpBtn()">회원가입하기</button>
-      <span>이미 아이디가 있으신가요?</span><a data-link="/">로그인</a>
+      <span>이미 아이디가 있으신가요?</span>
+      ${Link({ to: "/", content: "로그인" })}
     </div>
   </div>
   </section>`;

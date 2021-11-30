@@ -1,4 +1,5 @@
 import RenderHTML from "/src/index.js";
+import { Link } from "/src/link.js";
 
 const Login = () => {
   window.submitLogin = async (e) => {
@@ -13,8 +14,8 @@ const Login = () => {
         falseLogin.textContent = "";
         localStorage.setItem("uid", uid);
         localStorage.setItem("access_token", accessToken);
-        // history.pushState(null, "", "/main");
-        // RenderHTML();
+        history.pushState(null, "", "/main");
+        RenderHTML();
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
       }
@@ -63,10 +64,6 @@ const Login = () => {
     } //
     else sendSocialToken("kakao", urlParams.get("code"));
   }
-  const loginCss = document.createElement("link");
-  loginCss.rel = "stylesheet";
-  loginCss.href = "/src/login/login.css";
-  document.head.appendChild(loginCss);
 
   return `
   <section class="loginSec">
@@ -79,7 +76,7 @@ const Login = () => {
       <input placeholder="Password" type="password">
       <p class="falseLogin"></p>
       <button>Login</button>
-      <a data-link="/signUp">회원가입</a>
+      ${Link({ to: "/signUp", content: "회원가입" })}
     </form>
     <div class="loginSocialBox">
       <p>SNS계정으로 간편 로그인</p>

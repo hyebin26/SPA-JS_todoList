@@ -1,52 +1,32 @@
-const states = [];
-let currentStateKey = 0;
+import RenderHTML from "../index.js";
 
-function useState(initState) {
-  if (states.length === currentStateKey) {
-    states.push(initState);
-  }
-  const state = states[currentStateKey];
-  const setState = (newState) => {
-    console.log(currentStateKey, states);
-    states[currentStateKey] = newState;
-    render();
-  };
-  console.log("cs", currentStateKey);
-  currentStateKey += 1;
-
-  return [state, setState];
-}
-
-function Counter() {
-  const [count, setCount] = useState(1);
-  window.increment = () => setCount(count + 1);
-  return `
-    <div>
-      <strong>count: ${count} </strong>
-      <button onclick="increment()">증가</button>
-    </div>
-  `;
-}
-
-function Cat() {
-  const [cat, setCat] = useState("고양이");
-  window.meow = () => setCat(cat + " 야옹!");
-  return `
-    <div>
-      <strong>${cat}</strong>
-      <button onclick="meow()">고양이의 울음소리</button>
-    </div>
-  `;
-}
-
-function render() {
-  const app = document.getElementById("root");
-  app.innerHTML = `
-    <div>
-      ${Counter()}
-      ${Cat()}
-    </div>
-      `;
-  currentStateKey = 0;
-}
-render();
+export const MyReact = {
+  options: {
+    currentStateKey: 0,
+    renderCount: 0,
+    states: [],
+    root: null,
+    rootComponent: null,
+  },
+  useState: (initState) => {
+    const key = currentStateKey;
+    if (states.length === currentStateKey) {
+      states.push(initState);
+    }
+    const state = states[key];
+    const setState = (newState) => {
+      if (newState === state) return;
+      if (JSON.stringify(newState) === JSON.stringify(state)) return;
+      states[key] = newState;
+      render();
+    };
+    currentStateKey += 1;
+    return [state, setState];
+  },
+  render: (component, root) => {
+    MyReact.options.root = root;
+    MyReact.options.rootComponent = component;
+    MyReact.options.root.innerHTML = MyReact.options.rootComponent();
+    MyReact.options.currentStateKey = 0;
+  },
+};

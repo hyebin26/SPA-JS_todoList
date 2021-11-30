@@ -1,14 +1,11 @@
 import Header from "../header/header.js";
 import MainCollection from "../mainCollection/mainCollection.js";
 import Popup from "../popup/popup.js";
+import { useState } from "../core/react.js";
 
 const Main = () => {
-  const mainCss = document.createElement("link");
-  mainCss.rel = "stylesheet";
-  mainCss.href = "/src/main/main.css";
-  document.head.appendChild(mainCss);
-
-  let collectionData = [];
+  let [collectionData, setCollectionData] = useState([]);
+  setCollectionData([1, 2, 3, 4]);
   window.loadCollectionData = async () => {
     const uid = localStorage.getItem("uid");
     const sendLoadData = await axios.post(
@@ -20,7 +17,7 @@ const Main = () => {
         },
       }
     );
-    collectionData = await sendLoadData.data;
+    // setCollectionData(await sendLoadData.data);
   };
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
@@ -29,8 +26,8 @@ const Main = () => {
     clickPopup.classList.add("activeP");
   };
 
-  // => 결국 문제는 collection로딩이 오래걸리는것이 문제
-  // 로딩 애니메이션을 만들기
+  // useState로 상태가 변경되면 리렌더링 하게
+  // 근데 여기서 중요한 건 그 컴포넌트만 리렌더링이 되어야 함 ....(ㅠ__ㅠ )~
 
   return `
   ${Header()}

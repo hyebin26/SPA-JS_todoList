@@ -1,11 +1,6 @@
 import RenderHTML from "/src/index.js";
 
 const Header = () => {
-  const headerCss = document.createElement("link");
-  headerCss.rel = "stylesheet";
-  headerCss.href = "/src/header/header.css";
-  document.head.appendChild(headerCss);
-
   window.clickLogoutBtn = async () => {
     const logout = await axios.post(
       "/logout",
