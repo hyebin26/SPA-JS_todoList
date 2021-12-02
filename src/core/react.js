@@ -1,3 +1,11 @@
+const debounceFrame = (callback) => {
+  let nextFrameCallback = 0;
+  return () => {
+    cancelAnimationFrame(nextFrameCallback);
+    nextFrameCallback = requestAnimationFrame(callback);
+  };
+};
+
 export const MyReact = {
   options: {
     currentStateKey: 0,
@@ -21,13 +29,16 @@ export const MyReact = {
     MyReact.options.currentStateKey += 1;
     return [state, setState];
   },
-  render: (component, root) => {
-    console.log("render!!!!!!");
-    MyReact.options.root = root ? root : MyReact.options.root;
-    MyReact.options.rootComponent = component
-      ? component
-      : MyReact.options.rootComponent;
-    root.innerHTML = MyReact.options.rootComponent();
+  _render: debounceFrame(() => {
+    const { root, rootComponent } = MyReact.options;
+    if (!root || !rootComponent) return;
+    root.innerHTML = rootComponent();
     MyReact.options.currentStateKey = 0;
+  }),
+  render: (rootComponent, root) => {
+    MyReact.options.root = root;
+    MyReact.options.rootComponent = rootComponent;
+    console.log("before debounce");
+    MyReact._render();
   },
 };

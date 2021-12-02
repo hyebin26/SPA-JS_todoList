@@ -1,18 +1,14 @@
-const MainCollection = (color, title, tasks) => {
-  const mainCollectionCss = document.createElement("link");
-  mainCollectionCss.rel = "stylesheet";
-  mainCollectionCss.href = "/src/mainCollection/mainCollection.css";
-  document.head.appendChild(mainCollectionCss);
-
+const MainCollection = (item) => {
+  console.log(item);
   return `
     <li class="mainTodoList">
       <a>
-        <div class="mainTodoColor">
-           <img src="/image/arrow.jpg" alt="arrow" style="background:"${color}"">
+        <div class="mainTodoColor" style="background-color:${item.color}">
+           <img src="/image/arrow.jpg" alt="arrow">
         </div>
         <div class="mainTodoText">
-            <h3 class="mainTodoTItle">${title}</h3>
-            <p class="mainTodoTask">${tasks.length} task</p>
+            <h3 class="mainTodoTItle">${item.collection}</h3>
+            <p class="mainTodoTask">${item.tasks.split(",").length} task</p>
         </div>
       </a>
     </li>

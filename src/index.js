@@ -2,7 +2,7 @@ import Main from "./main/main.js";
 // import Header from "./header/header.js";
 // import Popup from "./popup/popup.js";
 // import Content from "./content/content.js";
-// import Login from "./login/login.js";
+import Login from "./login/login.js";
 // import SignUp from "./signUp/signUp.js";
 import { MyReact } from "./core/react.js";
 // import Router from "/src/router.js";

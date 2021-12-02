@@ -1,8 +1,11 @@
 ## vanilla js SPA todoList
 
-1. token 리팩토링
+1. useState 끝
+2. collection load data 추가
 
 ### 다음할 것
+
+- 데이터 받으면 콤마찍히는것 체크
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
