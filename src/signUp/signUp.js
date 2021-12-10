@@ -1,3 +1,4 @@
+import { Route } from "/src/router.js";
 import { Link } from "/src/link.js";
 
 const makeInputBox = ({
@@ -48,7 +49,7 @@ const SignUp = () => {
       });
       const signUpSuccess = await fetchSignUpSuccess.data;
       if (signUpSuccess) {
-        if (history.state.id) {
+        if (history.state) {
           const getAccessToken = await axios.post("/signUp/social", {
             uid: history.state.id,
           });
@@ -56,11 +57,11 @@ const SignUp = () => {
           localStorage.setItem("uid", history.state.id);
           localStorage.setItem("access_token", access_token);
           history.pushState({}, "main Page", "/main");
-          RenderHTML();
+          Route();
         } //
         else {
           history.pushState({}, "Login Page", "/");
-          RenderHTML();
+          Route();
         }
       } //
       else alert("다시 시도해주세요.");
@@ -143,10 +144,6 @@ const SignUp = () => {
       }
     }
   };
-  const signUpCss = document.createElement("link");
-  signUpCss.rel = "stylesheet";
-  signUpCss.href = "/src/signUp/signUp.css";
-  document.head.appendChild(signUpCss);
 
   const emailObj = {
     _type: "text",

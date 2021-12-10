@@ -38,7 +38,6 @@ export const MyReact = {
   render: (rootComponent, root) => {
     MyReact.options.root = root;
     MyReact.options.rootComponent = rootComponent;
-    console.log("before debounce");
     MyReact._render();
   },
 };

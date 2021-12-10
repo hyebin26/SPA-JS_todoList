@@ -1,12 +1,12 @@
 ## vanilla js SPA todoList
 
-1. 데이터 받으면 콤마찍는 것 해결
-2. router 로직 정하기
+1. router 로직변경
+2. loadColletionData
 
 ### 다음할 것
 
-- router 연결
-- 데이터 받으면 콤마찍히는것 체크
+- popup default로 하면 크기변경됨
+- main화면에서 바로 데이티 받기
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기

@@ -1,3 +1,4 @@
+import { Route } from "/src/router.js";
 import { Link } from "/src/link.js";
 
 const Login = () => {
@@ -45,14 +46,14 @@ const Login = () => {
     const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
       history.pushState({ id, nickname }, "", "/signUp");
-      RenderHTML();
+      Route();
     }
     if (!needSignup) {
       // id랑 access_token발급
       localStorage.setItem("uid", id);
       localStorage.setItem("access_token", access_token);
-      history.pushState("", "", "/main");
-      RenderHTML();
+      history.pushState(undefined, "", "/main");
+      Route();
     }
   };
   const url = new URL(window.location.href);

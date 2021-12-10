@@ -2,7 +2,7 @@ const MainCollection = (item) => {
   return `
     <li class="mainTodoList">
       <a>
-        <div class="mainTodoColor" style="background-color:"${item.color}"">
+        <div class="mainTodoColor" style="background:${item.color};">
            <img src="/image/arrow.jpg" alt="arrow">
         </div>
         <div class="mainTodoText">
