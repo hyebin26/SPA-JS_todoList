@@ -1,7 +1,6 @@
 ## vanilla js SPA todoList
 
-1. useState 끝
-2. collection load data 추가
+1. main, header, index css 수정
 
 ### 다음할 것
 

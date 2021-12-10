@@ -19,7 +19,7 @@ body {
   background-color: rgb(29, 29, 39);
   display: flex;
   justify-content: space-between;
-  padding: 0.7rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   color: #ffffff;
   align-items: center;
 }
@@ -50,7 +50,7 @@ body {
 .dashBox::after {
   content: "";
   position: absolute;
-  width: 100%;
+  width: 93%;
   border-bottom: 2px solid white;
   bottom: -1.1rem;
 }

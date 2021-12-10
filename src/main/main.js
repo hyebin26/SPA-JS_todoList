@@ -19,14 +19,8 @@ const Main = () => {
       }
     );
     const data = await sendLoadData.data;
-    if (data) {
-      setLoading(true);
-      setCollectionData(data);
-      console.log(data);
-    }
-    if (!data) {
-      setLoading(false);
-    }
+    setLoading(true);
+    setCollectionData(data);
   };
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
@@ -34,28 +28,40 @@ const Main = () => {
     const clickPopup = document.querySelector(".popupContainer");
     clickPopup.classList.add("activeP");
   };
-
+  console.log(collectionData);
   // useState로 상태가 변경되면 리렌더링 하게
   // 근데 여기서 중요한 건 그 컴포넌트만 리렌더링이 되어야 함 ....(ㅠ__ㅠ )~
   if (loading) {
     return `
   ${Header()}
   ${Popup()}
-  <section class="main">
-    <h2>Collections</h2>
-    <ul>
+  <section class=${collectionData.length ? "main" : "noCollectionBox"}>
     ${
       collectionData.length
-        ? collectionData.reduce((prev, cur) => MainCollection(prev), "")
+        ? `
+         <h2>Collections</h2>
+         <ul>
+            ${collectionData.map((item) => MainCollection(item))}
+         </ul>
+         <button class="addMainBtn" onclick="clickPopupBtn()">
+           Add Collection
+         </button>
+        `
         : `
-        <button class="addSubBtn" onclick="clickPopupBtn()">
-          Add Your First Collection
-        </button>
+          <h2 class="noCollectionTitle">You have no collection.</h2>
+          <button class="addSubBtn" onclick="clickPopupBtn()">
+            Add Your First Collection
+          </button>
         `
     }
-    </ul>
-    <button class="addMainBtn" onclick="clickPopupBtn()">Add Collection</button>
+    <ul>
+ 
     </section>`;
+  }
+  if (!loading) {
+    return `
+    <h2>Loading...</h2>
+    `;
   }
 };
 

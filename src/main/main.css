@@ -21,7 +21,7 @@
 .addMainBtn {
   width: 48%;
 }
-.addSubBtn,
+.addSubBtn:hover,
 .addMainBtn:hover {
   background-color: #272732;
   transition: 0.6s;
@@ -30,4 +30,17 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.noCollectionBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 7rem;
+}
+
+.noCollectionTitle {
+  font-size: 1.8rem;
+  padding-bottom: 1.5rem;
 }
