@@ -1,9 +1,11 @@
 ## vanilla js SPA todoList
 
-1. main, header, index css 수정
+1. 데이터 받으면 콤마찍는 것 해결
+2. router 로직 정하기
 
 ### 다음할 것
 
+- router 연결
 - 데이터 받으면 콤마찍히는것 체크
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
@@ -57,6 +59,8 @@ https://cotak.tistory.com/102
 
 - 현재 로직이 맞는지 모르겠음.
 - Link class undefined 체크하기
+- mutationObserver 사용못함 => 너무 비효율적 / Object만을 감지할 수는 아직 없음
+  참고:https://stackoverflow.com/questions/32148423/how-to-use-or-is-it-possible-mutationobserver-to-monitor-window-location-pathn
 
 ### 알게된 것
 
@@ -99,3 +103,5 @@ https://cotak.tistory.com/102
 9. router구현
 
 - history.pushState로 url을 변경 => 현재의 url에 맞는 view 렌더하기.
+- history.pushState로 url을 변경 => 현재의 url에 맞는 view를 렌더하기 위해서는 url이 변경하면 event를 추가해야됨 하지만 찾지 못했음
+- 생각한 방법은 => history.pushState를 해당 함수에서 하는 것이 아니라 Router.HandePush("가고 싶은 링크")로 링크 변경하고 render를 하기

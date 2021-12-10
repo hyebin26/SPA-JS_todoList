@@ -28,9 +28,7 @@ const Main = () => {
     const clickPopup = document.querySelector(".popupContainer");
     clickPopup.classList.add("activeP");
   };
-  console.log(collectionData);
-  // useState로 상태가 변경되면 리렌더링 하게
-  // 근데 여기서 중요한 건 그 컴포넌트만 리렌더링이 되어야 함 ....(ㅠ__ㅠ )~
+  // 근데 여기서 중요한 건 그 컴포넌트만 리렌더링이 되어야 함
   if (loading) {
     return `
   ${Header()}
@@ -41,7 +39,7 @@ const Main = () => {
         ? `
          <h2>Collections</h2>
          <ul>
-            ${collectionData.map((item) => MainCollection(item))}
+            ${collectionData.map((item) => MainCollection(item)).join("")}
          </ul>
          <button class="addMainBtn" onclick="clickPopupBtn()">
            Add Collection
@@ -54,8 +52,6 @@ const Main = () => {
           </button>
         `
     }
-    <ul>
- 
     </section>`;
   }
   if (!loading) {

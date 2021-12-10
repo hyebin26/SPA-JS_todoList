@@ -1,4 +1,3 @@
-import RenderHTML from "/src/index.js";
 import { Link } from "/src/link.js";
 
 const makeInputBox = ({
