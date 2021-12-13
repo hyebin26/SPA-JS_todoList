@@ -1,11 +1,10 @@
 ## vanilla js SPA todoList
 
-1. router에 Route로직변경
-2. token 로직변경
+1. server 토큰로직변경
 
 ### 다음할 것
 
-- popup default로 하면 크기변경됨
+- check token 재설정
 - main화면에서 바로 데이티 받기
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기

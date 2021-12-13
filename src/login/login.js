@@ -9,11 +9,11 @@ const Login = () => {
       pwd = e.target[1].value;
     try {
       const loginData = await axios.post("/login", { uid, pwd });
-      const { accessToken } = loginData.data;
-      if (accessToken) {
+      const { access_token } = loginData.data;
+      if (access_token) {
         falseLogin.textContent = "";
         localStorage.setItem("uid", uid);
-        localStorage.setItem("access_token", accessToken);
+        localStorage.setItem("access_token", access_token);
         Route({ state: undefined }, "/main");
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";

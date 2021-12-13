@@ -22,21 +22,12 @@ const Popup = () => {
   };
   window.handlePopupSubmit = async (e) => {
     e.preventDefault();
-    const checkToken = await checkTokenAPI();
     const collection = document.querySelector(".popupNameInput").value;
     const color = document.querySelector(".clickedColor").dataset.color;
     todo["color"] = color;
     todo["collection"] = collection;
     console.log("hello");
-    const postCollecionData = await axios.post(
-      "/collection",
-      { todo },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }
-    );
+    const postCollecionData = await axios.post("/collection", { todo });
     const collectionData = await postCollecionData.data;
     if (collectionData) {
       const exitPopup = document.querySelector(".popupContainer");

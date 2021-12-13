@@ -39,6 +39,12 @@ function makeToken(type, uid) {
   }
   return token;
 }
+function extractCookie(cookie) {
+  const splitCookie = cookie.split(";").map((item) => item.split("="));
+  const uid = splitCookie[1][1];
+  const access_token = splitCookie[0][1];
+  return uid, access_token;
+}
 app.get("/checkToken", async (req, res) => {
   const cookie = req.headers.cookie.split(";").map((item) => item.split("="));
   const uid = cookie[1][1];
@@ -51,45 +57,48 @@ app.get("/checkToken", async (req, res) => {
     res.json(false);
   }
 });
-async function checkToken(access_token, uid) {
-  if (!access_token) return false;
-  try {
-    const decoded = await jwt.verify(access_token, process.env.JWT_SECRET);
-    return true;
-  } catch (err) {
-    if (err.name === "TokenExpiredError") {
-      let check = true;
-      conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
-        if (err) console.log(err);
-        if (row[0]) {
-          let refreshToken = row[0].refresh_token;
-          try {
-            jwt.verify(refreshToken, process.env.JWT_SECRET);
-            check = true;
-          } catch (err) {
-            if (err.name === "TokenExpiredError") {
-              const makedRefresh = makeToken("refresh", uid);
-              const makedAccess = makeToken("access", uid);
-              conn.query(
-                `update tokens set refresh_token="${makedRefresh}" where uid="${uid}"`,
-                (err, row) => {
-                  if (err) console.log(err);
-                }
-              );
-              checkToken(makedAccess, uid);
-              check = true;
-            } //
-            if (err.name !== "TokenExpiredError") {
-              check = false;
-            }
-          }
-        } //
-      });
-      return check;
-    }
-    // refresh token check
-    // 존재하지 않을 경우 => API 호출 불가
-  }
+async function checkToken(cookie) {
+  console.log(cookie);
+  // const splitCookie = cookie.split(";").map((item) => item.split("="));
+  // const uid = splitCookie[1][1];
+  // const access_token = splitCookie[0][1];
+  // try {
+  //   const decoded = await jwt.verify(access_token, process.env.JWT_SECRET);
+  //   return true;
+  // } catch (err) {
+  //   if (err.name === "TokenExpiredError") {
+  //     let check = true;
+  //     conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
+  //       if (err) console.log(err);
+  //       if (row[0]) {
+  //         let refreshToken = row[0].refresh_token;
+  //         try {
+  //           jwt.verify(refreshToken, process.env.JWT_SECRET);
+  //           check = true;
+  //         } catch (err) {
+  //           if (err.name === "TokenExpiredError") {
+  //             const makedRefresh = makeToken("refresh", uid);
+  //             const makedAccess = makeToken("access", uid);
+  //             conn.query(
+  //               `update tokens set refresh_token="${makedRefresh}" where uid="${uid}"`,
+  //               (err, row) => {
+  //                 if (err) console.log(err);
+  //               }
+  //             );
+  //             checkToken(makedAccess, uid);
+  //             check = true;
+  //           } //
+  //           if (err.name !== "TokenExpiredError") {
+  //             check = false;
+  //           }
+  //         }
+  //       } //
+  //     });
+  //     return check;
+  //   }
+  //   // refresh token check
+  // 존재하지 않을 경우 => API 호출 불가
+  // }
 }
 
 app.get("/", (req, res) => {
@@ -121,7 +130,7 @@ app.post("/login", async (req, res) => {
       );
       res.cookie("uid", `${uid}`);
       res.cookie("access_token", `${access_token}`);
-      res.json({ accessToken });
+      res.json({ access_token });
     } //
     else {
       res.json(false);
@@ -173,20 +182,20 @@ app.post("/signUp/social", async (req, res) => {
 
 app.post("/collection", async (req, res) => {
   const { uid, collection, color } = req.body.todo;
-
-  const access_token = req.headers.authorization.split(" ")[1];
-  if (await checkToken(access_token)) {
-    conn.query(
-      `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
-      (err, row, field) => {
-        if (err) console.log(err);
-        res.json(true);
-      }
-    );
-  }
-  if (!(await checkToken(access_token))) {
-    res.json(false);
-  }
+  console.log(await checkToken(req.headers.cookie), "await");
+  console.log(checkToken(req.headers.cookie));
+  // if (await checkToken(access_token)) {
+  //   conn.query(
+  //     `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
+  //     (err, row, field) => {
+  //       if (err) console.log(err);
+  //       res.json(true);
+  //     }
+  //   );
+  // }
+  // if (!(await checkToken(access_token))) {
+  //   res.json(false);
+  // }
 });
 app.post("/collection/load", async (req, res) => {
   const { uid } = req.body;
