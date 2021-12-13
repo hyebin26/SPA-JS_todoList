@@ -39,6 +39,18 @@ function makeToken(type, uid) {
   }
   return token;
 }
+app.get("/checkToken", async (req, res) => {
+  const cookie = req.headers.cookie.split(";").map((item) => item.split("="));
+  const uid = cookie[1][1];
+  const access_token = cookie[0][1];
+  const check = await checkToken(access_token, uid);
+  if (check) {
+    res.json(true);
+  }
+  if (!check) {
+    res.json(false);
+  }
+});
 async function checkToken(access_token, uid) {
   if (!access_token) return false;
   try {
@@ -98,15 +110,17 @@ app.post("/login", async (req, res) => {
       res.json(false);
     }
     if (row[0] && pwd === row[0].pwd) {
-      let refreshToken = makeToken("refresh", uid);
-      let accessToken = makeToken("access", uid);
+      let refresh_token = makeToken("refresh", uid);
+      let access_token = makeToken("access", uid);
       conn.query(
-        `insert into tokens values("${refreshToken}","${uid}")`,
+        `insert into tokens values("${refresh_token}","${uid}")`,
         (err) => {
           if (err) console.log(err);
           console.log(row, "success");
         }
       );
+      res.cookie("uid", `${uid}`);
+      res.cookie("access_token", `${access_token}`);
       res.json({ accessToken });
     } //
     else {
@@ -148,6 +162,8 @@ app.post("/signUp/social", async (req, res) => {
   const refresh_token = makeToken("refresh", uid);
   try {
     await conn.query(`insert into tokens values("${refresh_token}","${uid}")`);
+    res.cookie("access_token", `${access_token}`);
+    res.cookie("uid", `${uid}`);
     res.json({ access_token });
   } catch (err) {
     console.log(err);
@@ -164,16 +180,18 @@ app.post("/collection", async (req, res) => {
       `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
       (err, row, field) => {
         if (err) console.log(err);
-        console.log(row);
+        res.json(true);
       }
     );
+  }
+  if (!(await checkToken(access_token))) {
+    res.json(false);
   }
 });
 app.post("/collection/load", async (req, res) => {
   const { uid } = req.body;
   const access_token = req.headers.authorization.split(" ")[1];
   const collectionData = [];
-  console.log("check Token", await checkToken(access_token, uid));
   if (await checkToken(access_token, uid)) {
     conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
       if (err) console.log(err);

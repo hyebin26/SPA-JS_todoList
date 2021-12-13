@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. router 로직변경
-2. loadColletionData
+1. router에 Route로직변경
+2. token 로직변경
 
 ### 다음할 것
 
@@ -88,12 +88,12 @@ https://cotak.tistory.com/102
 
 - index.js에서 DOM을 찾아서 이벤트를 등록하면 가독성이 떨어짐
 - 전역변수로 선언하는 것에 있어서 거부감이 있었으나 가독성과 속도의 저하도 크지 않을 것 같아서 attribute로 직접 이벤트를 등록함
-- 또한 처음엔 e.target이 되지가 않아서 다시 바꿧으나 event(this)이렇게하면 e.target을 가져올 수 있음\
+- 또한 처음엔 e.target이 되지가 않아서 다시 바꿧으나 event(this)이렇게하면 e.target을 가져올 수 있음
 
 7. axios를 추가한 이유
 
 - 로그인을 하고 API통신을 하기 위해서는 쿠키를 헤더에 넣고 통신을 해야된다.
-- localStrage에 쿠키를 저장하는 것보다 axios.defaults 사용하는 것이 더 안전할 거라고 생각하기도 했고 fetch를 더 간편하게 할 수 있기 때문에 추가했음
+- 쿠키를 사용해서 저장하는 것보다 axios.defaults 사용하는 것이 더 안전할 거라고 생각하기도 했고 fetch를 더 간편하게 할 수 있기 때문에 추가했음
 
 8. 코드 로직을 짜야 할 때
 
@@ -105,3 +105,9 @@ https://cotak.tistory.com/102
 - history.pushState로 url을 변경 => 현재의 url에 맞는 view 렌더하기.
 - history.pushState로 url을 변경 => 현재의 url에 맞는 view를 렌더하기 위해서는 url이 변경하면 event를 추가해야됨 하지만 찾지 못했음
 - 생각한 방법은 => history.pushState를 해당 함수에서 하는 것이 아니라 Router.HandePush("가고 싶은 링크")로 링크 변경하고 render를 하기
+
+10. LocalStorage vs Cookie
+
+- Cookie vs LocalStrage
+- Cookie는 매번 서버로 전송이 되고 LocalStorage에 비해 용량이 적다.
+- LocalStrage 매번 서버로 전송X 클라이언트 사이드에서 저장하고 관리, 용량도 쿠키보다 큼,영구 데이터 저장이 가능하다.

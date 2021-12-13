@@ -9,13 +9,12 @@ const Login = () => {
       pwd = e.target[1].value;
     try {
       const loginData = await axios.post("/login", { uid, pwd });
-      const { accessToken } = await loginData.data;
+      const { accessToken } = loginData.data;
       if (accessToken) {
         falseLogin.textContent = "";
         localStorage.setItem("uid", uid);
         localStorage.setItem("access_token", accessToken);
-        history.pushState(null, "", "/main");
-        RenderHTML();
+        Route({ state: undefined }, "/main");
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
       }
@@ -45,15 +44,12 @@ const Login = () => {
     const getUserData = await axios.post(`/social/token`, { token, social });
     const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
-      history.pushState({ id, nickname }, "", "/signUp");
-      Route();
+      Route({ state: { id, nickname } }, "/signUp");
     }
     if (!needSignup) {
-      // id랑 access_token발급
       localStorage.setItem("uid", id);
       localStorage.setItem("access_token", access_token);
-      history.pushState(undefined, "", "/main");
-      Route();
+      Route({ state: undefined }, "/main");
     }
   };
   const url = new URL(window.location.href);

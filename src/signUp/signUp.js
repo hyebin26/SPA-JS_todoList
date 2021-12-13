@@ -56,12 +56,10 @@ const SignUp = () => {
           const { access_token } = getAccessToken.data;
           localStorage.setItem("uid", history.state.id);
           localStorage.setItem("access_token", access_token);
-          history.pushState({}, "main Page", "/main");
-          Route();
+          Route({ state: null }, "/main");
         } //
         else {
-          history.pushState({}, "Login Page", "/");
-          Route();
+          Route({ state: null }, "/");
         }
       } //
       else alert("다시 시도해주세요.");
