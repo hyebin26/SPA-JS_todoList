@@ -1,9 +1,8 @@
 import Main from "./main/main.js";
-// import Header from "./header/header.js";
-// import Content from "./content/content.js";
 import Login from "./login/login.js";
 import { MyReact } from "./core/react.js";
 import SignUp from "./signUp/signUp.js";
+import Content from "./collection/collection.js";
 
 const App = () => {
   const url = new URL(window.location.href);
@@ -19,7 +18,9 @@ const App = () => {
       ? Main()
       : url.pathname === "/signUp"
       ? SignUp()
-      : "hello"
+      : url.pathname === "/collection"
+      ? Content()
+      : `<h1>페이지가 없습니다.</h1>`
   }
   `;
 };

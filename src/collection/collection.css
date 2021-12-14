@@ -1,14 +1,14 @@
-.contentSection {
+.collectionSection {
   max-width: 55rem;
   margin: 0 auto;
   padding: 4rem;
 }
-.contentTitleBox {
+.collectionTitleBox {
   position: relative;
   display: flex;
   align-items: center;
 }
-.contentTitleBox a {
+.collectionTitleBox a {
   font-size: 1.8rem;
   background: #272732;
   padding: 0 0.5rem;
@@ -18,13 +18,13 @@
   cursor: pointer;
   opacity: 0.6;
 }
-.contentTitleBox a:hover {
+.collectionTitleBox a:hover {
   opacity: 1;
 }
-.contentTitleBox h2 {
+.collectionTitleBox h2 {
   font-size: 1.8rem;
 }
-.contentSettingBtn {
+.collectionSettingBtn {
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -34,7 +34,7 @@
   margin-left: auto;
   padding: 0.2rem 0;
 }
-.contentSettingBtn:hover {
+.collectionSettingBtn:hover {
   opacity: 1;
 }
 .settingBox {
@@ -66,27 +66,27 @@
   display: flex !important;
 }
 
-/* content box */
-.contentTodoBox,
-.contentComBox {
+/* collection box */
+.collectionTodoBox,
+.collectionComBox {
   display: flex;
   flex-direction: column;
   padding: 3rem 0;
 }
-.contentTodoBox form,
-.contentTodoList,
-.contentCompleteList {
+.collectionTodoBox form,
+.collectionTodoList,
+.collectionCompleteList {
   border-radius: 0.7rem;
   display: flex;
   transition: border 0.3s;
   padding: 0.7rem;
 }
-.contentTodoBox form {
+.collectionTodoBox form {
   background: none;
   border: 2px solid #262632;
   transition: border 0.3s;
 }
-.contentTodoBox form button {
+.collectionTodoBox form button {
   border: none;
   width: 1.5rem;
   background: #ae68e6;
@@ -96,10 +96,10 @@
   cursor: pointer;
 }
 
-.contentTodoBox form:hover {
+.collectionTodoBox form:hover {
   border: 2px solid rgb(73, 73, 92);
 }
-.contentTodoBox input {
+.collectionTodoBox input {
   font-size: 1.1rem;
   background: none;
   border: none;
@@ -107,27 +107,27 @@
   width: 100%;
   padding-left: 0.6rem;
 }
-.contentTodoBox h3,
-.contentComBox h3 {
+.collectionTodoBox h3,
+.collectionComBox h3 {
   padding-bottom: 1rem;
 }
 
-.contentTodoList,
-.contentCompleteList {
+.collectionTodoList,
+.collectionCompleteList {
   background: #262632;
   border: none;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
-.contentCompleteList p {
+.collectionCompleteList p {
   text-decoration: line-through;
 }
-.contentTodoList p,
-.contentCompleteList p {
+.collectionTodoList p,
+.collectionCompleteList p {
   padding-left: 0.5rem;
 }
 
-.contentTaskBtn,
+.collectionTaskBtn,
 .completeBtn {
   border: 2px solid #ae68e6;
   background: none;

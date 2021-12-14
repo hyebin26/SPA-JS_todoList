@@ -98,6 +98,9 @@ app.get("/signUp", (req, res) => {
 app.get("/main", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
+app.get("/collection", (req, res) => {
+  res.status(200).sendFile(__dirname + "/public/index.html");
+});
 
 app.post("/login", async (req, res) => {
   const { uid, pwd } = req.body;

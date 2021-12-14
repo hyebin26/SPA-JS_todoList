@@ -9,7 +9,8 @@ const todo = {
 };
 
 const Popup = (props) => {
-  const [popupSuccess, setPopupSuccess] = MyReact.useState(null);
+  const [addCollectionData, setAddCollectionData] = MyReact.useState(null);
+
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -30,7 +31,7 @@ const Popup = (props) => {
       todo["collection"] = collection;
       const exitPopup = document.querySelector(".popupContainer");
       exitPopup.classList.remove("activeP");
-      setPopupSuccess(true);
+      setAddCollectionData(true);
       const responseCollectionData = await axios.post("/collections", { todo });
     } catch (err) {
       if (err.response.status === 401) {

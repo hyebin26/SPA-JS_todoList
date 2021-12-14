@@ -1,19 +1,18 @@
 ## vanilla js SPA todoList
 
-1. popup에 todolist생성 시 메인리렌더링되게 설정
+1. content -> collection으로 이름변경
 
 ### 다음할 것
 
-- popup 데이터추가 -> main 리렌더링하게
-- main화면에서 바로 데이티 받기
+1. query 스트링
+2. content.js에 함수적용
+3. mainCollection에 link추가, query string
+   "/collection/collectionId"
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
 
 1. 로딩 애니매이션
-2. local Event
-3. useState
-4. 뒤로가기가 적용안됨
 
 https://cotak.tistory.com/102
 
