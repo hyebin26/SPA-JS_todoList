@@ -1,6 +1,8 @@
 ## vanilla js SPA todoList
 
-1. server 토큰로직변경
+1.  server.js에 collection->collections, post -> get으로 변경(REST API스럽게)
+2.  token 유효성 검증하는 로직 변경
+3.  popup.js에 handleSubmit도 변경
 
 ### 다음할 것
 

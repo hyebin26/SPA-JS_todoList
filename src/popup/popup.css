@@ -10,7 +10,7 @@
   z-index: 999;
   display: none;
 }
-.popupBox {
+#popupBox {
   padding: 1.5rem 1rem;
   background-color: #1d1d27;
   border-radius: 0.7rem;

@@ -1,5 +1,3 @@
-import { checkTokenAPI } from "/src/utils/utils.js";
-
 const todo = {
   uid: localStorage.getItem("uid"),
   collection: "",
@@ -22,20 +20,20 @@ const Popup = () => {
   };
   window.handlePopupSubmit = async (e) => {
     e.preventDefault();
-    const collection = document.querySelector(".popupNameInput").value;
-    const color = document.querySelector(".clickedColor").dataset.color;
-    todo["color"] = color;
-    todo["collection"] = collection;
-    console.log("hello");
-    const postCollecionData = await axios.post("/collection", { todo });
-    const collectionData = await postCollecionData.data;
-    if (collectionData) {
+    try {
+      const collection = document.querySelector(".popupNameInput").value;
+      const color = document.querySelector(".clickedColor").dataset.color;
+      todo["color"] = color;
+      todo["collection"] = collection;
       const exitPopup = document.querySelector(".popupContainer");
       exitPopup.classList.remove("activeP");
+      const responseCollectionData = await axios.post("/collections", { todo });
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+      }
     }
-    if (!collectionData) {
-      alert("API권한이 없습니다.");
-    }
+
     // //collection fetch server => server sql 추가 => collection 기져오기
     // // collection이 변경되었을 때 => main에서 리렌더링이 되게
     // // 서버로 데이터 보내기 => BD에 데이터 저장 => 그 데이터를 리렌더링
@@ -53,7 +51,7 @@ const Popup = () => {
 
   return `
   <div class="popupContainer">
-    <form class="popupBox" onsubmit=handlePopupSubmit(event)>
+    <form id="popupBox" onsubmit=handlePopupSubmit(event)>
       <div class="popupTitleBox">
         <h3>Add Collection</h3>
         <button onclick="clickExitBtn()">x</button>
@@ -74,7 +72,7 @@ const Popup = () => {
         </ul>
       </div>
       <div class="popupBtnBox">
-        <button class="popupCreateBtn">Create</button>
+        <button class="popupCreateBtn" form="popupBox">Create</button>
         <button class="popupCancelBtn" onclick="clickExitBtn()">Cancel</button>
       </div>
     </form>
