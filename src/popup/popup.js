@@ -1,3 +1,5 @@
+import { MyReact } from "../core/react.js";
+
 const todo = {
   uid: localStorage.getItem("uid"),
   collection: "",
@@ -6,7 +8,8 @@ const todo = {
   done: [],
 };
 
-const Popup = () => {
+const Popup = (props) => {
+  const [popupSuccess, setPopupSuccess] = MyReact.useState(null);
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -27,6 +30,7 @@ const Popup = () => {
       todo["collection"] = collection;
       const exitPopup = document.querySelector(".popupContainer");
       exitPopup.classList.remove("activeP");
+      setPopupSuccess(true);
       const responseCollectionData = await axios.post("/collections", { todo });
     } catch (err) {
       if (err.response.status === 401) {

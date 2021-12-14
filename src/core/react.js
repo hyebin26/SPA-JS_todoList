@@ -34,6 +34,7 @@ export const MyReact = {
     if (!root || !rootComponent) return;
     root.innerHTML = rootComponent();
     MyReact.options.currentStateKey = 0;
+    console.log("render!!");
   }),
   render: (rootComponent, root) => {
     MyReact.options.root = root;
