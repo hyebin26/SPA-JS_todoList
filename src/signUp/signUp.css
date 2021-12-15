@@ -67,7 +67,8 @@
 .signUpBtnBox a:hover {
   color: #f74e6d;
 }
-.signUpFalseText {
-  color: rgb(253, 57, 57) !important;
-  font-size: 0.7rem;
+.popupInputFalse {
+  font-size: 0.9rem;
+  padding-top: 0.3rem;
+  padding-left: 0.2rem;
 }

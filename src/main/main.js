@@ -6,7 +6,6 @@ import { MyReact } from "../core/react.js";
 const Main = () => {
   const [collectionData, setCollectionData] = MyReact.useState([]);
   const [loading, setLoading] = MyReact.useState(false);
-
   window.loadCollectionData = async () => {
     try {
       const responseMainData = await axios.get("/collections");
@@ -29,7 +28,7 @@ const Main = () => {
   if (loading) {
     return `
   ${Header()}
-  ${Popup()}
+  ${Popup(setCollectionData)}
   <section class=${collectionData.length ? "main" : "noCollectionBox"}>
     ${
       collectionData.length

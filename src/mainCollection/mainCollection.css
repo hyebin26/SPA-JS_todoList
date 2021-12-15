@@ -13,7 +13,9 @@
   background: #272732;
 }
 .mainTodoColor {
-  width: 55px;
+  flex: 0 0 24%;
+  padding: 0.9rem 0;
+
   border-radius: 0.8rem;
   display: flex;
   align-items: center;
@@ -25,9 +27,16 @@
 }
 .mainTodoText {
   padding: 0rem 0.8rem;
+  flex: 0 0 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .mainTodoTItle {
-  padding: 0.2rem 0;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .mainTodoTask {
   padding: 0.2rem 0;

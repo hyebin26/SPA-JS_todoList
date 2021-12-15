@@ -8,9 +8,7 @@ const todo = {
   done: [],
 };
 
-const Popup = (props) => {
-  const [addCollectionData, setAddCollectionData] = MyReact.useState(null);
-
+const Popup = (test) => {
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -24,15 +22,23 @@ const Popup = (props) => {
   };
   window.handlePopupSubmit = async (e) => {
     e.preventDefault();
+    const blank_pattern = /^\s+|\s+$/g;
+    const collectionTitle = document.querySelector(".popupNameInput").value;
+    const color = document.querySelector(".clickedColor").dataset.color;
+    const titleFalse = document.querySelector(".popupInputFalse");
+    if (collectionTitle.replace(blank_pattern, "") === "") {
+      titleFalse.textContent = "제목을 다시 입력해주세요.";
+      return;
+    }
     try {
-      const collection = document.querySelector(".popupNameInput").value;
-      const color = document.querySelector(".clickedColor").dataset.color;
       todo["color"] = color;
-      todo["collection"] = collection;
+      todo["collection"] = collectionTitle;
       const exitPopup = document.querySelector(".popupContainer");
       exitPopup.classList.remove("activeP");
-      setAddCollectionData(true);
-      const responseCollectionData = await axios.post("/collections", { todo });
+      titleFalse.textContent = "";
+      const responseCollectionData = await axios.post("/collections", {
+        todo,
+      });
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");
@@ -62,8 +68,9 @@ const Popup = (props) => {
         <button onclick="clickExitBtn()">x</button>
       </div>
       <div class="popupNameBox">
-        <p>Name</p>
+        <p class="popupName">Name</p>
         <input placeholder="My Collection" type="text" class="popupNameInput">
+        <p class="popupInputFalse"></p>
       </div>
       <div class="popupColorBox">
         <p>Color</p>

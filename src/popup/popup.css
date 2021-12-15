@@ -58,7 +58,7 @@
 .popupColorBox {
   padding: 0.7rem 0;
 }
-.popupNameBox p {
+.popupName {
   font-size: 1.1rem;
   padding-bottom: 0.7rem;
 }
@@ -96,4 +96,8 @@
 .popupCancelBtn:hover {
   background-color: #525166;
   opacity: 1;
+}
+.popupInputFalse {
+  font-size: 0.9rem;
+  color: rgb(253, 57, 57);
 }

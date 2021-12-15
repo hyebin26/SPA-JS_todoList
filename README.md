@@ -1,8 +1,11 @@
 ## vanilla js SPA todoList
 
-1. content -> collection으로 이름변경
+1. popupTitle 공백제거
+2. mainCollection Title overflow설정
 
 ### 다음할 것
+
+로직을 맞게 하려면 popup으로 데이터를 추가할 경우 => main에 collectionData변경하기
 
 1. query 스트링
 2. content.js에 함수적용
