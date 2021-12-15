@@ -25,6 +25,8 @@ const conn = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
+const handleTest = () => {};
+
 function makeToken(type, uid) {
   let token;
   if (type === "refresh") {
@@ -40,7 +42,7 @@ function makeToken(type, uid) {
   return token;
 }
 
-function checkToken(cookie) {
+async function checkToken(cookie, res) {
   const splitCookie = cookie.split(";").map((item) => item.trim().split("="));
   let uid = "";
   let access_token = "";
@@ -56,35 +58,40 @@ function checkToken(cookie) {
     const decoded = jwt.verify(access_token, process.env.JWT_SECRET);
     return access_token;
   } catch (err) {
+    let remakeAccessToken = false;
     if (err.name === "TokenExpiredError") {
-      let remakeAccessToken = "";
-      conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
-        if (err) console.log(err);
-        if (row[0]) {
-          let refreshToken = row[0].refresh_token;
-          try {
-            const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-            remakeAccessToken = makeToken("access", uid);
-          } catch (err) {
-            if (err.name === "TokenExpiredError") {
-              const makedRefresh = makeToken("refresh", uid);
-              remakeAccessToken = makeToken("access", uid);
-              conn.query(
-                `update tokens set refresh_token="${makedRefresh}" where uid="${uid}"`,
-                (err, row) => {
-                  if (err) console.log(err);
-                  console.log("리프레시 토큰이 만료되어 access,refresh 재발급");
-                }
-              );
-            } //
-            if (err.name !== "TokenExpiredError") {
-              remakeAccessToken = false;
-            }
-          }
-        } //
-      });
-      return remakeAccessToken;
+      // conn query해서 refreshToken이 있으면 재발급
+      // cookie를 보내주면? or 혹은 쿠키를 설정?
+      // conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
+      //   if (err) console.log(err);
+      //   if (row[0]) {
+      //     try {
+      //       let refreshToken = row[0].refresh_token;
+      //       const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+      //       remakeAccessToken = makeToken("access", uid);
+      //       return remakeAccessToken;
+      //     } catch (err) {
+      //       if (err.name === "TokenExpiredError") {
+      //         const makedRefresh = makeToken("refresh", uid);
+      //         remakeAccessToken = makeToken("access", uid);
+      //         conn.query(
+      //           `update tokens set refresh_token="${makedRefresh}" where uid="${uid}"`,
+      //           (err, row) => {
+      //             if (err) console.log(err);
+      //             console.log("리프레시 토큰이 만료되어 access,refresh 재발급");
+      //           }
+      //         );
+      //         return remakeAccessToken;
+      //       } //
+      //       if (err.name !== "TokenExpiredError") {
+      //         remakeAccessToken = false;
+      //         return remakeAccessToken;
+      //       }
+      //     }
+      //   } //
+      // });
     }
+    return remakeAccessToken;
   }
 }
 
@@ -171,41 +178,64 @@ app.post("/signUp/social", async (req, res) => {
 });
 
 app.post("/collections", (req, res) => {
-  const { uid, collection, color } = req.body.todo;
-  try {
-    checkToken(req.headers.cookie);
-    conn.query(
-      `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
-      (err, row, field) => {
-        if (err) console.log(err);
-        res.status(201);
-      }
-    );
-  } catch (err) {
+  if (checkToken(req.headers.cookie)) {
+    try {
+      const { uid, collection, color } = req.body.todo;
+      const collectionData = [];
+      conn.query(
+        `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
+        (err, row, field) => {
+          if (err) console.log(err);
+          conn.query(
+            `select * from todo where uid="${uid}"`,
+            (err, row, field) => {
+              if (err) console.log(err);
+              row.forEach((item) => {
+                collectionData.push({ ...item });
+              });
+              res.send(collectionData);
+            }
+          );
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  if (!checkToken(req.headers.cookie)) {
     res.status(401).send("unauthenticated");
   }
 });
-app.get("/collections", (req, res) => {
-  try {
-    checkToken(req.headers.cookie);
-    let uid = "";
-    const collectionData = [];
-    const splitCookie = req.headers.cookie
-      .split(";")
-      .map((item) => item.trim().split("="));
-    splitCookie.forEach((item) => {
-      if (item[0] === "uid") uid = item[1];
-    });
-    conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
-      if (err) console.log(err);
-      row.forEach((item) => {
-        collectionData.push({ ...item });
-      });
-      res.send(collectionData);
-    });
-  } catch (err) {
-    res.status(401).send("unauthenticated");
-  }
+app.get("/collections", async (req, res) => {
+  res.cookie("test", "good?");
+  res.json("data");
+
+  console.log(await checkToken(req.headers.cookie, res));
+  // if (checkToken(req.headers.cookie)) {
+  //   try {
+  //     let uid = "";
+  //     const collectionData = [];
+  //     const splitCookie = req.headers.cookie
+  //       .split(";")
+  //       .map((item) => item.trim().split("="));
+  //     splitCookie.forEach((item) => {
+  //       if (item[0] === "uid") uid = item[1];
+  //     });
+  //     conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
+  //       if (err) console.log(err);
+  //       row.forEach((item) => {
+  //         collectionData.push({ ...item });
+  //       });
+  //       res.send(collectionData);
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+  // if (!checkToken(req.headers.cookie)) {
+  //   console.log("false");
+  //   res.status(401).send("unauthenticated");
+  // }
 });
 
 app.get("/detail", (req, res) => {

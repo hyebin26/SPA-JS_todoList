@@ -39,6 +39,7 @@ const Popup = (test) => {
       const responseCollectionData = await axios.post("/collections", {
         todo,
       });
+      console.log(responseCollectionData.data);
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");

@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. popupTitle 공백제거
-2. mainCollection Title overflow설정
+1. token을 재발급 받을 떄 비동기로 conn을 호출해서 리턴값으로 access_token이 실리지 않음 아직 해결 x
+   참고: https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
 
 ### 다음할 것
 
