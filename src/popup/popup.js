@@ -1,5 +1,3 @@
-import { MyReact } from "../core/react.js";
-
 const todo = {
   uid: localStorage.getItem("uid"),
   collection: "",

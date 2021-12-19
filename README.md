@@ -1,15 +1,19 @@
 ## vanilla js SPA todoList
 
-1. token을 재발급 받을 떄 비동기로 conn을 호출해서 리턴값으로 access_token이 실리지 않음 아직 해결 x
+1. token을 재발급 받을 떄 비동기로 conn을 호출해서 리턴값으로 access_token이 실리지 않음 아직 해결 x ,다시시도
    참고: https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
 
 ### 다음할 것
 
-로직을 맞게 하려면 popup으로 데이터를 추가할 경우 => main에 collectionData변경하기
+- https://m.blog.naver.com/n_jihyeon/221806066778참고
+- github에 async글 정리, 토큰 받는 거 다시 로직 생각해보기
+- 미룰 수 있으면 다음걸로 ㄱㄱ
+
+- 로직을 맞게 하려면 popup으로 데이터를 추가할 경우 => main에 collectionData변경하기
 
 1. query 스트링
-2. content.js에 함수적용
-3. mainCollection에 link추가, query string
+1. content.js에 함수적용
+1. mainCollection에 link추가, query string
    "/collection/collectionId"
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
