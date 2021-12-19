@@ -1,5 +1,3 @@
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNrc3A0MzM0IiwiaWF0IjoxNjM5OTA4MzM4LCJleHAiOjE2Mzk5MDgzMzl9.vltElPqmeYUZZZtDlgfeAngREr0CiXcAnn84Cw-RHyM
-
 import express from "express";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
@@ -36,7 +34,7 @@ function makeToken(type, uid) {
   } //
   else {
     token = jwt.sign({ id: uid }, process.env.JWT_SECRET, {
-      expiresIn: "1s",
+      expiresIn: "1h",
     });
   }
   return token;
@@ -75,8 +73,9 @@ app.get("/signUp", (req, res) => {
 app.get("/main", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
-app.get("/collection", (req, res) => {
+app.get("/collection/:collectionId", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
+  console.log(req.params.collectionId);
 });
 
 app.post("/login", async (req, res) => {
@@ -252,13 +251,11 @@ app.get("/collections", async (req, res) => {
           console.log(decoded);
           const collectionData = [];
           conn.query(
-            `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
+            `select * from todo where uid="${uid}"`,
             (err, row, field) => {
               if (err) {
                 console.log(err);
-                console.log("here error");
               }
-              console.log("why?");
               conn.query(
                 `select * from todo where uid="${uid}"`,
                 (err, row, field) => {
@@ -286,13 +283,6 @@ app.get("/collections", async (req, res) => {
     console.log("false");
     res.status(401).send("unauthenticated");
   }
-});
-
-app.get("/detail", (req, res) => {
-  res.redirect("http://localhost:3500");
-});
-app.get("/about", (req, res) => {
-  res.status(200).sendFile(__dirname + "/public/index.html");
 });
 
 app.get("/naver/auth", async (req, res) => {

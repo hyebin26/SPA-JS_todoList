@@ -102,7 +102,8 @@ const ContentController = {
   },
 };
 
-const Collection = () => {
+const Collection = (props) => {
+  console.log(props, "props");
   // contentSettingBtn.addEventListener(
   //   "click",
   //   ContentController.clickContentSettingBtn

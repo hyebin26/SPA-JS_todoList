@@ -1,15 +1,9 @@
 ## vanilla js SPA todoList
 
-1. token을 재발급 받을 떄 비동기로 conn을 호출해서 리턴값으로 access_token이 실리지 않음 아직 해결 x ,다시시도
-   참고: https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
+1. token받는 것 비동기 문제 해결 => 에러 11번
+2. /collection/collectionId 입력할 경우 collection.js 렌더링되게함.
 
 ### 다음할 것
-
-- https://m.blog.naver.com/n_jihyeon/221806066778참고
-- github에 async글 정리, 토큰 받는 거 다시 로직 생각해보기
-- 미룰 수 있으면 다음걸로 ㄱㄱ
-
-- 로직을 맞게 하려면 popup으로 데이터를 추가할 경우 => main에 collectionData변경하기
 
 1. query 스트링
 1. content.js에 함수적용
@@ -116,3 +110,9 @@ https://cotak.tistory.com/102
 - Cookie vs LocalStrage
 - Cookie는 매번 서버로 전송이 되고 LocalStorage에 비해 용량이 적다.
 - LocalStrage 매번 서버로 전송X 클라이언트 사이드에서 저장하고 관리, 용량도 쿠키보다 큼,영구 데이터 저장이 가능하다.
+
+11. 토큰 유효성 검증(비동기 동기)
+
+- token의 유효성을 검증할 때 checkToken이라는 함수에 우선 accessToken을 검증하고 만료되었을 경우 DB에 refreshToken이 존재하는지 체크하고 있을 경우 accessToken을 재발급 받는 형식으로 함수를 작성하였다. 하지만 DB를 호출하는 함수가 비동기여서 return값에 undefined가 나옴 => 다른 방법을 찾지 못하여 DB호출하는 함수를 쿼리문에서 구현
+
+- 참고: https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
