@@ -1,13 +1,11 @@
 ## vanilla js SPA todoList
 
-1. token받는 것 비동기 문제 해결 => 에러 11번
-2. /collection/collectionId 입력할 경우 collection.js 렌더링되게함.
-
 ### 다음할 것
 
-1. query 스트링
+- collection 하기
+
 1. content.js에 함수적용
-1. mainCollection에 link추가, query string
+2. mainCollection에 link추가, query string
    "/collection/collectionId"
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
@@ -116,3 +114,15 @@ https://cotak.tistory.com/102
 - token의 유효성을 검증할 때 checkToken이라는 함수에 우선 accessToken을 검증하고 만료되었을 경우 DB에 refreshToken이 존재하는지 체크하고 있을 경우 accessToken을 재발급 받는 형식으로 함수를 작성하였다. 하지만 DB를 호출하는 함수가 비동기여서 return값에 undefined가 나옴 => 다른 방법을 찾지 못하여 DB호출하는 함수를 쿼리문에서 구현
 
 - 참고: https://stackoverflow.com/questions/14220321/how-to-return-the-response-from-an-asynchronous-call
+
+12. Query String vs Path Variable
+
+Path Variable
+
+- 특정 인덱스에 대한 조회
+- ex) 아이디가 20번인 유저 조회 -> /user/:userId
+
+Query String
+
+- 특정 값으로 필터링
+- 이름이 james이고 20살인 유저조회 => /user?userName=james?age=20

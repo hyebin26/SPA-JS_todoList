@@ -68,42 +68,38 @@ const ContentController = {
   },
 
   clickTaskBtn: (e) => {
-    const contentComBox = document.querySelector(".contentComBox");
-    const contentComUl = document.querySelector(".contentComplete");
-    const contentComTitle = document.querySelector(".contentCompleteTitle");
-    const contentComLi = document.createElement("li");
-    const contentComP = document.createElement("p");
-    const contentComBtn = document.createElement("button");
-    const comText = e.target.nextSibling.innerText;
-    const comId = e.target.parentNode.dataset.id;
-    const comLength = document.querySelectorAll(".contentCompleteList").length;
-    const contentTaskTitle = document.querySelector(".contentTaskTitle");
-    const contentTaskLength =
-      document.querySelectorAll(".contentTodoList").length;
+    const collectionId = e.target.parentNode.dataset.id;
+    const collectionValue = e.target.nextSibling.textContent;
+    const collectionCompleteTitle = document.querySelector(
+      ".collectionCompleteTitle"
+    );
+    const completeLength = document.querySelectorAll(
+      ".collectionCompleteList"
+    ).length;
+    const collectionUl = document.querySelector(".collectionComplete");
+    const addedCollectionLi = document.createElement("li");
+    const addedCollectionBtn = document.createElement("button");
+    const addedCollectionP = document.createElement("p");
+    // contentComLi.dataset.id = comLength;
 
-    contentComP.textContent = comText;
-    contentComLi.dataset.id = comLength;
+    addedCollectionP.textContent = collectionValue;
+    addedCollectionBtn.textContent = "✓";
+    addedCollectionBtn.className = "completeBtn";
+    addedCollectionLi.className = "collectionCompleteList";
+    collectionCompleteTitle.textContent = `Completed - ${completeLength + 1}`;
 
-    contentComTitle.textContent = `Completed - ${comLength + 1}`;
-    contentComBtn.textContent = "✓";
-    contentComBtn.className = "completeBtn";
-    contentComLi.className = "contentCompleteList";
-    contentTaskTitle.textContent = `Tasks - ${contentTaskLength - 1}`;
+    // contentTaskTitle.textContent = `Tasks - ${contentTaskLength - 1}`;
+    // ContentModel.complete[comLength] = comText;
+    // delete ContentModel.task[comId];
+    addedCollectionLi.append(addedCollectionBtn, addedCollectionP);
+    collectionUl.append(addedCollectionLi);
 
-    contentComBox.append(contentComTitle, contentComUl);
-    contentComLi.append(contentComBtn, contentComP);
-    contentComUl.append(contentComLi);
-
-    ContentModel.complete[comLength] = comText;
-    delete ContentModel.task[comId];
-
-    contentComBtn.addEventListener("click", ContentController.addTodo);
-    e.target.parentNode.remove();
+    // contentComBtn.addEventListener("click", ContentController.addTodo);
+    // e.target.parentNode.remove();
   },
 };
 
 const Collection = (props) => {
-  console.log(props, "props");
   // contentSettingBtn.addEventListener(
   //   "click",
   //   ContentController.clickContentSettingBtn
@@ -111,6 +107,7 @@ const Collection = (props) => {
   // contentSettingBtn.addEventListener("blur", ContentController.blurSettignBox);
   // contentEditBtn.addEventListener("click", ContentController.clickContentPopup);
   // contentTodoForm.addEventListener("submit", ContentController.addTodo);
+  window.handleTaskBtn = ContentController.clickTaskBtn;
   window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
   window.handleCollectionAdd = ContentController.addTodo;
   window.handleEditCollectionBtn = ContentController.clickContentEditBtn;
@@ -128,7 +125,7 @@ const Collection = (props) => {
       </div>
     </div>
     <div class="collectionTodoBox">
-      <h3 class="collectionTaskTitle">Tasks - 0</h3>
+      <h3 class="collectionTaskTitle" >Tasks - 0</h3>
       <ul class="collectionTodo"></ul>
       <form onsubmit="handleCollectionAdd(event)">
         <button>+</button>
@@ -136,8 +133,8 @@ const Collection = (props) => {
       </form>
     </div>
     <div class="collectionComBox">
-      <ul class="collectionComplete"></ul>
       <h3 class="collectionCompleteTitle"></h3>
+      <ul class="collectionComplete"></ul>
     </div>
   </section>
   `;
