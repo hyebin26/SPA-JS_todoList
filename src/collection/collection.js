@@ -2,11 +2,7 @@ import Header from "../header/header.js";
 import Popup from "../popup/popup.js";
 import { MyReact } from "../core/react.js";
 import CollectionTask from "../collectionTask/collectionTask.js";
-
-const ContentModel = {
-  task: {},
-  complete: {},
-};
+import CollectionDone from "../collectionDone/collectionDone.js";
 
 const ContentController = {
   clickContentSettingBtn: () => {
@@ -29,37 +25,6 @@ const ContentController = {
       blurSettingBox.classList.remove("activeS");
     }, 100);
   },
-
-  clickTaskBtn: (e) => {
-    const collectionId = e.target.parentNode.dataset.id;
-    const collectionValue = e.target.nextSibling.textContent;
-    const collectionCompleteTitle = document.querySelector(
-      ".collectionCompleteTitle"
-    );
-    const completeLength = document.querySelectorAll(
-      ".collectionCompleteList"
-    ).length;
-    const collectionUl = document.querySelector(".collectionComplete");
-    const addedCollectionLi = document.createElement("li");
-    const addedCollectionBtn = document.createElement("button");
-    const addedCollectionP = document.createElement("p");
-
-    addedCollectionLi.dataset.id = collectionId;
-    addedCollectionP.textContent = collectionValue;
-    addedCollectionBtn.textContent = "✓";
-    addedCollectionBtn.className = "completeBtn";
-    addedCollectionLi.className = "collectionCompleteList";
-    collectionCompleteTitle.textContent = `Completed - ${completeLength + 1}`;
-
-    // contentTaskTitle.textContent = `Tasks - ${contentTaskLength - 1}`;
-    // ContentModel.complete[comLength] = comText;
-    // delete ContentModel.task[comId];
-    addedCollectionLi.append(addedCollectionBtn, addedCollectionP);
-    collectionUl.append(addedCollectionLi);
-
-    // contentComBtn.addEventListener("click", ContentController.addTodo);
-    // e.target.parentNode.remove();
-  },
 };
 
 const Collection = (props) => {
@@ -70,9 +35,9 @@ const Collection = (props) => {
   // contentSettingBtn.addEventListener("blur", ContentController.blurSettignBox);
   // contentEditBtn.addEventListener("click", ContentController.clickContentPopup);
   // contentTodoForm.addEventListener("submit", ContentController.addTodo);
-  const [task, setTask] = MyReact.useState(null);
-  const [done, setDone] = MyReact.useState(null);
-  const [title, setTitle] = MyReact.useState(null);
+  const [task, setTask] = MyReact.useState([]);
+  const [done, setDone] = MyReact.useState([]);
+  const [title, setTitle] = MyReact.useState("");
   const [loading, setLoading] = MyReact.useState(true);
 
   const url = new URL(window.location);
@@ -83,14 +48,12 @@ const Collection = (props) => {
     // submit일 경우임
     // done에서 넘어올 수 도 있음
     e.preventDefault();
-    const taskValue =
-      task === "" ? e.target[1].value : `${task},${e.target[1].value}`;
-    axios.patch(`/collection/collectionId/${collectionId}`, {
+    const taskValue = e.target[1].value;
+    axios.post(`/collection/collectionId/${collectionId}`, {
       taskValue,
     });
-    setTask(taskValue);
+    // setTask(taskValue);
   };
-
   window.handleTaskBtn = ContentController.clickTaskBtn;
   window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
   window.handleCollectionAdd = addCollectionTask;
@@ -102,11 +65,10 @@ const Collection = (props) => {
     );
     const collectionIdData = axiosCollectionIdData.data;
     setLoading(false);
-    const splitTask = collectionIdData[0].tasks.split(",");
-    const splitDone = collectionIdData[0].done.split(",");
-    setTask(splitTask);
-    setDone(splitDone);
-    setTitle(collectionIdData[0].collection);
+    // const splitDone = collectionIdData[0].done.split(",");
+    setTask(collectionIdData.tasks);
+    setDone(collectionIdData.done);
+    setTitle(collectionIdData.title                            );
   };
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());
   if (!loading) {
@@ -125,13 +87,13 @@ const Collection = (props) => {
     </div>
     <div class="collectionTodoBox">
       <h3 class="collectionTaskTitle" >Tasks - ${
-        task[0] === "" ? 0 : task.length
+        !task.length ? 0 : task.length
       }</h3>
       <ul class="collectionTodo"></ul>
       ${
-        task[0] === ""
+        !task.length
           ? ""
-          : task.map((item, idx) => CollectionTask(item, idx)).join("")
+          : task.map((item, idx) => CollectionTask(item, idx, setDone)).join("")
       }
       <li>
         <form onsubmit="handleCollectionAdd(event)">
@@ -140,9 +102,13 @@ const Collection = (props) => {
         </form>
       </li>
     </div>
-    <div class="collectionComBox">
-      <h3 class="collectionCompleteTitle"></h3>
-      <ul class="collectionComplete"></ul>
+    <div class="collectionDoneBox">
+      <h3 class="collectionDoneTitle">${
+        !done.length ? "" : `Done - ${done.length}`
+      }</h3>
+      <ul class="collectionDoneUl">
+      ${!done.length ? "" : done.map((item) => CollectionDone(item)).join("")}
+      </ul>
     </div>
   </section>
   `;

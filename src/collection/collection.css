@@ -68,14 +68,14 @@
 
 /* collection box */
 .collectionTodoBox,
-.collectionComBox {
+.collectionDoneBox {
   display: flex;
   flex-direction: column;
   padding: 3rem 0;
 }
 .collectionTodoBox form,
 .collectionTodoList,
-.collectionCompleteList {
+.collectionDoneList {
   border-radius: 0.7rem;
   display: flex;
   transition: border 0.3s;
@@ -108,27 +108,27 @@
   padding-left: 0.6rem;
 }
 .collectionTodoBox h3,
-.collectionComBox h3 {
+.collectionDoneBox h3 {
   padding-bottom: 1rem;
 }
 
 .collectionTodoList,
-.collectionCompleteList {
+.collectionDoneList {
   background: #262632;
   border: none;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
-.collectionCompleteList p {
+.collectionDoneList p {
   text-decoration: line-through;
 }
 .collectionTodoList p,
-.collectionCompleteList p {
+.collectionDoneList p {
   padding-left: 0.5rem;
 }
 
 .collectionTaskBtn,
-.completeBtn {
+.collectionDoneBtn {
   border: 2px solid #ae68e6;
   background: none;
   width: 1.5rem;
@@ -137,7 +137,7 @@
   cursor: pointer;
 }
 
-.completeBtn {
+.collectionDoneBtn {
   background: #ae68e6;
   color: black;
 }

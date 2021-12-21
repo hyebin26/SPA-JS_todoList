@@ -1,13 +1,12 @@
 ## vanilla js SPA todoList
 
-1. collectionTask.js추가
-2. addCollectionTask 로직변경
+1. collection 로직변경 => tasks,done 삭제,추가하기위해 id가 있어야함
 
 ### 다음할 것
 
-1. content.js에 함수적용
-2. mainCollection에 link추가, query string
-   "/collection/collectionId"
+- addtasks해야됨
+- collectionTask.js에 완료버튼 이벤트
+- collectionDone 이주하기
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기

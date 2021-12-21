@@ -11,8 +11,8 @@ const MainCollection = (item) => {
         </div>
         <div class="mainTodoText">
           <h3 class="mainTodoTItle">${item.collection}</h3>
-          <p class="mainTodoTask">${item.tasks.split(",").length} task</p>
         </div>`,
+       state: { collection: item.collection },
      })}
     </li>
     `;

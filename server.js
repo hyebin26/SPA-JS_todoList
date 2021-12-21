@@ -77,34 +77,97 @@ app.get("/collection/:collectionId", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
 app.get("/collection/collectionId/:collectionId", (req, res) => {
+  const collectionIdCheckToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;
-  conn.query(
-    `select * from todo where collectionId="${collectionId}"`,
-    (err, row) => {
-      try {
-        res.json(row);
-      } catch {
-        console.log(err);
-        res.status(404).send(false);
+  if (collectionIdCheckToken === "success") {
+    conn.query(
+      `select * from tasks where collectionId="${collectionId}"`,
+      (err, row) => {
+        const tasks = row;
+        try {
+          conn.query(
+            `select * from done where collectionId="${collectionId}"`,
+            (err2, row2) => {
+              if (err2) console.log(err2);
+              const done = row2;
+              conn.query(
+                `select collection from todo where collectionId=${collectionId}`,
+                (err3, row3) => {
+                  if (err3) console.log(err3);
+                  const title = row3[0].collection;
+                  res.json({ tasks, done, title });
+                }
+              );
+            }
+          );
+        } catch {
+          console.log(err);
+          res.status(404).send(false);
+        }
       }
-    }
-  );
+    );
+  }
+  if (collectionIdCheckToken === "expiredError") {
+    conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
+      if (err) {
+        console.log(err);
+        res.status(404);
+      }
+      if (row[0]) {
+        try {
+          let refreshToken = row[0].refresh_token;
+          const accessToken = makeToken("access", uid);
+          const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+          conn.query(
+            `select * from tasks where collectionId="${collectionId}"`,
+            (err, row) => {
+              const tasks = row;
+              try {
+                conn.query(
+                  `select * from done where collectionId="${collectionId}"`,
+                  (err2, row2) => {
+                    if (err2) console.log(err2);
+                    const done = row2;
+                    conn.query(
+                      `select collection from todo where collectionId=${collectionId}`,
+                      (err3, row3) => {
+                        if (err3) console.log(err3);
+                        const title = row3[0].collection;
+                        res.json({ tasks, done, title });
+                      }
+                    );
+                  }
+                );
+              } catch {
+                console.log(err);
+                res.status(404).send(false);
+              }
+            }
+          );
+        } catch (err) {
+          res.status(401).send("unauthenticated");
+        }
+      } //
+      if (!row[0]) {
+        res.status(401).send("unauthenticated");
+      }
+    });
+  }
+  if (collectionIdCheckToken === "error") {
+    res.status(401).send("unauthenticated");
+  }
 });
 
-app.patch("/collection/collectionId/:collectionId", (req, res) => {
+app.post("/collection/collectionId/:collectionId", (req, res) => {
+  const collectionIdCheckToken = checkToken(req.headers.cookie);
   const task = req.body.taskValue;
   const collectionId = req.params.collectionId;
-  conn.query(
-    `update todo set tasks="${task}" where collectionId="${collectionId}"`,
-    (err, row) => {
-      try {
-        res.send(true);
-      } catch {
-        console.log(err);
-        res.status(404).send(false);
-      }
-    }
-  );
+  if (collectionIdCheckToken === "success") {
+    conn.query(`insert into tasks values()`);
+  }
+  if (collectionIdCheckToken === "error") {
+    res.status(401).send("unauthenticated");
+  }
 });
 
 app.post("/login", async (req, res) => {
@@ -182,7 +245,7 @@ app.post("/collections", (req, res) => {
     try {
       const collectionData = [];
       conn.query(
-        `insert into todo values("${uid}","${collection}","${color}","","",0)`,
+        `insert into todo values("${uid}","${collection}","${color}",0)`,
         (err, row, field) => {
           if (err) console.log(err);
           conn.query(
@@ -215,7 +278,7 @@ app.post("/collections", (req, res) => {
           const accessToken = makeToken("access", uid);
           const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
           conn.query(
-            `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
+            `insert into todo values("${uid}","${collection}","${color}",0)`,
             (err, row, field) => {
               if (err) console.log(err);
               conn.query(
@@ -277,7 +340,6 @@ app.get("/collections", async (req, res) => {
           let refreshToken = row[0].refresh_token;
           const accessToken = makeToken("access", uid);
           const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-          console.log(decoded);
           const collectionData = [];
           conn.query(
             `select * from todo where uid="${uid}"`,

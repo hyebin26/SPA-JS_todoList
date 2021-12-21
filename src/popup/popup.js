@@ -37,7 +37,6 @@ const Popup = (setCollectionData) => {
       const responseCollectionData = await axios.post("/collections", {
         todo,
       });
-      console.log("he?");
       setCollectionData(responseCollectionData);
       // main에 리렌더링을 해야됨 어케?
       // => 1. useState
