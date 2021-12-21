@@ -2,11 +2,11 @@ const todo = {
   uid: localStorage.getItem("uid"),
   collection: "",
   color: "",
-  tasks: [],
-  done: [],
+  tasks: "",
+  done: "",
 };
 
-const Popup = (test) => {
+const Popup = (setCollectionData) => {
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -37,7 +37,10 @@ const Popup = (test) => {
       const responseCollectionData = await axios.post("/collections", {
         todo,
       });
-      console.log(responseCollectionData.data);
+      console.log("he?");
+      setCollectionData(responseCollectionData);
+      // main에 리렌더링을 해야됨 어케?
+      // => 1. useState
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");

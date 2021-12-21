@@ -75,7 +75,36 @@ app.get("/main", (req, res) => {
 });
 app.get("/collection/:collectionId", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
-  console.log(req.params.collectionId);
+});
+app.get("/collection/collectionId/:collectionId", (req, res) => {
+  const collectionId = req.params.collectionId;
+  conn.query(
+    `select * from todo where collectionId="${collectionId}"`,
+    (err, row) => {
+      try {
+        res.json(row);
+      } catch {
+        console.log(err);
+        res.status(404).send(false);
+      }
+    }
+  );
+});
+
+app.patch("/collection/collectionId/:collectionId", (req, res) => {
+  const task = req.body.taskValue;
+  const collectionId = req.params.collectionId;
+  conn.query(
+    `update todo set tasks="${task}" where collectionId="${collectionId}"`,
+    (err, row) => {
+      try {
+        res.send(true);
+      } catch {
+        console.log(err);
+        res.status(404).send(false);
+      }
+    }
+  );
 });
 
 app.post("/login", async (req, res) => {
@@ -153,7 +182,7 @@ app.post("/collections", (req, res) => {
     try {
       const collectionData = [];
       conn.query(
-        `insert into todo values("${uid}","${collection}","${color}","[]","[]",0)`,
+        `insert into todo values("${uid}","${collection}","${color}","","",0)`,
         (err, row, field) => {
           if (err) console.log(err);
           conn.query(

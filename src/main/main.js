@@ -5,14 +5,13 @@ import { MyReact } from "../core/react.js";
 
 const Main = () => {
   const [collectionData, setCollectionData] = MyReact.useState([]);
-  const [loading, setLoading] = MyReact.useState(false);
+  const [loading, setLoading] = MyReact.useState(true);
   window.loadCollectionData = async () => {
     try {
       const responseMainData = await axios.get("/collections");
       const mainData = await responseMainData.data;
-      setLoading(true);
+      setLoading(false);
       setCollectionData(mainData);
-      console.log(mainData);
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");
@@ -25,7 +24,7 @@ const Main = () => {
     const clickPopup = document.querySelector(".popupContainer");
     clickPopup.classList.add("activeP");
   };
-  if (loading) {
+  if (!loading) {
     return `
   ${Header()}
   ${Popup(setCollectionData)}
@@ -50,7 +49,7 @@ const Main = () => {
     }
     </section>`;
   }
-  if (!loading) {
+  if (loading) {
     return `
     <h2>Loading...</h2>
     `;

@@ -1,5 +1,7 @@
 import Header from "../header/header.js";
 import Popup from "../popup/popup.js";
+import { MyReact } from "../core/react.js";
+import CollectionTask from "../collectionTask/collectionTask.js";
 
 const ContentModel = {
   task: {},
@@ -11,46 +13,7 @@ const ContentController = {
     const clickSettingBox = document.querySelector(".settingBox");
     clickSettingBox.classList.toggle("activeS");
   },
-  addTodo: (e) => {
-    e.preventDefault();
-    const type = e.type;
-    const addTodo = document.querySelector(".collectionTodo");
-    const addTaskCnt = document.querySelectorAll(".collectionTodoList");
-    const taskId = Object.keys(ContentModel.task).length;
-    const addTaskTitle = document.querySelector(".collectionTaskTitle");
-    const todoList = document.createElement("li");
-    const taskBtn = document.createElement("button");
-    const taskText = document.createElement("p");
-
-    todoList.className = "collectionTodoList";
-    taskBtn.className = "collectionTaskBtn";
-    addTaskTitle.textContent = `Tasks - ${addTaskCnt.length + 1}`;
-    taskBtn.textContent = " ";
-    todoList.dataset.id = taskId;
-    taskBtn.addEventListener("click", ContentController.clickTaskBtn);
-    todoList.append(taskBtn, taskText);
-    addTodo.append(todoList);
-    if (type === "submit") {
-      if (e.target[1].value !== "" && e.target[1].value[0] !== " ") {
-        taskText.textContent = e.target[1].value;
-        ContentModel.task[taskId] = e.target[1].value;
-        e.target[1].value = "";
-      }
-    } //
-    else {
-      const addCompleteTitle = document.querySelector(".contentCompleteTitle");
-      const addCompleteLength = document.querySelectorAll(
-        ".contentCompleteList"
-      ).length;
-
-      addCompleteTitle.textContent = `Completed -${addCompleteLength - 1}`;
-      taskText.textContent = e.target.nextSibling.textContent;
-
-      ContentModel.task[addTaskCntLength] = e.target.nextSibling.textContent;
-      e.target.parentNode.remove();
-      delete ContentModel.complete[e.target.parentNode.dataset.id];
-    }
-  },
+  addTodo: (e) => {},
   //
   //
   clickCompleteBtn: (e) => {
@@ -80,8 +43,8 @@ const ContentController = {
     const addedCollectionLi = document.createElement("li");
     const addedCollectionBtn = document.createElement("button");
     const addedCollectionP = document.createElement("p");
-    // contentComLi.dataset.id = comLength;
 
+    addedCollectionLi.dataset.id = collectionId;
     addedCollectionP.textContent = collectionValue;
     addedCollectionBtn.textContent = "✓";
     addedCollectionBtn.className = "completeBtn";
@@ -107,17 +70,53 @@ const Collection = (props) => {
   // contentSettingBtn.addEventListener("blur", ContentController.blurSettignBox);
   // contentEditBtn.addEventListener("click", ContentController.clickContentPopup);
   // contentTodoForm.addEventListener("submit", ContentController.addTodo);
+  const [task, setTask] = MyReact.useState(null);
+  const [done, setDone] = MyReact.useState(null);
+  const [title, setTitle] = MyReact.useState(null);
+  const [loading, setLoading] = MyReact.useState(true);
+
+  const url = new URL(window.location);
+  const searchPathname = url.pathname.split("/");
+  const collectionId = searchPathname[2];
+
+  const addCollectionTask = (e) => {
+    // submit일 경우임
+    // done에서 넘어올 수 도 있음
+    e.preventDefault();
+    const taskValue =
+      task === "" ? e.target[1].value : `${task},${e.target[1].value}`;
+    axios.patch(`/collection/collectionId/${collectionId}`, {
+      taskValue,
+    });
+    setTask(taskValue);
+  };
+
   window.handleTaskBtn = ContentController.clickTaskBtn;
   window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
-  window.handleCollectionAdd = ContentController.addTodo;
+  window.handleCollectionAdd = addCollectionTask;
   window.handleEditCollectionBtn = ContentController.clickContentEditBtn;
-  return `
+
+  const loadCollectionIdData = async () => {
+    const axiosCollectionIdData = await axios.get(
+      `/collection/collectionId/${collectionId}`
+    );
+    const collectionIdData = axiosCollectionIdData.data;
+    setLoading(false);
+    const splitTask = collectionIdData[0].tasks.split(",");
+    const splitDone = collectionIdData[0].done.split(",");
+    setTask(splitTask);
+    setDone(splitDone);
+    setTitle(collectionIdData[0].collection);
+  };
+  document.addEventListener("DOMContentLoaded", loadCollectionIdData());
+  if (!loading) {
+    return `
   ${Header()}
   ${Popup()}
   <section class="collectionSection">
     <div class="collectionTitleBox">
       <a>﹤</a>
-      <h2>학교</h2>
+      <h2>${title}</h2>
       <button class="collectionSettingBtn" onclick="handleContentSettingBtn()">···</button>
       <div class="settingBox">
         <button class="settingEdit" onclick="handleEditCollectionBtn()">Edit Collection</button>
@@ -125,12 +124,21 @@ const Collection = (props) => {
       </div>
     </div>
     <div class="collectionTodoBox">
-      <h3 class="collectionTaskTitle" >Tasks - 0</h3>
+      <h3 class="collectionTaskTitle" >Tasks - ${
+        task[0] === "" ? 0 : task.length
+      }</h3>
       <ul class="collectionTodo"></ul>
-      <form onsubmit="handleCollectionAdd(event)">
-        <button>+</button>
-        <input placeholder="Add task" type="text"> 
-      </form>
+      ${
+        task[0] === ""
+          ? ""
+          : task.map((item, idx) => CollectionTask(item, idx)).join("")
+      }
+      <li>
+        <form onsubmit="handleCollectionAdd(event)">
+          <button>+</button>
+          <input placeholder="Add task" type="text" /> 
+        </form>
+      </li>
     </div>
     <div class="collectionComBox">
       <h3 class="collectionCompleteTitle"></h3>
@@ -138,6 +146,7 @@ const Collection = (props) => {
     </div>
   </section>
   `;
+  }
 };
 
 export default Collection;

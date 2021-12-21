@@ -1,8 +1,9 @@
 ## vanilla js SPA todoList
 
-### 다음할 것
+1. collectionTask.js추가
+2. addCollectionTask 로직변경
 
-- collection 하기
+### 다음할 것
 
 1. content.js에 함수적용
 2. mainCollection에 link추가, query string
