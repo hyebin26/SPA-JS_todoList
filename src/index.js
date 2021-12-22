@@ -12,7 +12,6 @@ const App = () => {
   const searchPathname = url.pathname.split("/");
   const collectionId =
     searchPathname[1] === "collection" ? searchPathname[2] : null;
-
   return `
   ${
     url.pathname === "/"

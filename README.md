@@ -1,6 +1,6 @@
 ## vanilla js SPA todoList
 
-1. collection 로직변경 => tasks,done 삭제,추가하기위해 id가 있어야함
+1.  링크문제해결
 
 ### 다음할 것
 

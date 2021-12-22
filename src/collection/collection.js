@@ -68,7 +68,7 @@ const Collection = (props) => {
     // const splitDone = collectionIdData[0].done.split(",");
     setTask(collectionIdData.tasks);
     setDone(collectionIdData.done);
-    setTitle(collectionIdData.title                            );
+    setTitle(collectionIdData.title);
   };
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());
   if (!loading) {
