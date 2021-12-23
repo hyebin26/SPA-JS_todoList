@@ -126,3 +126,9 @@ Query String
 
 - 특정 값으로 필터링
 - 이름이 james이고 20살인 유저조회 => /user?userName=james?age=20
+
+13. event.currentTarget vs event.target
+
+- 바닐라 자바스크립트로 링크를 구현할 때 모든 링크에서 onClickTag라는 하나의 함수를 공용으로 호출하기 때문에, 함수의 매개변수 to값이 계속해서 변경되었음.
+- 고민된게 우선 계속해서 새로운 함수를 만들어 주는 것은 올바른 로직이 아니라고 생각해서 고민하던 중 현재의 target에 적혀있는 href값을 가져와서 url을 변경하려고 했으나 a태그 자식요소가 존재할 경우 target에 href가 존재하지 않음
+- event.currentTarget은 무조건 이벤트가 걸려있는 위치를 반환하므로 자식요소를 클릭해도 이벤트가 걸려있는 a태그를 가져오므로 href값을 가져올 수 있음
