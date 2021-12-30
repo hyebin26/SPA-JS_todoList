@@ -1,4 +1,5 @@
 const CollectionTask = (task, idx, setDone) => {
+  console.log(task);
   const clickTaskBtn = (e) => {
     // done으로 이동하게 하기
     // task 삭제

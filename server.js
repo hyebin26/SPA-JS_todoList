@@ -80,6 +80,7 @@ app.get("/collection/collectionId/:collectionId", (req, res) => {
   const collectionIdCheckToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;
   if (collectionIdCheckToken === "success") {
+    console.log("check@@@");
     conn.query(
       `select * from tasks where collectionId="${collectionId}"`,
       (err, row) => {

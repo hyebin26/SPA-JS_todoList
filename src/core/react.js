@@ -34,8 +34,6 @@ export const MyReact = {
     if (!root || !rootComponent) return;
     root.innerHTML = rootComponent();
     MyReact.options.currentStateKey = 0;
-    const url = new URL(window.location.href);
-    console.log(url.pathname);
   }),
   render: (rootComponent, root) => {
     MyReact.options.root = root;
