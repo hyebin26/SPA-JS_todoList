@@ -3,29 +3,27 @@ import Popup from "../popup/popup.js";
 import { MyReact } from "../core/react.js";
 import CollectionTask from "../collectionTask/collectionTask.js";
 import CollectionDone from "../collectionDone/collectionDone.js";
+import { Link } from "../link.js";
 
-// const ContentController = {
-//   clickContentSettingBtn: () => {
-//     const clickSettingBox = document.querySelector(".settingBox");
-//     clickSettingBox.classList.toggle("activeS");
-//   },
-//   addTodo: (e) => {},
-//   //
-//   //
-//   clickCompleteBtn: (e) => {
-//     console.log(e);
-//   },
-//   clickContentEditBtn: () => {
-//     const clickContentPopup = document.querySelector(".popupContainer");
-//     clickContentPopup.classList.add("activeP");
-//   },
-//   blurSettignBox: () => {
-//     const blurSettingBox = document.querySelector(".settingBox");
-//     setTimeout(() => {
-//       blurSettingBox.classList.remove("activeS");
-//     }, 100);
-//   },
-// };
+const ContentController = {
+  clickContentSettingBtn: () => {
+    const clickSettingBox = document.querySelector(".settingBox");
+    clickSettingBox.classList.toggle("activeS");
+  },
+  addTodo: (e) => {},
+  //
+  //
+  clickCompleteBtn: (e) => {
+    console.log(e);
+  },
+
+  blurSettignBox: () => {
+    const blurSettingBox = document.querySelector(".settingBox");
+    setTimeout(() => {
+      blurSettingBox.classList.remove("activeS");
+    }, 100);
+  },
+};
 
 const Collection = () => {
   // contentSettingBtn.addEventListener(
@@ -39,6 +37,7 @@ const Collection = () => {
   const [done, setDone] = MyReact.useState([]);
   const [title, setTitle] = MyReact.useState("");
   const [loading, setLoading] = MyReact.useState(true);
+  const [isShow, setIsShow] = MyReact.useState(false);
 
   const url = new URL(window.location);
   const searchPathname = url.pathname.split("/");
@@ -55,10 +54,11 @@ const Collection = () => {
   //   // setTask(taskValue);
   // };
   // window.handleTaskBtn = ContentController.clickTaskBtn;
-  // window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
   // window.handleCollectionAdd = addCollectionTask;
-  // window.handleEditCollectionBtn = ContentController.clickContentEditBtn;
 
+  const clickContentEditBtn = () => {
+    setIsShow(true);
+  };
   const loadCollectionIdData = async () => {
     const axiosCollectionIdData = await axios.get(
       `/collection/collectionId/${collectionId}`
@@ -69,15 +69,17 @@ const Collection = () => {
     setTitle(collectionIdData.title);
     setLoading(false);
   };
+  window.handleEditCollectionBtn = clickContentEditBtn;
+  window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());
   return `
   ${Header()}
-  ${Popup()}
+  ${Popup(isShow)}
   <section class="collectionSection">
     ${
       !loading
         ? `<div class="collectionTitleBox">
-    <a>﹤</a>
+    ${Link({ to: "/main", content: "<" })}
     <h2>${title}</h2>
     <button class="collectionSettingBtn" onclick="handleContentSettingBtn()">···</button>
     <div class="settingBox">

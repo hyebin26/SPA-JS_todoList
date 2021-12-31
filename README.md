@@ -1,10 +1,12 @@
 ## vanilla js SPA todoList
 
-1. 링크로 페이지를 이동할 경우 MyReact의 상태가 초기화되지 않음
-   => 링크로 페이지이동할 경우 상태 초기화
+1. main에서 popup을 클릭해서 submit할 경우 리렌더링하기 위해 main에서 useState를 통해 리렌더링을 했는데 popup.js에서 useState를 통해 리렌더링되게 함
+2. 클릭할 경우 popup에 class를 추가하는 방법이 아닌 useState를 통해 보여주는 방법으로 로직 변경
 
 ### 다음할 것
 
+- popup 로직 cancel 하고 x버튼 그리고 main popup로직변경
+- 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - addtasks해야됨
 - collectionTask.js에 완료버튼 이벤트
 - collectionDone 이주하기

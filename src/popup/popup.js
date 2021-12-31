@@ -1,3 +1,5 @@
+import { MyReact } from "../core/react.js";
+
 const todo = {
   uid: localStorage.getItem("uid"),
   collection: "",
@@ -6,7 +8,9 @@ const todo = {
   done: "",
 };
 
-const Popup = (setCollectionData) => {
+const Popup = (isShow) => {
+  const [checkShow, setCheckShow] = MyReact.useState(false);
+  const [test, setTest] = MyReact.useState([]);
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -37,9 +41,7 @@ const Popup = (setCollectionData) => {
       const responseCollectionData = await axios.post("/collections", {
         todo,
       });
-      setCollectionData(responseCollectionData);
-      // main에 리렌더링을 해야됨 어케?
-      // => 1. useState
+      setCheckShow(!checkShow); // 리렌더링용
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");
@@ -49,6 +51,12 @@ const Popup = (setCollectionData) => {
     // //collection fetch server => server sql 추가 => collection 기져오기
     // // collection이 변경되었을 때 => main에서 리렌더링이 되게
     // // 서버로 데이터 보내기 => BD에 데이터 저장 => 그 데이터를 리렌더링
+  };
+  const loadPopupData = async (path) => {
+    const collectionId = path.split("collection")[1];
+    const loadPopupData = await axios.get(`/collection/popup${collectionId}`);
+    const popupData = loadPopupData.data;
+    setTest(popupData);
   };
 
   const colorList = [
@@ -60,36 +68,70 @@ const Popup = (setCollectionData) => {
     "#70C4BF",
     "#9E7F72",
   ];
-
-  return `
-  <div class="popupContainer">
-    <form id="popupBox" onsubmit=handlePopupSubmit(event)>
-      <div class="popupTitleBox">
-        <h3>Add Collection</h3>
-        <button onclick="clickExitBtn()">x</button>
-      </div>
-      <div class="popupNameBox">
-        <p class="popupName">Name</p>
-        <input placeholder="My Collection" type="text" class="popupNameInput">
-        <p class="popupInputFalse"></p>
-      </div>
-      <div class="popupColorBox">
-        <p>Color</p>
-        <ul>
-          <li class="clickedColor colorList" style="background:${colorList[0]};border:3px solid ${colorList[0]}" data-color="${colorList[0]}" data-color:"${colorList[0]}" onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[1]}" data-color="${colorList[1]}" onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[2]}" data-color="${colorList[2]}" onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[3]}" data-color="${colorList[3]}" onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[4]}" data-color="${colorList[4]}" onclick="clickPopupColor(this)"></li>
-          <li class="colorList" style="border:3px solid ${colorList[5]}" data-color="${colorList[5]}" onclick="clickPopupColor(this)"></li>
-        </ul>
-      </div>
-      <div class="popupBtnBox">
-        <button class="popupCreateBtn" form="popupBox">Create</button>
-        <button class="popupCancelBtn" onclick="clickExitBtn()">Cancel</button>
-      </div>
-    </form>
-  </div>
-  `;
+  if (isShow) {
+    const url = new URL(window.location);
+    if (url.pathname.includes("main")) {
+    }
+    if (url.pathname.includes("collection")) {
+      loadPopupData(url.pathname);
+      console.log(test);
+    }
+    return `
+    <div class="popupContainer">
+      <form id="popupBox" onsubmit=handlePopupSubmit(event)>
+        <div class="popupTitleBox">
+          <h3>${!test.length ? "Change Collection" : "Add Collection"}</h3>
+          <button onclick="clickExitBtn()">x</button>
+        </div>
+        <div class="popupNameBox">
+          <p class="popupName">Name</p>
+          <input placeholder="My Collection" type="text" class="popupNameInput" value=${
+            !test.length ? test.collection : "dddddd"
+          }>
+          <p class="popupInputFalse"></p>
+        </div>
+        <div class="popupColorBox">
+          <p>Color</p>
+          <ul>
+            <li class="clickedColor colorList" style="background:${
+              colorList[0]
+            };border:3px solid ${colorList[0]}" data-color="${
+      colorList[0]
+    }" data-color:"${colorList[0]}" onclick="clickPopupColor(this)"></li>
+            <li class="colorList" style="border:3px solid ${
+              colorList[1]
+            }" data-color="${
+      colorList[1]
+    }" onclick="clickPopupColor(this)"></li>
+            <li class="colorList" style="border:3px solid ${
+              colorList[2]
+            }" data-color="${
+      colorList[2]
+    }" onclick="clickPopupColor(this)"></li>
+            <li class="colorList" style="border:3px solid ${
+              colorList[3]
+            }" data-color="${
+      colorList[3]
+    }" onclick="clickPopupColor(this)"></li>
+            <li class="colorList" style="border:3px solid ${
+              colorList[4]
+            }" data-color="${
+      colorList[4]
+    }" onclick="clickPopupColor(this)"></li>
+            <li class="colorList" style="border:3px solid ${
+              colorList[5]
+            }" data-color="${
+      colorList[5]
+    }" onclick="clickPopupColor(this)"></li>
+          </ul>
+        </div>
+        <div class="popupBtnBox">
+          <button class="popupCreateBtn" form="popupBox">Create</button>
+          <button class="popupCancelBtn" onclick="clickExitBtn()">Cancel</button>
+        </div>
+      </form>
+    </div>
+    `;
+  }
 };
 export default Popup;

@@ -80,7 +80,6 @@ app.get("/collection/collectionId/:collectionId", (req, res) => {
   const collectionIdCheckToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;
   if (collectionIdCheckToken === "success") {
-    console.log("check@@@");
     conn.query(
       `select * from tasks where collectionId="${collectionId}"`,
       (err, row) => {
@@ -163,8 +162,22 @@ app.post("/collection/collectionId/:collectionId", (req, res) => {
   const collectionIdCheckToken = checkToken(req.headers.cookie);
   const task = req.body.taskValue;
   const collectionId = req.params.collectionId;
-  if (collectionIdCheckToken === "success") {
-    conn.query(`insert into tasks values()`);
+});
+
+app.get("/collection/popup/:collectionId", async (req, res) => {
+  const collectionId = req.params.collectionId;
+  const collectionIdCheckToken = checkToken(req.headers.cookie);
+  if (
+    collectionIdCheckToken === "success" ||
+    collectionIdCheckToken === "expiredError"
+  ) {
+    conn.query(
+      `select * from todo where collectionId=${collectionId}`,
+      (err, row) => {
+        if (err) console.log(err);
+        res.json(row[0]);
+      }
+    );
   }
   if (collectionIdCheckToken === "error") {
     res.status(401).send("unauthenticated");

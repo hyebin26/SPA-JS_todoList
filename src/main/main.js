@@ -24,36 +24,34 @@ const Main = () => {
     const clickPopup = document.querySelector(".popupContainer");
     clickPopup.classList.add("activeP");
   };
-  if (!loading) {
-    return `
+  console.log(collectionData);
+  return `
   ${Header()}
   ${Popup(setCollectionData)}
-  <section class=${collectionData.length ? "main" : "noCollectionBox"}>
-    ${
-      collectionData.length
-        ? `
-         <h2>Collections</h2>
-         <ul>
-            ${collectionData.map((item) => MainCollection(item)).join("")}
-         </ul>
-         <button class="addMainBtn" onclick="clickPopupBtn()">
-           Add Collection
-         </button>
-        `
-        : `
-          <h2 class="noCollectionTitle">You have no collection.</h2>
-          <button class="addSubBtn" onclick="clickPopupBtn()">
-            Add Your First Collection
-          </button>
-        `
-    }
-    </section>`;
+  ${
+    !loading
+      ? `<section class=${collectionData.length ? "main" : "noCollectionBox"}>
+  ${
+    collectionData.length
+      ? `
+       <h2>Collections</h2>
+       <ul>
+          ${collectionData.map((item) => MainCollection(item)).join("")}
+       </ul>
+       <button class="addMainBtn" onclick="clickPopupBtn()">
+         Add Collection
+       </button>
+      `
+      : `
+        <h2 class="noCollectionTitle">You have no collection.</h2>
+        <button class="addSubBtn" onclick="clickPopupBtn()">
+          Add Your First Collection
+        </button>
+      `
   }
-  if (loading) {
-    return `
-    <h2>Loading...</h2>
-    `;
-  }
+  </section>`
+      : ""
+  }`;
 };
 
 export default Main;
