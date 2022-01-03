@@ -1,27 +1,18 @@
 ## vanilla js SPA todoList
 
-1. popup 나가기 버튼 로직 수정(class로 하지 않고 useState를 사용함) => 리렌더링을 시키기위해
-2. popup.js에 collection에서 form을 submit할 경우 method put으로 변경
+1. collectionDone에 done click event 추가
+2. collectionTask에 task click event 추가
 
 ### 다음할 것
 
-- popup 로직 cancel 하고 x버튼 그리고 main popup로직변경
-- 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - addtasks해야됨
 - collectionTask.js에 완료버튼 이벤트
 - collectionDone 이주하기
+- 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
+- collection.js 에 addCollectionTask에서 axios post를 할 경우 데이터가 추가된다. 데이터가 추가되고 리렌더링을 발생시키기 위해 check라는 useState를 통해 리렌더링을 발생하지만 맞지 않는 로직같다.
 
 - https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
 - 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
-
-1. 로딩 애니매이션
-
-https://cotak.tistory.com/102
-
-- signUp은 social로 회원가입하면 바로 main, 아닐경우 로그인
-- login은 social로 DB에 id존재하면 토큰 받고 메인으로
-
-- main collection 데이터 받아오기
 
 - 리팩토링 해보기 => 추상화 https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Make-useSate-hook/#_3-render-%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE-%E1%84%8E%E1%85%AE%E1%84%89%E1%85%A1%E1%86%BC%E1%84%92%E1%85%AA참고
 - 배포

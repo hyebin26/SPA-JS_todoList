@@ -10,9 +10,6 @@ const ContentController = {
     const clickSettingBox = document.querySelector(".settingBox");
     clickSettingBox.classList.toggle("activeS");
   },
-  addTodo: (e) => {},
-  //
-  //
   clickCompleteBtn: (e) => {
     console.log(e);
   },
@@ -38,23 +35,29 @@ const Collection = () => {
   const [title, setTitle] = MyReact.useState("");
   const [loading, setLoading] = MyReact.useState(true);
   const [isShow, setIsShow] = MyReact.useState(false);
+  const [check, setCheck] = MyReact.useState(false);
 
   const url = new URL(window.location);
   const searchPathname = url.pathname.split("/");
   const collectionId = searchPathname[2];
 
-  // const addCollectionTask = (e) => {
-  //   // submit일 경우임
-  //   // done에서 넘어올 수 도 있음
-  //   e.preventDefault();
-  //   const taskValue = e.target[1].value;
-  //   axios.post(`/collection/collectionId/${collectionId}`, {
-  //     taskValue,
-  //   });
-  //   // setTask(taskValue);
-  // };
+  const addCollectionTask = async (e) => {
+    // submit일 경우임
+    // done에서 넘어올 수 도 있음
+    e.preventDefault();
+    const taskValue = e.target[1].value;
+    const postTaskData = await axios.post(`/collection/tasks/${collectionId}`, {
+      content: taskValue,
+    });
+    if (postTaskData) {
+      setCheck(!check);
+    } else {
+      alert("API권한이 없습니다.");
+    }
+
+    // // setTask(taskValue);
+  };
   // window.handleTaskBtn = ContentController.clickTaskBtn;
-  // window.handleCollectionAdd = addCollectionTask;
 
   const clickContentEditBtn = () => {
     setIsShow(true);
@@ -69,6 +72,7 @@ const Collection = () => {
     setTitle(collectionIdData.title);
     setLoading(false);
   };
+  window.handleCollectionAdd = addCollectionTask;
   window.handleEditCollectionBtn = clickContentEditBtn;
   window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());

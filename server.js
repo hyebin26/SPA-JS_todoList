@@ -40,7 +40,7 @@ function makeToken(type, uid) {
   return token;
 }
 
-function checkToken(cookie, res) {
+function checkToken(cookie) {
   const splitCookie = cookie.split(";").map((item) => item.trim().split("="));
   let uid = "";
   let access_token = "";
@@ -79,7 +79,10 @@ app.get("/collection/:collectionId", (req, res) => {
 app.get("/collection/collectionId/:collectionId", (req, res) => {
   const collectionIdCheckToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;
-  if (collectionIdCheckToken === "success") {
+  if (
+    collectionIdCheckToken === "success" ||
+    collectionIdCheckToken === "expiredError"
+  ) {
     conn.query(
       `select * from tasks where collectionId="${collectionId}"`,
       (err, row) => {
@@ -107,61 +110,86 @@ app.get("/collection/collectionId/:collectionId", (req, res) => {
       }
     );
   }
-  if (collectionIdCheckToken === "expiredError") {
-    conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
-      if (err) {
-        console.log(err);
-        res.status(404);
-      }
-      if (row[0]) {
-        try {
-          let refreshToken = row[0].refresh_token;
-          const accessToken = makeToken("access", uid);
-          const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-          conn.query(
-            `select * from tasks where collectionId="${collectionId}"`,
-            (err, row) => {
-              const tasks = row;
-              try {
-                conn.query(
-                  `select * from done where collectionId="${collectionId}"`,
-                  (err2, row2) => {
-                    if (err2) console.log(err2);
-                    const done = row2;
-                    conn.query(
-                      `select collection from todo where collectionId=${collectionId}`,
-                      (err3, row3) => {
-                        if (err3) console.log(err3);
-                        const title = row3[0].collection;
-                        res.json({ tasks, done, title });
-                      }
-                    );
-                  }
-                );
-              } catch {
-                console.log(err);
-                res.status(404).send(false);
-              }
-            }
-          );
-        } catch (err) {
-          res.status(401).send("unauthenticated");
-        }
-      } //
-      if (!row[0]) {
-        res.status(401).send("unauthenticated");
-      }
-    });
-  }
+
   if (collectionIdCheckToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
 
-app.post("/collection/collectionId/:collectionId", (req, res) => {
-  const collectionIdCheckToken = checkToken(req.headers.cookie);
-  const task = req.body.taskValue;
+app.post("/collection/tasks/:collectionId", (req, res) => {
+  const collectionPostToken = checkToken(req.headers.cookie);
+  const content = req.body.content;
   const collectionId = req.params.collectionId;
+  const doneId = req.body.doneId;
+  if (
+    collectionPostToken === "success" ||
+    collectionPostToken === "expiredError"
+  ) {
+    if (!doneId) {
+      conn.query(
+        `insert into tasks values(0,"${content}","${collectionId}")`,
+        (err, row) => {
+          if (err) console.log(err);
+          res.send(true);
+        }
+      );
+    }
+    if (doneId) {
+      conn.query(
+        `insert into tasks values("${doneId}","${content}","${collectionId}")`,
+        (err, row) => {
+          if (err) console.log(err);
+          res.send(true);
+        }
+      );
+    }
+  } else {
+    res.status(401).send("unauthenticated");
+  }
+});
+app.post("/collection/tasks/delete/:collectionId", (req, res) => {
+  const taskDeleteToken = checkToken(req.headers.cookie);
+  const { taskId } = req.body;
+  if (taskDeleteToken === "expiredError" || taskDeleteToken === "success") {
+    conn.query(`delete from tasks where taskId=${taskId}`, (err, row) => {
+      if (err) console.log(err);
+      res.send(true);
+    });
+  } else {
+    res.status(401).send("unauthenticated");
+  }
+});
+
+app.post("/collection/done/:collectionId", (req, res) => {
+  const donePostToken = checkToken(req.headers.cookie);
+  const collectionId = req.params.collectionId;
+  const { content } = req.body;
+  const { doneId } = req.body;
+  if (donePostToken === "success" || donePostToken === "expiredError") {
+    conn.query(
+      `insert into done values("${doneId}","${content}","${collectionId}")`,
+      (err, row, field) => {
+        if (err) console.log(err);
+        if (row.affectedRows) {
+          res.send(true);
+        }
+      }
+    );
+  } else {
+    res.status(401).send("unauthenticated");
+  }
+});
+app.post("/collection/done/delete/:collectionId", (req, res) => {
+  const doneDeleteToken = checkToken(req.headers.cookie);
+  const { doneId } = req.body;
+  if (doneDeleteToken === "expiredError" || doneDeleteToken === "success") {
+    conn.query(`delete from done where doneId=${doneId}`, (err, row) => {
+      if (err) console.log(err);
+      res.send(true);
+    });
+  } else {
+    res.status(401).send("unauthenticated");
+  }
 });
 
 app.get("/collection/popup/:collectionId", async (req, res) => {
