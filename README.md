@@ -1,13 +1,10 @@
 ## vanilla js SPA todoList
 
-1. collectionDone에 done click event 추가
-2. collectionTask에 task click event 추가
+1. collection.js clickDeleteCollectionBtn이벤트 추가
 
 ### 다음할 것
 
-- addtasks해야됨
-- collectionTask.js에 완료버튼 이벤트
-- collectionDone 이주하기
+- collection.js에 clickDeleteCollectionBtn이벤트 리렌더링되게하기
 - 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - collection.js 에 addCollectionTask에서 axios post를 할 경우 데이터가 추가된다. 데이터가 추가되고 리렌더링을 발생시키기 위해 check라는 useState를 통해 리렌더링을 발생하지만 맞지 않는 로직같다.
 

@@ -76,6 +76,26 @@ app.get("/main", (req, res) => {
 app.get("/collection/:collectionId", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
+app.delete("/collection/:collectionId", (req, res) => {
+  console.log("why?");
+  const collectionDeleteToken = checkToken(req.headers.cookie);
+  const collectionId = req.params.collectionId;
+  if (
+    collectionDeleteToken === "success" ||
+    collectionDeleteToken === "expiredError"
+  ) {
+    conn.query(
+      `delete from todo where collectionId=${collectionId}`,
+      (err, row) => {
+        if (err) console.log(err);
+        console.log(row);
+        res.send(true);
+      }
+    );
+  } else {
+    res.status(401).send(false);
+  }
+});
 app.get("/collection/collectionId/:collectionId", (req, res) => {
   const collectionIdCheckToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;

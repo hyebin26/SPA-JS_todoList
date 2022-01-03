@@ -5,31 +5,7 @@ import CollectionTask from "../collectionTask/collectionTask.js";
 import CollectionDone from "../collectionDone/collectionDone.js";
 import { Link } from "../link.js";
 
-const ContentController = {
-  clickContentSettingBtn: () => {
-    const clickSettingBox = document.querySelector(".settingBox");
-    clickSettingBox.classList.toggle("activeS");
-  },
-  clickCompleteBtn: (e) => {
-    console.log(e);
-  },
-
-  blurSettignBox: () => {
-    const blurSettingBox = document.querySelector(".settingBox");
-    setTimeout(() => {
-      blurSettingBox.classList.remove("activeS");
-    }, 100);
-  },
-};
-
 const Collection = () => {
-  // contentSettingBtn.addEventListener(
-  //   "click",
-  //   ContentController.clickContentSettingBtn
-  // );
-  // contentSettingBtn.addEventListener("blur", ContentController.blurSettignBox);
-  // contentEditBtn.addEventListener("click", ContentController.clickContentPopup);
-  // contentTodoForm.addEventListener("submit", ContentController.addTodo);
   const [todo, setTodo] = MyReact.useState([]);
   const [done, setDone] = MyReact.useState([]);
   const [title, setTitle] = MyReact.useState("");
@@ -42,8 +18,6 @@ const Collection = () => {
   const collectionId = searchPathname[2];
 
   const addCollectionTask = async (e) => {
-    // submit일 경우임
-    // done에서 넘어올 수 도 있음
     e.preventDefault();
     const taskValue = e.target[1].value;
     const postTaskData = await axios.post(`/collection/tasks/${collectionId}`, {
@@ -54,11 +28,11 @@ const Collection = () => {
     } else {
       alert("API권한이 없습니다.");
     }
-
-    // // setTask(taskValue);
   };
-  // window.handleTaskBtn = ContentController.clickTaskBtn;
-
+  const clickSettingBox = () => {
+    const clickSettingBox = document.querySelector(".settingBox");
+    clickSettingBox.classList.toggle("activeS");
+  };
   const clickContentEditBtn = () => {
     setIsShow(true);
   };
@@ -72,9 +46,28 @@ const Collection = () => {
     setTitle(collectionIdData.title);
     setLoading(false);
   };
+  const clickDeleteCollectionBtn = async () => {
+    const dialog = confirm("정말 삭제하시겟습니까?");
+    if (dialog) {
+      const deleteCollectionData = await axios.delete(
+        `/collection/${collectionId}`
+      );
+      if (deleteCollectionData.data) {
+        history.pushState("", "", "/main");
+        alert("삭제되었습니다.");
+        setCheck(!check);
+      }
+      if (!deleteCollectionData.data) {
+        alert("API권한이 없습니다.");
+      }
+    } else {
+      return false;
+    }
+  };
   window.handleCollectionAdd = addCollectionTask;
   window.handleEditCollectionBtn = clickContentEditBtn;
-  window.handleContentSettingBtn = ContentController.clickContentSettingBtn;
+  window.handleSettingBox = clickSettingBox;
+  window.handleDeleteCollectionBtn = clickDeleteCollectionBtn;
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());
   return `
   ${Header()}
@@ -85,10 +78,10 @@ const Collection = () => {
         ? `<div class="collectionTitleBox">
     ${Link({ to: "/main", content: "<" })}
     <h2>${title}</h2>
-    <button class="collectionSettingBtn" onclick="handleContentSettingBtn()">···</button>
+    <button class="collectionSettingBtn" onclick="handleSettingBox()">···</button>
     <div class="settingBox">
       <button class="settingEdit" onclick="handleEditCollectionBtn()">Edit Collection</button>
-      <button class="settingDelete">Delete Collection</button>
+      <button class="settingDelete" onclick="handleDeleteCollectionBtn()">Delete Collection</button>
     </div>
   </div>
   <div class="collectionTodoBox">
