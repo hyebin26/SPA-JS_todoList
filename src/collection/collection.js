@@ -74,7 +74,7 @@ const Collection = () => {
   document.addEventListener("DOMContentLoaded", loadCollectionIdData());
   return `
   ${Header()}
-  ${Popup(isShow)}
+  ${Popup(isShow, setIsShow)}
   <section class="collectionSection">
     ${
       !loading

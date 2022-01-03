@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. main에서 popup을 클릭해서 submit할 경우 리렌더링하기 위해 main에서 useState를 통해 리렌더링을 했는데 popup.js에서 useState를 통해 리렌더링되게 함
-2. 클릭할 경우 popup에 class를 추가하는 방법이 아닌 useState를 통해 보여주는 방법으로 로직 변경
+1. popup 나가기 버튼 로직 수정(class로 하지 않고 useState를 사용함) => 리렌더링을 시키기위해
+2. popup.js에 collection에서 form을 submit할 경우 method put으로 변경
 
 ### 다음할 것
 

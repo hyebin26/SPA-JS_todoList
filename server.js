@@ -175,11 +175,34 @@ app.get("/collection/popup/:collectionId", async (req, res) => {
       `select * from todo where collectionId=${collectionId}`,
       (err, row) => {
         if (err) console.log(err);
-        res.json(row[0]);
+        res.json(row);
       }
     );
   }
   if (collectionIdCheckToken === "error") {
+    res.status(401).send("unauthenticated");
+  }
+});
+app.put("/collection/popup/:collectionId", async (req, res) => {
+  const collectionId = req.params.collectionId;
+  const { color } = req.body;
+  const { collection } = req.body;
+  const collectionPutCheckToken = checkToken(req.headers.cookie);
+  if (
+    collectionPutCheckToken === "success" ||
+    collectionPutCheckToken === "expiredError"
+  ) {
+    conn.query(
+      `update todo set color="${color}", collection="${collection}" where collectionId=${collectionId}`,
+      (err, row) => {
+        if (err) console.log(err);
+        if (row.affectedRows) {
+          res.send(true);
+        }
+      }
+    );
+  }
+  if (collectionPutCheckToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });

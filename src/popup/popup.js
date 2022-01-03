@@ -1,16 +1,7 @@
 import { MyReact } from "../core/react.js";
 
-const todo = {
-  uid: localStorage.getItem("uid"),
-  collection: "",
-  color: "",
-  tasks: "",
-  done: "",
-};
-
-const Popup = (isShow) => {
-  const [checkShow, setCheckShow] = MyReact.useState(false);
-  const [test, setTest] = MyReact.useState([]);
+const Popup = (isShow, setIsShow) => {
+  const [collectionData, setCollectionData] = MyReact.useState([]);
   window.clickPopupColor = (target) => {
     const clickedColor = document.querySelector(".clickedColor");
     clickedColor.style.backgroundColor = "#1d1d27";
@@ -18,9 +9,15 @@ const Popup = (isShow) => {
     target.classList.add("clickedColor");
     target.style.backgroundColor = target.style.borderColor;
   };
-  window.clickExitBtn = () => {
-    const exitPopup = document.querySelector(".popupContainer");
-    exitPopup.classList.remove("activeP");
+  window.clickExitBtn = (e) => {
+    e.preventDefault();
+    setIsShow(false);
+  };
+  window.clickOtherContainer = (e) => {
+    const parentBox = document.querySelector(".popupContainer");
+    if (parentBox === e.target) {
+      setIsShow(false);
+    }
   };
   window.handlePopupSubmit = async (e) => {
     e.preventDefault();
@@ -28,22 +25,38 @@ const Popup = (isShow) => {
     const collectionTitle = document.querySelector(".popupNameInput").value;
     const color = document.querySelector(".clickedColor").dataset.color;
     const titleFalse = document.querySelector(".popupInputFalse");
+    const todo = {};
     if (collectionTitle.replace(blank_pattern, "") === "") {
       titleFalse.textContent = "제목을 다시 입력해주세요.";
       return;
     }
-    try {
+    if (e.target.dataset.parent === "main") {
+      try {
+        todo["color"] = color;
+        todo["collection"] = collectionTitle;
+        titleFalse.textContent = "";
+        const responseCollectionData = await axios.post("/collections", {
+          todo,
+        });
+        setIsShow(false); // 리렌더링용
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert("API권한이 없습니다.");
+        }
+      }
+    }
+    if (e.target.dataset.parent === "collection") {
       todo["color"] = color;
       todo["collection"] = collectionTitle;
-      const exitPopup = document.querySelector(".popupContainer");
-      exitPopup.classList.remove("activeP");
-      titleFalse.textContent = "";
-      const responseCollectionData = await axios.post("/collections", {
-        todo,
-      });
-      setCheckShow(!checkShow); // 리렌더링용
-    } catch (err) {
-      if (err.response.status === 401) {
+      const url = new URL(window.location);
+      const collectionId = url.pathname.split("collection")[1];
+      const putCollectionData = await axios.put(
+        `/collection/popup${collectionId}`,
+        todo
+      );
+      if (putCollectionData) {
+        setIsShow(false);
+      } else {
         alert("API권한이 없습니다.");
       }
     }
@@ -56,9 +69,8 @@ const Popup = (isShow) => {
     const collectionId = path.split("collection")[1];
     const loadPopupData = await axios.get(`/collection/popup${collectionId}`);
     const popupData = loadPopupData.data;
-    setTest(popupData);
+    setCollectionData(popupData);
   };
-
   const colorList = [
     "#FC76A1",
     "#DBBE56",
@@ -70,23 +82,24 @@ const Popup = (isShow) => {
   ];
   if (isShow) {
     const url = new URL(window.location);
-    if (url.pathname.includes("main")) {
-    }
     if (url.pathname.includes("collection")) {
       loadPopupData(url.pathname);
-      console.log(test);
     }
     return `
-    <div class="popupContainer">
-      <form id="popupBox" onsubmit=handlePopupSubmit(event)>
+    <div class="popupContainer" onclick="clickOtherContainer(event)">
+      <form id="popupBox" onsubmit="handlePopupSubmit(event)" data-parent=${
+        collectionData.length ? "collection" : "main"
+      }>
         <div class="popupTitleBox">
-          <h3>${!test.length ? "Change Collection" : "Add Collection"}</h3>
-          <button onclick="clickExitBtn()">x</button>
+          <h3>${
+            collectionData.length ? "Change Collection" : "Add Collection"
+          }</h3>
+          <button onclick="clickExitBtn(event)">x</button>
         </div>
         <div class="popupNameBox">
           <p class="popupName">Name</p>
           <input placeholder="My Collection" type="text" class="popupNameInput" value=${
-            !test.length ? test.collection : "dddddd"
+            collectionData.length ? collectionData[0].collection : ""
           }>
           <p class="popupInputFalse"></p>
         </div>
@@ -126,12 +139,15 @@ const Popup = (isShow) => {
           </ul>
         </div>
         <div class="popupBtnBox">
-          <button class="popupCreateBtn" form="popupBox">Create</button>
-          <button class="popupCancelBtn" onclick="clickExitBtn()">Cancel</button>
+          <button class="popupCreateBtn" form="popupBox" >Create</button>
+          <button class="popupCancelBtn" onclick="clickExitBtn(event)">Cancel</button>
         </div>
       </form>
     </div>
     `;
+  }
+  if (!isShow) {
+    return ``;
   }
 };
 export default Popup;

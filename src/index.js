@@ -6,9 +6,6 @@ import Collection from "./collection/collection.js";
 
 const App = () => {
   const url = new URL(window.location.href);
-  window.addEventListener("popstate", () => {
-    MyReact.render(App, document.querySelector("#root"));
-  });
   const searchPathname = url.pathname.split("/");
   const collectionId =
     searchPathname[1] === "collection" ? searchPathname[2] : null;

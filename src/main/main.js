@@ -5,6 +5,7 @@ import { MyReact } from "../core/react.js";
 
 const Main = () => {
   const [collectionData, setCollectionData] = MyReact.useState([]);
+  const [isShow, setIsShow] = MyReact.useState(false);
   const [loading, setLoading] = MyReact.useState(true);
   window.loadCollectionData = async () => {
     try {
@@ -21,13 +22,11 @@ const Main = () => {
   document.addEventListener("DOMContentLoaded", loadCollectionData());
 
   window.clickPopupBtn = () => {
-    const clickPopup = document.querySelector(".popupContainer");
-    clickPopup.classList.add("activeP");
+    setIsShow(true);
   };
-  console.log(collectionData);
   return `
   ${Header()}
-  ${Popup(setCollectionData)}
+  ${Popup(isShow, setIsShow)}
   ${
     !loading
       ? `<section class=${collectionData.length ? "main" : "noCollectionBox"}>
