@@ -23,7 +23,8 @@ const makeInputBox = ({
 };
 
 const SignUp = () => {
-  window.clickSignUpBtn = async () => {
+  window.clickSignUpBtn = async (type) => {
+    window.duplicateCheck(document.querySelector(".signUpUnameInput"));
     const duplicate = document.querySelectorAll(".falseSignup");
     const uid = document.querySelector(".signUpUidInput")
       ? document.querySelector(".signUpUidInput").value
@@ -32,16 +33,14 @@ const SignUp = () => {
       ? document.querySelector(".signUpPasswordInput").value
       : null;
     const uname = document.querySelector(".signUpUnameInput").value;
-    window.duplicateCheck(document.querySelector(".signUpUnameInput"));
     if (duplicate.length) {
+      alert("회원가입에 실패했습니다.");
       duplicate.forEach((item) => {
         item.textContent = "필수 입력 항목입니다.";
       });
+      return false;
     } //
-    else if (uid.length < 6 && uname < 2 && pwd.length < 8) {
-      alert("다시 시도해주세요.");
-    } //
-    else {
+    if (type === "social") {
       const fetchSignUpSuccess = await axios.post("/signUp/success", {
         uid,
         pwd,
@@ -64,6 +63,34 @@ const SignUp = () => {
       } //
       else alert("다시 시도해주세요.");
     }
+    if (type !== "social") {
+      if (pwd && uid && uname) {
+        const fetchSignUpSuccess = await axios.post("/signUp/success", {
+          uid,
+          pwd,
+          uname,
+        });
+        const signUpSuccess = await fetchSignUpSuccess.data;
+        if (signUpSuccess) {
+          if (history.state) {
+            const getAccessToken = await axios.post("/signUp/social", {
+              uid: history.state.id,
+            });
+            const { access_token } = getAccessToken.data;
+            localStorage.setItem("uid", history.state.id);
+            localStorage.setItem("access_token", access_token);
+            Router.push("/main");
+          } //
+          else {
+            Router.push("/");
+          }
+        } //
+        else alert("다시 시도해주세요.");
+      } //
+      else {
+        alert("다시 시도해주세요.");
+      }
+    }
   };
   window.focusOutPassword = (taget) => {
     const PASS_MIN = 8,
@@ -81,13 +108,15 @@ const SignUp = () => {
         taget.nextElementSibling.textContent =
           "비밀 번호는 영문,숫자 포함 8글자 이상이어야 합니다.";
         taget.nextElementSibling.classList.add("falseSignup");
-      } else {
+      }
+      if (taget.parentNode.className === "signUpPasswordCheckBox") {
         const checkPass = document.querySelector(".signUpPasswordInput");
         if (checkPass.value !== taget.value) {
           taget.nextElementSibling.textContent =
             "비밀번호가 일치하지 않습니다.";
           taget.nextElementSibling.classList.add("falseSignup");
-        } else {
+        }
+        if (checkPass.value === taget.value) {
           taget.nextElementSibling.textContent = "";
           taget.nextElementSibling.classList.remove("falseSignup");
         }
@@ -184,7 +213,7 @@ const SignUp = () => {
     <div class="signUpInputBox">
       ${makeInputBox(nicknameObj)}
       <div class="signUpBtnBox">
-        <button class="signUpBtn" onclick="clickSignUpBtn()">회원가입하기</button>
+        <button class="signUpBtn" onclick="clickSignUpBtn('social')">회원가입하기</button>
         <span>이미 아이디가 있으신가요?</span>
         ${Link({ to: "/", content: "로그인" })}
       </div>

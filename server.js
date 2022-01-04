@@ -268,12 +268,11 @@ app.post("/login", async (req, res) => {
         `insert into tokens values("${refreshToken}","${uid}")`,
         (err) => {
           if (err) console.log(err);
-          console.log(row, "success");
+          res.cookie("uid", `${uid}`);
+          res.cookie("access_token", `${accessToken}`);
+          res.json({ access_token: accessToken });
         }
       );
-      res.cookie("uid", `${uid}`);
-      res.cookie("access_token", `${accessToken}`);
-      res.json({ access_token: accessToken });
     } //
     else {
       res.json(false);
@@ -486,7 +485,7 @@ app.get("/kakao/auth", async (req, res) => {
 });
 
 app.post("/social/token", async (req, res) => {
-  const { token, social } = req.body;
+  const { code, social } = req.body;
   if (social === "kakao") {
     try {
       const getTokenOptions = {
@@ -495,7 +494,7 @@ app.post("/social/token", async (req, res) => {
         redirect: "follow",
       };
       const fetchGetToken = await fetch(
-        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${token}`,
+        `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.KAKAO_API_KEY}&code=${code}`,
         getTokenOptions
       );
       const kakaoToken = await fetchGetToken.json();

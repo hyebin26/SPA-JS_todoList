@@ -36,15 +36,15 @@ const Login = () => {
   };
   window.clickKakaoBtn = async (e) => {
     try {
-      const fetchKakaoBtn = await axios(`/kakao/auth`); //
+      const fetchKakaoBtn = await axios(`/kakao/auth`);
       const { kakaoAuthURL } = await fetchKakaoBtn.data;
       location.href = kakaoAuthURL;
     } catch (err) {
       console.log(err);
     }
   };
-  const sendSocialToken = async (social, token) => {
-    const getUserData = await axios.post(`/social/token`, { token, social });
+  const sendSocialToken = async (social, code) => {
+    const getUserData = await axios.post(`/social/token`, { code, social });
     const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
       Router.push("/signUp", { id, nickname });

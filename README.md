@@ -1,8 +1,6 @@
 ## vanilla js SPA todoList
 
-1. header 로그아웃 css 변경
-2. login.js, signUp.js에 Route -> Router로 변경
-3. popup html form으로 전체 div를 감쌋는데 필요한 데이터만 감싸는 것으로 변경
+1. login, signUp 리팩토링
 
 ### 다음할 것
 
@@ -14,23 +12,6 @@
 
 - 리팩토링 해보기 => 추상화 https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Make-useSate-hook/#_3-render-%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE-%E1%84%8E%E1%85%AE%E1%84%89%E1%85%A1%E1%86%BC%E1%84%92%E1%85%AA참고
 - 배포
-
-### content
-
-- delete, 뒤로가기 설정
-- taskBox에 완료 버튼 이벤트 추가하기
-
-### popupz
-
-- **해결못함**: return하는 곳에 colorList를 맵핑해서 li를 만드는 함수에 넣었는데 UI에 colorList요소 하나당 두개씩 추가됨
-
--data 전달
-
-다음은 complete 섹션
-
-### main
-
-- main에서 화면이 로드되었을 때 데이터를 가져오는 controll추가해야됨
 
 ### Login
 
@@ -46,14 +27,13 @@
 
 ### Router
 
-- 현재 로직이 맞는지 모르겠음.
 - Link class undefined 체크하기
 - mutationObserver 사용못함 => 너무 비효율적 / Object만을 감지할 수는 아직 없음
   참고:https://stackoverflow.com/questions/32148423/how-to-use-or-is-it-possible-mutationobserver-to-monitor-window-location-pathn
 
 ### 알게된 것
 
-1. 데이터를 보낼 때 header의 컨텐트 타입과 body의 데이터 타입이랑 똑같아야 함 => 아닐 시 가지 않음
+1. 데이터를 보낼 때 header의 컨텐트 타입과 body의 데이터 타입이랑 똑같아야 함 => 아닐 시 전송X
 
 2. DOMcontentedLoad vs window onLoad
 
@@ -73,7 +53,7 @@
 - <button onclick>로 이벤트를 등록하면 함수를 전역에서만 찾는다.
 - 전역변수로 선언되면 자바스크립트는 파일이 달라도 하나의 전역변수로 선언되기 때문에 문제가 일어나기 쉽다.
 
-6. attribute에 직접적으로 이벤트를 등록한 이유
+6. attribute에서 이벤트를 등록하는 것이 아니라 직접적으로 이벤트를 등록한 이유
 
 - index.js에서 DOM을 찾아서 이벤트를 등록하면 가독성이 떨어짐
 - 전역변수로 선언하는 것에 있어서 거부감이 있었으나 가독성과 속도의 저하도 크지 않을 것 같아서 attribute로 직접 이벤트를 등록함
