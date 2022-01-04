@@ -3,23 +3,34 @@ import { MyReact } from "../core/react.js";
 const CollectionDone = (done) => {
   const [check, setCheck] = MyReact.useState(false);
   const clickdoneBtn = async (e) => {
-    // done 삭제, task에 추가
     const content = e.target.nextElementSibling.textContent;
     const doneId = e.target.parentNode.dataset.id;
     const url = new URL(window.location);
     const collectionId = url.pathname.split("/collection/")[1];
-    const postTaskData = await axios.post(`/collection/tasks/${collectionId}`, {
-      content,
-      doneId,
-    });
-    if (postTaskData.data) {
-      const deleteDoneData = await axios.post(
-        `/collection/done/delete/${collectionId}`,
-        { doneId }
+    try {
+      const postTaskData = await axios.post(
+        `/collection/tasks/${collectionId}`,
+        {
+          content,
+          doneId,
+        }
       );
-      setCheck(!check);
-    } else {
-      alert("API권한이 없습니다.");
+      if (postTaskData.data) {
+        const deleteDoneData = await axios.post(
+          `/collection/done/delete/${collectionId}`,
+          { doneId }
+        );
+        if (deleteDoneData.data) {
+          setCheck(!check);
+        }
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+        return;
+      }
+      console.log(err);
+      alert("다시 시도해주세요.");
     }
   };
   window.handleDoneBtn = clickdoneBtn;

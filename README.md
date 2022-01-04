@@ -1,17 +1,12 @@
 ## vanilla js SPA todoList
 
-1. server.js , header , popup, main,collection 리팩토링
+1. collection, collectionDone,collectionTask 리팩토링
 
 ### 다음할 것
 
-- 
 - 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - collection.js 에 addCollectionTask에서 axios post를 할 경우 데이터가 추가된다. 데이터가 추가되고 리렌더링을 발생시키기 위해 check라는 useState를 통해 리렌더링을 발생하지만 맞지 않는 로직같다.
 
-- https://github.com/facebook/react/issues/11527 => setState가 비동기인이유 확인하기
-- 리렌더링을 할때 렌더링을 하나의 컴포넌트만 되게 하기
-
-- 리팩토링 해보기 => 추상화 https://junilhwang.github.io/TIL/Javascript/Design/Vanilla-JS-Make-useSate-hook/#_3-render-%E1%84%92%E1%85%A1%E1%86%B7%E1%84%89%E1%85%AE-%E1%84%8E%E1%85%AE%E1%84%89%E1%85%A1%E1%86%BC%E1%84%92%E1%85%AA참고
 - 배포
 
 ### Login
@@ -20,15 +15,8 @@
 
 - login할 경우 쿠키,uid를 localStorage에 저장 => axios.defaults로 저장할 경우 새로고침하면 사라짐
 
-- REST API로 구현했을 때 social/signUp으로가면 회원가입 한 사람이 로그인할 경우 화면이 매끄럽지 않음
-
-- 소셜 로그인 - DB에 id있을경우, 없을 경우
-- 카카오 로그아웃 구현하지 않았음 => 누를 떄 마다 재로그인을 해야됨
-- 네이버 로그아웃 => http://nid.naver.com/nidlogin.logout 팝업하기?
-
 ### Router
 
-- Link class undefined 체크하기
 - mutationObserver 사용못함 => 너무 비효율적 / Object만을 감지할 수는 아직 없음
   참고:https://stackoverflow.com/questions/32148423/how-to-use-or-is-it-possible-mutationobserver-to-monitor-window-location-pathn
 
@@ -108,3 +96,6 @@ Query String
 
 14. form태그 사용할 때 데이터가 사용되는 곳에만 form태그 감싸기
     => 안에 다른 버튼이 있을 경우 이벤트가 버블링 되기 때문에 이벤트가 꼬이게됨
+
+15. useState가 async인 이유
+    참고:https://github.com/hyebin26/JsStudy/blob/main/React/UseState%EA%B0%80%20async%EC%9D%B8%20%EC%9D%B4%EC%9C%A0.md

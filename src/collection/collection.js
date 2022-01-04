@@ -28,7 +28,9 @@ const Collection = () => {
           content: taskValue,
         }
       );
-      setCheck(!check);
+      if (postTaskData.data) {
+        setCheck(!check);
+      }
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");
@@ -71,8 +73,10 @@ const Collection = () => {
         const deleteCollectionData = await axios.delete(
           `/collection/${collectionId}`
         );
-        alert("삭제되었습니다.");
-        Router.push("/main");
+        if (deleteCollectionData.data) {
+          alert("삭제되었습니다.");
+          Router.push("/main");
+        }
       } catch (err) {
         if (err.response.status === 401) {
           alert("API권한이 없습니다.");
@@ -81,7 +85,8 @@ const Collection = () => {
         console.log(err);
         alert("다시 시도해주세요.");
       }
-    } else {
+    }
+    if (!dialog) {
       return false;
     }
   };

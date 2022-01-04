@@ -8,18 +8,30 @@ const CollectionTask = (task) => {
     const url = new URL(window.location);
     const collectionId = url.pathname.split("/collection/")[1];
 
-    const postDoneData = await axios.post(`/collection/done/${collectionId}`, {
-      content,
-      doneId: taskId,
-    });
-    if (postDoneData.data) {
-      const deleteTaskData = await axios.post(
-        `/collection/tasks/delete/${collectionId}`,
-        { taskId }
+    try {
+      const postDoneData = await axios.post(
+        `/collection/done/${collectionId}`,
+        {
+          content,
+          doneId: taskId,
+        }
       );
-      setCheck(!check);
-    } else {
-      alert("API권한이 없습니다.");
+      if (postDoneData.data) {
+        const deleteTaskData = await axios.post(
+          `/collection/tasks/delete/${collectionId}`,
+          { taskId }
+        );
+        if (deleteTaskData.data) {
+          setCheck(!check);
+        }
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+        return;
+      }
+      console.log(err);
+      alert("다시 시도해주세요.");
     }
   };
   window.handleClickTaskBtn = clickTaskBtn;

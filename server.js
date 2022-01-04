@@ -77,22 +77,41 @@ app.get("/collection/:collectionId", (req, res) => {
   res.status(200).sendFile(__dirname + "/public/index.html");
 });
 app.delete("/collection/:collectionId", (req, res) => {
-  console.log("why?");
   const collectionDeleteToken = checkToken(req.headers.cookie);
   const collectionId = req.params.collectionId;
   if (
     collectionDeleteToken === "success" ||
     collectionDeleteToken === "expiredError"
   ) {
+    if (collectionDeleteToken === "expiredError") {
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(
       `delete from todo where collectionId=${collectionId}`,
       (err, row) => {
-        if (err) console.log(err);
-        console.log(row);
+        if (err) {
+          console.log(err);
+          res.status(404);
+        }
         res.send(true);
       }
     );
-  } else {
+  }
+  if (collectionDeleteToken === "error") {
     res.status(401).send(false);
   }
 });
@@ -208,11 +227,30 @@ app.post("/collection/tasks/delete/:collectionId", (req, res) => {
   const taskDeleteToken = checkToken(req.headers.cookie);
   const { taskId } = req.body;
   if (taskDeleteToken === "expiredError" || taskDeleteToken === "success") {
+    if (taskDeleteToken === "expiredError") {
+      const { uid } = req.cookies;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(`delete from tasks where taskId=${taskId}`, (err, row) => {
       if (err) console.log(err);
       res.send(true);
     });
-  } else {
+  }
+  if (taskDeleteToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
@@ -223,6 +261,24 @@ app.post("/collection/done/:collectionId", (req, res) => {
   const { content } = req.body;
   const { doneId } = req.body;
   if (donePostToken === "success" || donePostToken === "expiredError") {
+    if (donePostToken === "expiredError") {
+      const { uid } = req.cookies;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(
       `insert into done values("${doneId}","${content}","${collectionId}")`,
       (err, row, field) => {
@@ -232,7 +288,8 @@ app.post("/collection/done/:collectionId", (req, res) => {
         }
       }
     );
-  } else {
+  }
+  if (donePostToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
@@ -240,11 +297,30 @@ app.post("/collection/done/delete/:collectionId", (req, res) => {
   const doneDeleteToken = checkToken(req.headers.cookie);
   const { doneId } = req.body;
   if (doneDeleteToken === "expiredError" || doneDeleteToken === "success") {
+    if (doneDeleteToken === "expiredError") {
+      const { uid } = req.cookies;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(`delete from done where doneId=${doneId}`, (err, row) => {
       if (err) console.log(err);
       res.send(true);
     });
-  } else {
+  }
+  if (doneDeleteToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
