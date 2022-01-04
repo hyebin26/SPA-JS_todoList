@@ -5,20 +5,27 @@ const Header = () => {
   window.clickLogoutBtn = async () => {
     const headerConfirm = confirm("로그아웃하시겠습니까?");
     if (headerConfirm) {
-      const logout = await axios.delete("/logout");
-      if (logout.data) {
+      try {
+        const logout = await axios.delete(
+          `/logout/${localStorage.getItem("uid")}`
+        );
         Router.push("/");
         localStorage.removeItem("access_token");
         localStorage.removeItem("uid");
-      }
-      if (!logout.data) {
-        alert("API권한이 없습니다.");
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert("API권한이 없습니다.");
+          return;
+        }
+        alert("다시 시도해주세요.");
       }
     } else {
       return false;
     }
   };
-
+  // if (localStorage.getItem("uid") && localStorage.getItem("access_token")) {
+  //   Router.push("/");
+  // }
   return `<section class="header">
   <div class="dashBox">
     ${Link({

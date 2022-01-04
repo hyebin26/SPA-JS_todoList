@@ -103,6 +103,24 @@ app.get("/collection/collectionId/:collectionId", (req, res) => {
     collectionIdCheckToken === "success" ||
     collectionIdCheckToken === "expiredError"
   ) {
+    if (collectionIdCheckToken === "expiredError") {
+      const { uid } = req.cookies;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(
       `select * from tasks where collectionId="${collectionId}"`,
       (err, row) => {
@@ -145,6 +163,24 @@ app.post("/collection/tasks/:collectionId", (req, res) => {
     collectionPostToken === "success" ||
     collectionPostToken === "expiredError"
   ) {
+    if (collectionPostToken === "expiredError") {
+      const { uid } = req.cookies;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     if (!doneId) {
       conn.query(
         `insert into tasks values(0,"${content}","${collectionId}")`,
@@ -163,7 +199,8 @@ app.post("/collection/tasks/:collectionId", (req, res) => {
         }
       );
     }
-  } else {
+  }
+  if (collectionPostToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
@@ -219,6 +256,24 @@ app.get("/collection/popup/:collectionId", async (req, res) => {
     collectionIdCheckToken === "success" ||
     collectionIdCheckToken === "expiredError"
   ) {
+    if (collectionIdCheckToken === "expiredError") {
+      const uid = req.cookies.uid;
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(
       `select * from todo where collectionId=${collectionId}`,
       (err, row) => {
@@ -235,11 +290,29 @@ app.put("/collection/popup/:collectionId", async (req, res) => {
   const collectionId = req.params.collectionId;
   const { color } = req.body;
   const { collection } = req.body;
+  const { uid } = req.body;
   const collectionPutCheckToken = checkToken(req.headers.cookie);
   if (
     collectionPutCheckToken === "success" ||
     collectionPutCheckToken === "expiredError"
   ) {
+    if (collectionPutCheckToken === "expiredError") {
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(
       `update todo set color="${color}", collection="${collection}" where collectionId=${collectionId}`,
       (err, row) => {
@@ -325,7 +398,27 @@ app.post("/signUp/social", async (req, res) => {
 app.post("/collections", (req, res) => {
   const collectionCheckToken = checkToken(req.headers.cookie);
   const { uid, collection, color } = req.body.todo;
-  if (collectionCheckToken === "success") {
+  if (
+    collectionCheckToken === "success" ||
+    collectionCheckToken === "expiredError"
+  ) {
+    if (collectionCheckToken === "expiredError") {
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     try {
       const collectionData = [];
       conn.query(
@@ -351,57 +444,35 @@ app.post("/collections", (req, res) => {
       res.status(404).send("DB error");
     }
   }
-  if (collectionCheckToken === "expiredError") {
-    conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
-      if (err) {
-        console.log(err);
-      }
-      if (row[0]) {
-        try {
-          let refreshToken = row[0].refresh_token;
-          const accessToken = makeToken("access", uid);
-          const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-          conn.query(
-            `insert into todo values("${uid}","${collection}","${color}",0)`,
-            (err, row, field) => {
-              if (err) console.log(err);
-              conn.query(
-                `select * from todo where uid="${uid}"`,
-                (err, row, field) => {
-                  if (err) console.log(err);
-                  row.forEach((item) => {
-                    collectionData.push({ ...item });
-                  });
-                  res.cookie("access_token", `${accessToken}`);
-                  res.send(collectionData);
-                }
-              );
-            }
-          );
-        } catch (err) {
-          res.status(401).send("unauthenticated");
-        }
-      } //
-      if (!row[0]) {
-        res.status(401).send("unauthenticated");
-      }
-    });
-  }
   if (collectionCheckToken === "error") {
     res.status(401).send("unauthenticated");
   }
 });
-app.get("/collections", async (req, res) => {
+app.get("/collections/:uid", async (req, res) => {
   const getCollectionCheckToken = checkToken(req.headers.cookie);
-  let uid = "";
+  const uid = req.params.uid;
   const collectionData = [];
-  const splitCookie = req.headers.cookie
-    .split(";")
-    .map((item) => item.trim().split("="));
-  splitCookie.forEach((item) => {
-    if (item[0] === "uid") uid = item[1];
-  });
-  if (getCollectionCheckToken === "success") {
+  if (
+    getCollectionCheckToken === "success" ||
+    getCollectionCheckToken === "expiredError"
+  ) {
+    if (getCollectionCheckToken === "expiredError") {
+      conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     try {
       conn.query(`select * from todo where uid="${uid}"`, (err, row, field) => {
         if (err) console.log(err);
@@ -414,48 +485,7 @@ app.get("/collections", async (req, res) => {
       console.log(err);
     }
   }
-  if (getCollectionCheckToken === "expiredError") {
-    conn.query(`select * from tokens where uid="${uid}"`, (err, row) => {
-      if (err) {
-        console.log(err);
-      }
-      if (row[0]) {
-        try {
-          let refreshToken = row[0].refresh_token;
-          const accessToken = makeToken("access", uid);
-          const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-          const collectionData = [];
-          conn.query(
-            `select * from todo where uid="${uid}"`,
-            (err, row, field) => {
-              if (err) {
-                console.log(err);
-              }
-              conn.query(
-                `select * from todo where uid="${uid}"`,
-                (err, row, field) => {
-                  if (err) console.log(err);
-                  row.forEach((item) => {
-                    collectionData.push({ ...item });
-                  });
-                  res.cookie("access_token", `${accessToken}`);
-                  res.send(collectionData);
-                }
-              );
-            }
-          );
-        } catch (err) {
-          console.log("error");
-          res.status(401).send("unauthenticated");
-        }
-      } //
-      if (!row[0]) {
-        res.status(401).send("unauthenticated");
-      }
-    });
-  }
   if (getCollectionCheckToken === "error") {
-    console.log("false");
     res.status(401).send("unauthenticated");
   }
 });
@@ -575,23 +605,34 @@ app.post("/social/token", async (req, res) => {
   }
 });
 
-app.delete("/logout", async (req, res) => {
+app.delete("/logout/:uid", async (req, res) => {
   const logoutToken = checkToken(req.headers.cookie);
+  const uid = req.params.uid;
   if (logoutToken === "expiredError" || logoutToken === "success") {
-    let uid = "";
-    const splitHeader = req.headers.cookie
-      .split(";")
-      .map((item) => item.trim().split("="));
-    splitHeader.forEach((item) => {
-      if (item[0] === "uid") uid = item[1];
-    });
+    if (logoutToken === "expiredError") {
+      conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+        if (err) {
+          res.status(404);
+          return;
+        }
+        if (row[0]) {
+          const remakedToken = makeToken("access", uid);
+          res.cookie("access_token", `${remakedToken}`);
+          res.cookie("uid", `${uid}`);
+        }
+        if (!row[0]) {
+          res.status(401).send("unauthorized");
+          return;
+        }
+      });
+    }
     conn.query(`delete from tokens where uid="${uid}"`, (err, row) => {
       if (err) console.log(err);
       res.send(true);
     });
   }
   if (logoutToken === "error") {
-    res.status(401).send(false);
+    res.status(401).send("unauthorized");
   }
 });
 

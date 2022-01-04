@@ -9,14 +9,19 @@ const Main = () => {
   const [loading, setLoading] = MyReact.useState(true);
   window.loadCollectionData = async () => {
     try {
-      const responseMainData = await axios.get("/collections");
+      const responseMainData = await axios.get(
+        `/collections/${localStorage.getItem("uid")}`
+      );
       const mainData = await responseMainData.data;
       setLoading(false);
       setCollectionData(mainData);
     } catch (err) {
       if (err.response.status === 401) {
         alert("API권한이 없습니다.");
+        return;
       }
+      console.log(err);
+      alert("다시 시도해주세요.");
     }
   };
   document.addEventListener("DOMContentLoaded", loadCollectionData());

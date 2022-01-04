@@ -1,9 +1,10 @@
 ## vanilla js SPA todoList
 
-1. login, signUp 리팩토링
+1. server.js , header , popup, main,collection 리팩토링
 
 ### 다음할 것
 
+- 
 - 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - collection.js 에 addCollectionTask에서 axios post를 할 경우 데이터가 추가된다. 데이터가 추가되고 리렌더링을 발생시키기 위해 check라는 useState를 통해 리렌더링을 발생하지만 맞지 않는 로직같다.
 

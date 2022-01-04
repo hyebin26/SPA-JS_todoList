@@ -21,13 +21,21 @@ const Collection = () => {
   const addCollectionTask = async (e) => {
     e.preventDefault();
     const taskValue = e.target[1].value;
-    const postTaskData = await axios.post(`/collection/tasks/${collectionId}`, {
-      content: taskValue,
-    });
-    if (postTaskData) {
+    try {
+      const postTaskData = await axios.post(
+        `/collection/tasks/${collectionId}`,
+        {
+          content: taskValue,
+        }
+      );
       setCheck(!check);
-    } else {
-      alert("API권한이 없습니다.");
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+        return;
+      }
+      console.log(err);
+      alert("다시 시도해주세요.");
     }
   };
   const clickSettingBox = () => {
@@ -38,27 +46,40 @@ const Collection = () => {
     setIsShow(true);
   };
   const loadCollectionIdData = async () => {
-    const axiosCollectionIdData = await axios.get(
-      `/collection/collectionId/${collectionId}`
-    );
-    const collectionIdData = axiosCollectionIdData.data;
-    setTodo(collectionIdData.tasks);
-    setDone(collectionIdData.done);
-    setTitle(collectionIdData.title);
-    setLoading(false);
+    try {
+      const axiosCollectionIdData = await axios.get(
+        `/collection/collectionId/${collectionId}`
+      );
+      const collectionIdData = axiosCollectionIdData.data;
+      setTodo(collectionIdData.tasks);
+      setDone(collectionIdData.done);
+      setTitle(collectionIdData.title);
+      setLoading(false);
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+        return;
+      }
+      console.log(err);
+      alert("다시 시도해주세요.");
+    }
   };
   const clickDeleteCollectionBtn = async () => {
     const dialog = confirm("정말 삭제하시겟습니까?");
     if (dialog) {
-      const deleteCollectionData = await axios.delete(
-        `/collection/${collectionId}`
-      );
-      if (deleteCollectionData.data) {
+      try {
+        const deleteCollectionData = await axios.delete(
+          `/collection/${collectionId}`
+        );
         alert("삭제되었습니다.");
         Router.push("/main");
-      }
-      if (!deleteCollectionData.data) {
-        alert("API권한이 없습니다.");
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert("API권한이 없습니다.");
+          return;
+        }
+        console.log(err);
+        alert("다시 시도해주세요.");
       }
     } else {
       return false;

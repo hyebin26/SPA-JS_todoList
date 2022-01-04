@@ -42,30 +42,48 @@ const Popup = (isShow, setIsShow) => {
       } catch (err) {
         if (err.response.status === 401) {
           alert("API권한이 없습니다.");
+          return;
         }
+        console.log(err);
+        alert("다시 시도해주세요.");
       }
     }
     if (e.target.dataset.parent === "collection") {
       todo["color"] = color;
       todo["collection"] = collectionTitle;
+      todo["uid"] = localStorage.getItem("uid");
       const url = new URL(window.location);
       const collectionId = url.pathname.split("collection")[1];
-      const putCollectionData = await axios.put(
-        `/collection/popup${collectionId}`,
-        todo
-      );
-      if (putCollectionData) {
+      try {
+        const putCollectionData = await axios.put(
+          `/collection/popup${collectionId}`,
+          todo
+        );
         setIsShow(false);
-      } else {
-        alert("API권한이 없습니다.");
+      } catch (err) {
+        if (err.response.status === 401) {
+          alert("API권한이 없습니다.");
+          return;
+        }
+        console.log(err);
+        alert("다시 시도해주세요.");
       }
     }
   };
   const loadPopupData = async (path) => {
     const collectionId = path.split("collection")[1];
-    const loadPopupData = await axios.get(`/collection/popup${collectionId}`);
-    const popupData = loadPopupData.data;
-    setCollectionData(popupData);
+    try {
+      const loadPopupData = await axios.get(`/collection/popup${collectionId}`);
+      const popupData = await loadPopupData.data;
+      setCollectionData(popupData);
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+        return;
+      }
+      console.log(err);
+      alert("다시 시도해주세요.");
+    }
   };
   const colorList = [
     "#FC76A1",
