@@ -4,6 +4,7 @@ import { MyReact } from "../core/react.js";
 import CollectionTask from "../collectionTask/collectionTask.js";
 import CollectionDone from "../collectionDone/collectionDone.js";
 import { Link } from "../link.js";
+import { Router } from "../router.js";
 
 const Collection = () => {
   const [todo, setTodo] = MyReact.useState([]);
@@ -53,9 +54,8 @@ const Collection = () => {
         `/collection/${collectionId}`
       );
       if (deleteCollectionData.data) {
-        history.pushState("", "", "/main");
         alert("삭제되었습니다.");
-        setCheck(!check);
+        Router.push("/main");
       }
       if (!deleteCollectionData.data) {
         alert("API권한이 없습니다.");

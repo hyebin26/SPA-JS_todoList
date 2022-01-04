@@ -1,4 +1,4 @@
-import { Route } from "/src/router.js";
+import { Router } from "/src/router.js";
 import { Link } from "/src/link.js";
 
 const Login = () => {
@@ -14,7 +14,7 @@ const Login = () => {
         falseLogin.textContent = "";
         localStorage.setItem("uid", uid);
         localStorage.setItem("access_token", access_token);
-        Route({ state: undefined }, "/main");
+        Router.push("/main");
       } else {
         falseLogin.textContent = "아이디와 비밀번호를 확인해주세요.";
       }
@@ -44,12 +44,12 @@ const Login = () => {
     const getUserData = await axios.post(`/social/token`, { token, social });
     const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
-      Route({ state: { id, nickname } }, "/signUp");
+      Router.push("/signUp", { state: { id, nickname } });
     }
     if (!needSignup) {
       localStorage.setItem("uid", id);
       localStorage.setItem("access_token", access_token);
-      Route({ state: undefined }, "/main");
+      Router.push("/main");
     }
   };
   const url = new URL(window.location.href);
@@ -64,7 +64,7 @@ const Login = () => {
   return `
   <section class="loginSec">
     <div class="loginTitleBox">
-      <img src="/image/task.png">
+      <img src="/image/task.svg">
       <h1>TASKS</h1>
     </div>
     <form class="loginInputBox" onsubmit="submitLogin(event)">

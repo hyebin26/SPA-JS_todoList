@@ -576,16 +576,23 @@ app.post("/social/token", async (req, res) => {
   }
 });
 
-app.post("/logout", async (req, res) => {
-  const access_token = req.headers.authorization.split(" ")[1];
-  const uid = req.body;
-  if (await checkToken(access_token, uid)) {
+app.delete("/logout", async (req, res) => {
+  const logoutToken = checkToken(req.headers.cookie);
+  if (logoutToken === "expiredError" || logoutToken === "success") {
+    let uid = "";
+    const splitHeader = req.headers.cookie
+      .split(";")
+      .map((item) => item.trim().split("="));
+    splitHeader.forEach((item) => {
+      if (item[0] === "uid") uid = item[1];
+    });
     conn.query(`delete from tokens where uid="${uid}"`, (err, row) => {
       if (err) console.log(err);
       res.send(true);
     });
-  } else {
-    res.json(false);
+  }
+  if (logoutToken === "error") {
+    res.status(401).send(false);
   }
 });
 
