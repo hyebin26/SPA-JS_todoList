@@ -10,7 +10,6 @@ const Popup = (isShow, setIsShow) => {
     target.style.backgroundColor = target.style.borderColor;
   };
   window.clickExitBtn = (e) => {
-    e.preventDefault();
     setIsShow(false);
   };
   window.clickOtherContainer = (e) => {
@@ -34,6 +33,7 @@ const Popup = (isShow, setIsShow) => {
       try {
         todo["color"] = color;
         todo["collection"] = collectionTitle;
+        todo["uid"] = localStorage.getItem("uid");
         titleFalse.textContent = "";
         const responseCollectionData = await axios.post("/collections", {
           todo,
@@ -60,10 +60,6 @@ const Popup = (isShow, setIsShow) => {
         alert("API권한이 없습니다.");
       }
     }
-
-    // //collection fetch server => server sql 추가 => collection 기져오기
-    // // collection이 변경되었을 때 => main에서 리렌더링이 되게
-    // // 서버로 데이터 보내기 => BD에 데이터 저장 => 그 데이터를 리렌더링
   };
   const loadPopupData = async (path) => {
     const collectionId = path.split("collection")[1];
@@ -87,28 +83,29 @@ const Popup = (isShow, setIsShow) => {
     }
     return `
     <div class="popupContainer" onclick="clickOtherContainer(event)">
-      <form id="popupBox" onsubmit="handlePopupSubmit(event)" data-parent=${
-        collectionData.length ? "collection" : "main"
-      }>
+      <div class="popupBox"> 
         <div class="popupTitleBox">
           <h3>${
             collectionData.length ? "Change Collection" : "Add Collection"
           }</h3>
           <button onclick="clickExitBtn(event)">x</button>
         </div>
-        <div class="popupNameBox">
-          <p class="popupName">Name</p>
-          <input placeholder="My Collection" type="text" class="popupNameInput" value=${
-            collectionData.length ? collectionData[0].collection : ""
-          }>
-          <p class="popupInputFalse"></p>
-        </div>
-        <div class="popupColorBox">
-          <p>Color</p>
-          <ul>
-            <li class="clickedColor colorList" style="background:${
-              colorList[0]
-            };border:3px solid ${colorList[0]}" data-color="${
+        <form id="popupForm" onsubmit="handlePopupSubmit(event)" data-parent=${
+          collectionData.length ? "collection" : "main"
+        }>
+          <div class="popupNameBox">
+            <p class="popupName">Name</p>
+            <input placeholder="My Collection" type="text" class="popupNameInput" value=${
+              collectionData.length ? collectionData[0].collection : ""
+            }>
+            <p class="popupInputFalse"></p>
+          </div>
+          <div class="popupColorBox">
+            <p>Color</p>
+            <ul>
+              <li class="clickedColor colorList" style="background:${
+                colorList[0]
+              };border:3px solid ${colorList[0]}" data-color="${
       colorList[0]
     }" data-color:"${colorList[0]}" onclick="clickPopupColor(this)"></li>
             <li class="colorList" style="border:3px solid ${
@@ -137,12 +134,13 @@ const Popup = (isShow, setIsShow) => {
       colorList[5]
     }" onclick="clickPopupColor(this)"></li>
           </ul>
-        </div>
+      </div>
+        </form>
         <div class="popupBtnBox">
-          <button class="popupCreateBtn" form="popupBox" >Create</button>
+          <button class="popupCreateBtn" form="popupForm" >Create</button>
           <button class="popupCancelBtn" onclick="clickExitBtn(event)">Cancel</button>
         </div>
-      </form>
+      </div>
     </div>
     `;
   }

@@ -2,6 +2,9 @@ import { Router } from "/src/router.js";
 import { Link } from "/src/link.js";
 
 const Login = () => {
+  if (localStorage.getItem("uid") && localStorage.getItem("access_token")) {
+    Router.push("/main");
+  }
   window.submitLogin = async (e) => {
     e.preventDefault();
     const falseLogin = document.querySelector(".falseLogin");
@@ -44,7 +47,7 @@ const Login = () => {
     const getUserData = await axios.post(`/social/token`, { token, social });
     const { needSignup, id, nickname, access_token } = getUserData.data;
     if (needSignup) {
-      Router.push("/signUp", { state: { id, nickname } });
+      Router.push("/signUp", { id, nickname });
     }
     if (!needSignup) {
       localStorage.setItem("uid", id);
@@ -60,7 +63,6 @@ const Login = () => {
     } //
     else sendSocialToken("kakao", urlParams.get("code"));
   }
-
   return `
   <section class="loginSec">
     <div class="loginTitleBox">

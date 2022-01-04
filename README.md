@@ -1,6 +1,8 @@
 ## vanilla js SPA todoList
 
-1. router.js에 route -> router로 변경
+1. header 로그아웃 css 변경
+2. login.js, signUp.js에 Route -> Router로 변경
+3. popup html form으로 전체 div를 감쌋는데 필요한 데이터만 감싸는 것으로 변경
 
 ### 다음할 것
 
@@ -122,3 +124,6 @@ Query String
 - 바닐라 자바스크립트로 링크를 구현할 때 모든 링크에서 onClickTag라는 하나의 함수를 공용으로 호출하기 때문에, 함수의 매개변수 to값이 계속해서 변경되었음.
 - 고민된게 우선 계속해서 새로운 함수를 만들어 주는 것은 올바른 로직이 아니라고 생각해서 고민하던 중 현재의 target에 적혀있는 href값을 가져와서 url을 변경하려고 했으나 a태그 자식요소가 존재할 경우 target에 href가 존재하지 않음
 - event.currentTarget은 무조건 이벤트가 걸려있는 위치를 반환하므로 자식요소를 클릭해도 이벤트가 걸려있는 a태그를 가져오므로 href값을 가져올 수 있음
+
+14. form태그 사용할 때 데이터가 사용되는 곳에만 form태그 감싸기
+    => 안에 다른 버튼이 있을 경우 이벤트가 버블링 되기 때문에 이벤트가 꼬이게됨

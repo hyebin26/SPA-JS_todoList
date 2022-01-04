@@ -1,4 +1,4 @@
-import { Route } from "/src/router.js";
+import { Router } from "/src/router.js";
 import { Link } from "/src/link.js";
 
 const makeInputBox = ({
@@ -38,7 +38,7 @@ const SignUp = () => {
         item.textContent = "필수 입력 항목입니다.";
       });
     } //
-    else if (uid.length < 6 && pwd.length < 8 && uname < 2) {
+    else if (uid.length < 6 && uname < 2 && pwd.length < 8) {
       alert("다시 시도해주세요.");
     } //
     else {
@@ -56,10 +56,10 @@ const SignUp = () => {
           const { access_token } = getAccessToken.data;
           localStorage.setItem("uid", history.state.id);
           localStorage.setItem("access_token", access_token);
-          Route({ state: null }, "/main");
+          Router.push("/main");
         } //
         else {
-          Route({ state: null }, "/");
+          Router.push("/");
         }
       } //
       else alert("다시 시도해주세요.");
