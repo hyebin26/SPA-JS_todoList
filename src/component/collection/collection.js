@@ -1,10 +1,10 @@
 import Header from "../header/header.js";
 import Popup from "../popup/popup.js";
-import { MyReact } from "../core/react.js";
+import { MyReact } from "../../util/react.js";
 import CollectionTask from "../collectionTask/collectionTask.js";
 import CollectionDone from "../collectionDone/collectionDone.js";
-import { Link } from "../link.js";
-import { Router } from "../router.js";
+import { Link } from "../../util/link.js";
+import { Router } from "../../util/router.js";
 
 const Collection = () => {
   const [todo, setTodo] = MyReact.useState([]);

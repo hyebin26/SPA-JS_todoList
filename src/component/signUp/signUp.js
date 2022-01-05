@@ -1,5 +1,5 @@
-import { Router } from "/src/router.js";
-import { Link } from "/src/link.js";
+import { Router } from "/src/util/router.js";
+import { Link } from "/src/util/link.js";
 
 const makeInputBox = ({
   _type,
@@ -58,6 +58,7 @@ const SignUp = () => {
           Router.push("/main");
         } //
         else {
+          alert("회원가입에 성공하셨습니다.");
           Router.push("/");
         }
       } //
@@ -82,6 +83,7 @@ const SignUp = () => {
             Router.push("/main");
           } //
           else {
+            alert("회원가입에 성공하셨습니다.");
             Router.push("/");
           }
         } //

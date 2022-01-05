@@ -1,5 +1,5 @@
-import { Link } from "../link.js";
-import { Router } from "../router.js";
+import { Link } from "../../util/link.js";
+import { Router } from "../../util/router.js";
 
 const Header = () => {
   window.clickLogoutBtn = async () => {

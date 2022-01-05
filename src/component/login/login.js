@@ -1,5 +1,5 @@
-import { Router } from "/src/router.js";
-import { Link } from "/src/link.js";
+import { Router } from "/src/util/router.js";
+import { Link } from "/src/util/link.js";
 
 const Login = () => {
   if (localStorage.getItem("uid") && localStorage.getItem("access_token")) {

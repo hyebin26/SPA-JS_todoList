@@ -1,4 +1,4 @@
-import { Link } from "../link.js";
+import { Link } from "../../util/link.js";
 
 const MainCollection = (item) => {
   return `

@@ -1,5 +1,5 @@
-import { MyReact } from "./core/react.js";
-import App from "./index.js";
+import { MyReact } from "./react.js";
+import App from "../index.js";
 
 export const Link = ({ to, content, state }) => {
   window.onClickAtag = (e) => {

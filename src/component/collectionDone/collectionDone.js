@@ -1,4 +1,4 @@
-import { MyReact } from "../core/react.js";
+import { MyReact } from "../../util/react.js";
 
 const CollectionDone = (done) => {
   const [check, setCheck] = MyReact.useState(false);

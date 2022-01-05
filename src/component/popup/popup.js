@@ -1,4 +1,4 @@
-import { MyReact } from "../core/react.js";
+import { MyReact } from "../../util/react.js";
 
 const Popup = (isShow, setIsShow) => {
   const [collectionData, setCollectionData] = MyReact.useState([]);

@@ -1,7 +1,7 @@
 import Header from "../header/header.js";
 import MainCollection from "../mainCollection/mainCollection.js";
 import Popup from "../popup/popup.js";
-import { MyReact } from "../core/react.js";
+import { MyReact } from "../../util/react.js";
 
 const Main = () => {
   const [collectionData, setCollectionData] = MyReact.useState([]);
