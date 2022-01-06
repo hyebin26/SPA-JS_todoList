@@ -1,7 +1,7 @@
 ## vanilla js SPA todoList
 
-1. 폴더 component, util 추가하고 정리
-2. 회원가입하고 페이지 이동전에 alert추가
+1. aws 배포도전
+2. linux 환경변수 설정
 
 ### 다음할 것
 
