@@ -1,9 +1,17 @@
 ## vanilla js SPA todoList
 
-1. aws 배포도전
-2. linux 환경변수 설정
+1. 인스턴스 다시 생성
 
 ### 다음할 것
+
+- https로 연결
+- 네이버,다음 redirect변경
+- port모두 80으로 변경
+- mysql 체크
+
+- 환경변수에 대해서 정리
+- aws내가 한 방식 기록하기
+- 리눅스 쉘 스크립트
 
 - 배포하기 aws 최대한 이해하면서
 - 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
@@ -101,3 +109,5 @@ Query String
 
 15. useState가 async인 이유
     참고:https://github.com/hyebin26/JsStudy/blob/main/React/UseState%EA%B0%80%20async%EC%9D%B8%20%EC%9D%B4%EC%9C%A0.md
+
+이미지 :<a href="http://www.onlinewebfonts.com">oNline Web Fonts</a>
