@@ -2,8 +2,22 @@ import { Router } from "/src/util/router.js";
 import { Link } from "/src/util/link.js";
 
 const Login = () => {
+  const checkToken = async () => {
+    try {
+      const uid = localStorage.getItem("uid");
+      const checkTokenForLogin = await axios.get(`/login/${uid}`);
+      if (checkTokenForLogin.data) {
+        Router.push("/main");
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        alert("API권한이 없습니다.");
+      }
+      console.log(err);
+    }
+  };
   if (localStorage.getItem("uid") && localStorage.getItem("access_token")) {
-    Router.push("/main");
+    checkToken();
   }
   window.submitLogin = async (e) => {
     e.preventDefault();

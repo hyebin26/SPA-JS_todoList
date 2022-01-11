@@ -18,8 +18,8 @@ app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const conn = mysql.createConnection({
-  host: "localhost",
+const conn = mysql.createPool({
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
@@ -642,7 +642,7 @@ app.post("/social/token", async (req, res) => {
   if (social === "naver") {
     try {
       const fetchNaverToken = await fetch(
-        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${token}`
+        `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&code=${code}`
       );
       const getNaverToken = await fetchNaverToken.json();
       const naverToken = getNaverToken.access_token;
@@ -712,12 +712,14 @@ app.delete("/logout/:uid", async (req, res) => {
   }
 });
 
+app.get("/login/:uid", (req, res) => {
+  const uid = req.params.uid;
+  conn.query(`select * from tokens where uid=${uid}`, (err, row) => {
+    if (err) console.log(err);
+    res.send(true);
+  });
+});
+
 app.listen(3500, () => {
   console.log("Running");
 });
-
-// social/signup test
-// app.get("/social/signUp", (req, res) => {
-//   console.log(__dirname);
-//   res.status(200).sendFile(__dirname + "/public/index.html");
-// });

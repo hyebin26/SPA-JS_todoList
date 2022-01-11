@@ -1,19 +1,12 @@
 ## vanilla js SPA todoList
 
-1. 인스턴스 다시 생성
+1. 자동로그인할 때 localStorage만 체크 하는 게 아니라 DB tokens에 아이디 존재 여부확인
 
 ### 다음할 것
 
-- https로 연결
-- 네이버,다음 redirect변경
-- port모두 80으로 변경
-- mysql 체크
-
-- 환경변수에 대해서 정리
-- aws내가 한 방식 기록하기
+- 자동로그인이 될 떄 토큰 체크해야됨
 - 리눅스 쉘 스크립트
 
-- 배포하기 aws 최대한 이해하면서
 - 메인 페이지 화면 뚝뚝 끊키는 것 해결하기
 - collection.js 에 addCollectionTask에서 axios post를 할 경우 데이터가 추가된다. 데이터가 추가되고 리렌더링을 발생시키기 위해 check라는 useState를 통해 리렌더링을 발생하지만 맞지 않는 로직같다.
 
